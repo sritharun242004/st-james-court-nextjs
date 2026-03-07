@@ -25,7 +25,7 @@ const Explore = () => {
       distance: '0.2 km',
       duration: '30 min',
       rating: 4.5,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/bb842d0f75cfdfebff190006819c262831327ef7.jpg',
+      image: 'https://images.pexels.com/photos/5709968/pexels-photo-5709968.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'The famed Sai Baba Temple is just steps from the resort, popular for morning prayers and spiritual solace.',
       highlights: ['Morning Prayers', 'Peaceful Atmosphere', 'Walking Distance', 'Spiritual Experience'],
       price: 'Free',
@@ -38,7 +38,7 @@ const Explore = () => {
       distance: '0.8 km',
       duration: '30 min',
       rating: 4.5,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/2279729fb77273209c9d52bba16defc4f47cd26e.jpg',
+      image: 'https://images.pexels.com/photos/29082079/pexels-photo-29082079.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Local Murugan shrine with a colorful gopuram in Kalapet, popular for quick prayers and community rituals.',
       highlights: ['Colorful Gopuram', 'Community Rituals', 'Local Culture', 'Walking Distance'],
       price: 'Free',
@@ -65,7 +65,7 @@ const Explore = () => {
       distance: '6 km',
       duration: '1 hr',
       rating: 4.5,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/10dca6b6f0a8a80803b0cf143885a4af92cafbac.jpg',
+      image: 'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Unpretentious spot for veg North Indian thalis and Punjabi dishes near Auroville; budget-friendly with outdoor seating.',
       highlights: ['North Indian Thalis', 'Budget Friendly', 'Outdoor Seating', 'Veg Cuisine'],
       price: '₹200-400 per person',
@@ -91,7 +91,7 @@ const Explore = () => {
       distance: '6 km',
       duration: '1 hr',
       rating: 4.6,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/70e46def94c466e7569f10098b1a275f491e826e.jpg',
+      image: 'https://images.pexels.com/photos/1855214/pexels-photo-1855214.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Vegan/veg menu with laksa, lattes, and healthy options in a trendy, quiet spot; popular for brunch.',
       highlights: ['Vegan Menu', 'Healthy Options', 'Trendy Ambiance', 'Brunch Spot'],
       price: '₹400-700 per person',
@@ -117,7 +117,7 @@ const Explore = () => {
       distance: '10 km',
       duration: '2-3 hrs',
       rating: 4.3,
-      image: 'https://images.pexels.com/photos/346529/pexels-photo-346529.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.pexels.com/photos/32279595/pexels-photo-32279595.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Scenic lake spanning 390 hectares, ideal for birdwatching and boating; a nature lovers paradise between Pondy and TN border.',
       highlights: ['Birdwatching', 'Boating', 'Nature Walks', '390 Hectare Lake'],
       price: '~₹200',
@@ -131,7 +131,7 @@ const Explore = () => {
       distance: '12 km',
       duration: '2-3 hrs',
       rating: 4.4,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/1c37891cc4d8c506d4322d2a8b96c1768bc381ae.jpg',
+      image: 'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Pristine golden sands reached by a 20-30 min boat ride from Chunnambar; perfect for relaxation and water sports.',
       highlights: ['Boat Ride Access', 'Golden Sands', 'Water Sports', 'Secluded Beach'],
       price: 'Boat ~₹200-300/person',
@@ -144,7 +144,7 @@ const Explore = () => {
       distance: '13 km',
       duration: '1 hr',
       rating: 3.6,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/e4ad83de84ae875d3ec931a00825aed54fe48c61.jpg',
+      image: 'https://images.pexels.com/photos/28656073/pexels-photo-28656073.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Ancient Roman-Chola port ruins dating back to 1st century BC with fascinating artifacts; a key Indo-Roman trade site.',
       highlights: ['Roman Ruins', 'Archaeological Site', 'Indo-Roman Trade', 'Historical Artifacts'],
       price: 'Free',
@@ -157,7 +157,7 @@ const Explore = () => {
       distance: '13 km',
       duration: '2 hrs',
       rating: 4.6,
-      image: 'https://images.pexels.com/photos/1049298/pexels-photo-1049298.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.pexels.com/photos/3974244/pexels-photo-3974244.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Iconic golden dome meditation center in Auroville; book passes in advance for inner chamber views amid beautiful gardens.',
       highlights: ['Golden Dome', 'Meditation Center', 'Beautiful Gardens', 'Advance Booking'],
       price: 'Free (pass required)',
@@ -170,7 +170,7 @@ const Explore = () => {
       distance: '14 km',
       duration: '1 hr',
       rating: 4.2,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/cb8033584bc45ca627b27700f44ce12fbf7938eb.jpg',
+      image: 'https://images.pexels.com/photos/1139541/pexels-photo-1139541.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Calm rocky beach near Kottakupam with stunning sunsets and fewer crowds; perfect for peaceful walks.',
       highlights: ['Stunning Sunsets', 'Fewer Crowds', 'Rocky Shoreline', 'Peaceful Walks'],
       price: 'Free',
@@ -183,7 +183,7 @@ const Explore = () => {
       distance: '15 km',
       duration: '1-2 hrs',
       rating: 4.7,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/f5a666cf8abe415aa80dccb66a54d7e73ab19207.jpg',
+      image: 'https://images.pexels.com/photos/4915549/pexels-photo-4915549.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Spiritual hub founded by Sri Aurobindo with peaceful gardens and samadhi; a place for meditation and quiet reflection.',
       highlights: ['Meditation Hall', 'Peaceful Gardens', 'Samadhi', 'Spiritual Experience'],
       price: 'Free',
@@ -196,7 +196,7 @@ const Explore = () => {
       distance: '16 km',
       duration: '1 hr',
       rating: 4.3,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/e98e744227941907f6b673d116f42c34e68afe01.jpg',
+      image: 'https://images.pexels.com/photos/17945496/pexels-photo-17945496.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Iconic seafront with Gandhi statue and lighthouse views; perfect for evening strolls and street food.',
       highlights: ['Gandhi Statue', 'Lighthouse Views', 'Evening Strolls', 'Street Food'],
       price: 'Free',
@@ -209,7 +209,7 @@ const Explore = () => {
       distance: '16 km',
       duration: '45 min',
       rating: 4.6,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/25049c5ae4b72ec9ec885dd72670e55a3bb425c4.jpg',
+      image: 'https://images.pexels.com/photos/28867654/pexels-photo-28867654.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Vibrant Ganesha temple with elephant blessings and colorful rituals; one of the most famous temples in Pondicherry.',
       highlights: ['Elephant Blessings', 'Colorful Rituals', 'Historic Temple', 'Vibrant Atmosphere'],
       price: 'Free (donations)',
@@ -222,7 +222,7 @@ const Explore = () => {
       distance: '16 km',
       duration: '2-3 hrs',
       rating: 4.5,
-      image: 'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.pexels.com/photos/1799730/pexels-photo-1799730.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Explore the charming colonial architecture, yellow buildings, and cobblestone streets of the French Quarter.',
       highlights: ['Colonial Architecture', 'Cafes & Boutiques', 'Photography Spots', 'Walking Tours'],
       price: 'Free',
@@ -235,7 +235,7 @@ const Explore = () => {
       distance: '16 km',
       duration: '1 hr',
       rating: 4.3,
-      image: 'https://images.pexels.com/photos/1320684/pexels-photo-1320684.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.pexels.com/photos/6395411/pexels-photo-6395411.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Beautiful Gothic architecture and stunning stained glass windows in this historic church.',
       highlights: ['Gothic Architecture', 'Stained Glass', 'Religious History', 'Photography'],
       price: 'Free',
@@ -249,7 +249,7 @@ const Explore = () => {
       distance: '17 km',
       duration: '1 hr',
       rating: 4.3,
-      image: 'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.pexels.com/photos/58599/pexels-photo-58599.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Rich collection of French colonial artifacts, sculptures, and historical portraits showcasing Pondicherry heritage.',
       highlights: ['Colonial Artifacts', 'Historical Portraits', 'Sculptures', 'French Heritage'],
       price: 'Free',
@@ -262,7 +262,7 @@ const Explore = () => {
       distance: '18 km',
       duration: '2-3 hrs',
       rating: 4.2,
-      image: 'https://pplx-res.cloudinary.com/image/upload/pplx_search_images/2156920b1efd1492592b1eea3cfc99a30d3b5f08.jpg',
+      image: 'https://images.pexels.com/photos/14024974/pexels-photo-14024974.jpeg?auto=compress&cs=tinysrgb&w=800',
       description: 'Lush 22-acre garden with exotic plants, musical fountain, toy train, and peaceful walking paths.',
       highlights: ['Exotic Plants', 'Musical Fountain', 'Toy Train', 'Picnic Spots'],
       price: 'Free',
@@ -279,6 +279,7 @@ const Explore = () => {
       name: 'Beach & Nature Lover',
       description: 'Sun, sand, and serene lakes',
       gradient: 'from-blue-500 to-cyan-500',
+      image: 'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg?auto=compress&cs=tinysrgb&w=800',
       stops: [
         'Paradise Beach - Boat ride & morning swim (2-3 hrs)',
         'Ousteri Lake - Birdwatching & picnic lunch (2 hrs)',
@@ -289,6 +290,7 @@ const Explore = () => {
       name: 'Culture & Heritage Explorer',
       description: 'History, ruins, and colonial charm',
       gradient: 'from-orange-500 to-red-500',
+      image: 'https://images.pexels.com/photos/1799730/pexels-photo-1799730.jpeg?auto=compress&cs=tinysrgb&w=800',
       stops: [
         'Arikamedu Ruins - Morning history walk (1 hr)',
         'Matrimandir - Auroville culture visit (2 hrs)',
@@ -299,6 +301,7 @@ const Explore = () => {
       name: 'Spiritual & Wellness Seeker',
       description: 'Meditation, temples, and mindful dining',
       gradient: 'from-purple-500 to-pink-500',
+      image: 'https://images.pexels.com/photos/3974244/pexels-photo-3974244.jpeg?auto=compress&cs=tinysrgb&w=800',
       stops: [
         'Sai Baba Temple - Morning prayers (30 min)',
         'Matrimandir - Meditation session (2 hrs)',
@@ -381,8 +384,11 @@ const Explore = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-52 pb-20 bg-gradient-to-r from-blue-600 to-teal-500 text-white">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+      <section className="pt-52 pb-20 relative text-white">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/1799730/pexels-photo-1799730.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Explore Pondicherry</h1>
           <p className="text-2xl max-w-4xl mx-auto leading-relaxed">
             Discover the rich cultural heritage, stunning beaches, and unique Franco-Tamil culture —
@@ -464,9 +470,13 @@ const Explore = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {itineraries.map((itinerary, index) => (
               <div key={index} className="bg-gradient-to-br from-slate-50 to-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-slate-100">
-                <div className={`bg-gradient-to-r ${itinerary.gradient} p-6 text-white`}>
-                  <h3 className="text-xl font-bold mb-1">{itinerary.name}</h3>
-                  <p className="text-white/80 text-sm">{itinerary.description}</p>
+                <div className="relative h-48">
+                  <img src={itinerary.image} alt={itinerary.name} className="w-full h-full object-cover" />
+                  <div className={`absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent`}></div>
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1">{itinerary.name}</h3>
+                    <p className="text-white/80 text-sm">{itinerary.description}</p>
+                  </div>
                 </div>
                 <div className="p-6">
                   <div className="space-y-4">
@@ -502,7 +512,7 @@ const Explore = () => {
                 name: 'Mahabalipuram Heritage Tour',
                 distance: '~95 km via ECR',
                 duration: 'Full day (7 AM - 7 PM)',
-                image: 'https://images.pexels.com/photos/15832040/pexels-photo-15832040.jpeg?auto=compress&cs=tinysrgb&w=600',
+                image: 'https://images.pexels.com/photos/30312127/pexels-photo-30312127.jpeg?auto=compress&cs=tinysrgb&w=600',
                 highlights: [
                   'Shore Temple (UNESCO, 8th century) - ₹40/₹600',
                   'Pancha Rathas (5 monolithic chariots)',
@@ -517,7 +527,7 @@ const Explore = () => {
                 name: 'Thanjavur Temple Circuit',
                 distance: '~150 km via NH32',
                 duration: 'Full day',
-                image: 'https://images.pexels.com/photos/3522880/pexels-photo-3522880.jpeg?auto=compress&cs=tinysrgb&w=600',
+                image: 'https://images.pexels.com/photos/5124396/pexels-photo-5124396.jpeg?auto=compress&cs=tinysrgb&w=600',
                 highlights: [
                   'Brihadeeswarar Temple (UNESCO, Chola) - ₹10/₹200',
                   'Royal Palace & Bronze Gallery - ₹50/₹200',
@@ -532,7 +542,7 @@ const Explore = () => {
                 name: 'Chidambaram & Kumbakonam',
                 distance: '~120 km via NH32',
                 duration: 'Full day',
-                image: 'https://images.pexels.com/photos/2161449/pexels-photo-2161449.jpeg?auto=compress&cs=tinysrgb&w=600',
+                image: 'https://images.pexels.com/photos/33253295/pexels-photo-33253295.jpeg?auto=compress&cs=tinysrgb&w=600',
                 highlights: [
                   'Nataraja Temple (1,000 pillar hall) - Free',
                   'Temple Architecture (5 elemental kosas)',

@@ -142,8 +142,11 @@ const Events = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-52 pb-20 bg-gradient-to-r from-blue-600 to-teal-500 text-white">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+      <section className="pt-52 pb-20 relative text-white">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Events & Celebrations</h1>
           <p className="text-2xl max-w-4xl mx-auto leading-relaxed">
             Create unforgettable memories with our exceptional event planning services

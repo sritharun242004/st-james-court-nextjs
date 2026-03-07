@@ -3,17 +3,29 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Calendar, Users, Plus, Minus, CreditCard, Shield, Gift } from 'lucide-react';
+import { Calendar, Users, Plus, Minus, CreditCard, Shield, Gift, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface GuestDetails {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  address: string;
-  city: string;
-  country: string;
   specialRequests: string;
+  privilegeCardNumber: string;
+}
+
+interface BookingResult {
+  bookingId: number;
+  categoryCode: string;
+  checkIn: string;
+  checkOut: string;
+  rooms: number;
+  nights: { date: string; basePrice: number; finalPrice: number; discountPercent: number | null }[];
+  baseAmount: number;
+  discountAmount: number;
+  finalAmount: number;
+  paymentStatus: string;
+  privilegeApplied: boolean;
 }
 
 const Booking = () => {
@@ -25,25 +37,24 @@ const Booking = () => {
   const [children, setChildren] = useState(0);
   const [rooms, setRooms] = useState(1);
   const [selectedRoom, setSelectedRoom] = useState('');
-  const [promoCode, setPromoCode] = useState('');
   const [step, setStep] = useState(1);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [bookingResult, setBookingResult] = useState<BookingResult | null>(null);
+  const [apiError, setApiError] = useState('');
   const [guestDetails, setGuestDetails] = useState<GuestDetails>({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    address: '',
-    city: '',
-    country: '',
-    specialRequests: ''
+    specialRequests: '',
+    privilegeCardNumber: '',
   });
 
   const roomTypes = [
-    { id: 'deluxe-room', name: 'Deluxe Room', price: 4500 },
-    { id: 'super-deluxe', name: 'Super Deluxe', price: 5500 },
-    { id: 'executive-suite', name: 'Executive Suite Room', price: 6500 }
+    { id: 'DELUXE', name: 'Deluxe Room', price: 4500 },
+    { id: 'SUPER_DELUXE', name: 'Super Deluxe', price: 5500 },
+    { id: 'SUITE', name: 'Executive Suite Room', price: 6500 }
   ];
 
   const addOns = [
@@ -54,6 +65,13 @@ const Booking = () => {
   ];
 
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+
+  const formatDate = (date: Date): string => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
 
   const calculateBookingNights = () => {
     if (checkIn && checkOut) {
@@ -99,12 +117,12 @@ const Booking = () => {
     if (stepNumber === 3) {
       if (!guestDetails.firstName.trim()) errors.firstName = 'First name is required';
       if (!guestDetails.lastName.trim()) errors.lastName = 'Last name is required';
-      if (!guestDetails.email.trim()) errors.email = 'Email is required';
       if (!guestDetails.phone.trim()) errors.phone = 'Phone number is required';
-      // Basic email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (guestDetails.email && !emailRegex.test(guestDetails.email)) {
-        errors.email = 'Please enter a valid email address';
+      if (guestDetails.email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(guestDetails.email)) {
+          errors.email = 'Please enter a valid email address';
+        }
       }
     }
 
@@ -114,37 +132,131 @@ const Booking = () => {
 
   const handleStepChange = async (nextStep: number) => {
     if (validateStep(step)) {
-      if (step === 1 && nextStep === 2) {
-        // Simulate availability check
-        setIsLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setIsLoading(false);
-      }
       setStep(nextStep);
     }
   };
 
   const handleBookingSubmit = async () => {
     if (!validateStep(3)) return;
+    if (!checkIn || !checkOut) return;
 
     setIsLoading(true);
-    // Simulate booking submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    setApiError('');
 
-    // Show success message (in a real app, redirect to confirmation page)
-    alert('Booking submitted successfully! You will receive a confirmation email shortly.');
+    try {
+      const res = await fetch('/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          categoryCode: selectedRoom,
+          checkIn: formatDate(checkIn),
+          checkOut: formatDate(checkOut),
+          rooms,
+          adults,
+          children,
+          fullName: `${guestDetails.firstName} ${guestDetails.lastName}`.trim(),
+          phone: guestDetails.phone,
+          email: guestDetails.email || undefined,
+          privilegeCardNumber: guestDetails.privilegeCardNumber || undefined,
+          specialRequests: guestDetails.specialRequests || undefined,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setApiError(data.error || 'Booking failed');
+        return;
+      }
+
+      setBookingResult(data);
+      setStep(4);
+    } catch {
+      setApiError('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGuestDetailsChange = (field: keyof GuestDetails, value: string) => {
     setGuestDetails(prev => ({ ...prev, [field]: value }));
   };
 
+  // Step 4: Success
+  if (step === 4 && bookingResult) {
+    return (
+      <div>
+        <section className="pt-52 pb-20 relative text-white">
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
+            <div className="absolute inset-0 bg-black/50"></div>
+          </div>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
+            <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Booking Confirmed</h1>
+          </div>
+        </section>
+        <div className="max-w-2xl mx-auto px-4 py-12">
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Thank You!</h2>
+            <p className="text-slate-600 mb-8">Your booking has been confirmed.</p>
+
+            <div className="bg-slate-50 rounded-lg p-6 text-left space-y-3">
+              <div className="flex justify-between">
+                <span className="text-slate-600">Booking ID:</span>
+                <span className="font-bold text-blue-600">#{bookingResult.bookingId}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-600">Room:</span>
+                <span className="font-medium">{roomTypes.find(r => r.id === bookingResult.categoryCode)?.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-600">Check-in:</span>
+                <span className="font-medium">{bookingResult.checkIn}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-600">Check-out:</span>
+                <span className="font-medium">{bookingResult.checkOut}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-600">Rooms:</span>
+                <span className="font-medium">{bookingResult.rooms}</span>
+              </div>
+              {bookingResult.privilegeApplied && (
+                <div className="flex justify-between">
+                  <span className="text-slate-600">Privilege Discount:</span>
+                  <span className="font-medium text-green-600">-₹{bookingResult.discountAmount.toLocaleString()}</span>
+                </div>
+              )}
+              <div className="border-t pt-3 flex justify-between text-lg font-bold">
+                <span>Total Amount:</span>
+                <span className="text-blue-600">₹{bookingResult.finalAmount.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-600">Payment Status:</span>
+                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">{bookingResult.paymentStatus}</span>
+              </div>
+            </div>
+
+            <a
+              href="/"
+              className="inline-block mt-8 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+            >
+              Back to Home
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-52 pb-20 bg-gradient-to-r from-blue-600 to-teal-500 text-white">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+      <section className="pt-52 pb-20 relative text-white">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Book Your Stay</h1>
           <p className="text-2xl max-w-4xl mx-auto leading-relaxed">
             Reserve your perfect beachfront escape at St James Court Beach Resort
@@ -180,6 +292,13 @@ const Booking = () => {
       </section>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
+        {apiError && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-2">
+            <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+            <span className="text-red-700 text-sm">{apiError}</span>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Booking Form */}
           <div className="lg:col-span-2">
@@ -328,7 +447,7 @@ const Booking = () => {
                   disabled={isLoading}
                   className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  {isLoading ? 'Checking Availability...' : 'Continue to Services'}
+                  Continue to Services
                 </button>
               </div>
             )}
@@ -361,25 +480,6 @@ const Booking = () => {
                   ))}
                 </div>
 
-                <div className="mb-8">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Promo Code</label>
-                  <div className="flex gap-3">
-                    <input
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                      placeholder="Enter promo code"
-                      className="flex-1 p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <button
-                      type="button"
-                      className="px-6 py-3 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                </div>
-
                 <div className="flex gap-4">
                   <button
                     onClick={() => handleStepChange(1)}
@@ -399,7 +499,7 @@ const Booking = () => {
 
             {step === 3 && (
               <div className="bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-3xl font-bold text-slate-900 mb-8">Payment & Confirmation</h2>
+                <h2 className="text-3xl font-bold text-slate-900 mb-8">Guest Details & Confirmation</h2>
 
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold text-slate-900 mb-4">Guest Information</h3>
@@ -409,7 +509,7 @@ const Booking = () => {
                         type="text"
                         value={guestDetails.firstName}
                         onChange={(e) => handleGuestDetailsChange('firstName', e.target.value)}
-                        placeholder="First Name"
+                        placeholder="First Name *"
                         className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                           validationErrors.firstName ? 'border-red-500' : 'border-slate-300'
                         }`}
@@ -423,7 +523,7 @@ const Booking = () => {
                         type="text"
                         value={guestDetails.lastName}
                         onChange={(e) => handleGuestDetailsChange('lastName', e.target.value)}
-                        placeholder="Last Name"
+                        placeholder="Last Name *"
                         className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                           validationErrors.lastName ? 'border-red-500' : 'border-slate-300'
                         }`}
@@ -451,7 +551,7 @@ const Booking = () => {
                         type="tel"
                         value={guestDetails.phone}
                         onChange={(e) => handleGuestDetailsChange('phone', e.target.value)}
-                        placeholder="Phone Number"
+                        placeholder="Phone Number *"
                         className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                           validationErrors.phone ? 'border-red-500' : 'border-slate-300'
                         }`}
@@ -464,43 +564,31 @@ const Booking = () => {
                 </div>
 
                 <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-slate-900 mb-4">Payment Method</h3>
-                  <div className="space-y-4">
-                    <div className="border-2 border-blue-500 bg-blue-50 rounded-lg p-4">
-                      <div className="flex items-center">
-                        <CreditCard className="h-5 w-5 text-blue-600 mr-3" />
-                        <span className="font-medium">Credit/Debit Card</span>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        placeholder="Card Number"
-                        className="p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Cardholder Name"
-                        className="p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="text"
-                        placeholder="MM/YY"
-                        className="p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="text"
-                        placeholder="CVV"
-                        className="p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
+                  <h3 className="text-xl font-semibold text-slate-900 mb-4">Privilege Card (Optional)</h3>
+                  <input
+                    type="text"
+                    value={guestDetails.privilegeCardNumber}
+                    onChange={(e) => handleGuestDetailsChange('privilegeCardNumber', e.target.value)}
+                    placeholder="Enter privilege card number for discounts"
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold text-slate-900 mb-4">Special Requests</h3>
+                  <textarea
+                    value={guestDetails.specialRequests}
+                    onChange={(e) => handleGuestDetailsChange('specialRequests', e.target.value)}
+                    placeholder="Any special requests? (e.g., early check-in, extra pillows)"
+                    rows={3}
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
                 </div>
 
                 <div className="flex items-center mb-8">
                   <Shield className="h-5 w-5 text-green-500 mr-2" />
                   <span className="text-sm text-slate-600">
-                    Your payment information is secure and encrypted
+                    Your booking will be confirmed with payment at check-in
                   </span>
                 </div>
 
@@ -516,7 +604,7 @@ const Booking = () => {
                     disabled={isLoading}
                     className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
-                    {isLoading ? 'Processing...' : 'Complete Booking'}
+                    {isLoading ? 'Confirming Booking...' : 'Confirm Booking'}
                   </button>
                 </div>
               </div>
