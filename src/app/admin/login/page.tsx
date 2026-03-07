@@ -8,12 +8,13 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const AdminLogin = () => {
   const router = useRouter();
-  const { login, loading } = useAuth();
+  const { adminLogin } = useAuth();
   const [formData, setFormData] = React.useState({
-    email: '',
+    username: '',
     password: ''
   });
   const [error, setError] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -25,17 +26,28 @@ const AdminLogin = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
-    if (!formData.email.includes('admin')) {
-      setError('Invalid admin credentials');
-      return;
-    }
+    setLoading(true);
 
     try {
-      await login(formData.email, formData.password);
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: formData.username, password: formData.password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Invalid admin credentials');
+        return;
+      }
+
+      adminLogin(data.admin.username, data.token);
       router.push('/admin/dashboard');
-    } catch (err) {
-      setError('Invalid admin credentials');
+    } catch {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,18 +72,18 @@ const AdminLogin = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Admin Username
+                Username
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
                 <input
                   type="text"
-                  name="email"
+                  name="username"
                   required
-                  value={formData.email}
+                  value={formData.username}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="admin@stjamesresort.com"
+                  placeholder="admin"
                 />
               </div>
             </div>
@@ -89,7 +101,7 @@ const AdminLogin = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="••••••••"
+                  placeholder="Enter password"
                 />
               </div>
             </div>
@@ -114,7 +126,7 @@ const AdminLogin = () => {
 
           <div className="mt-4 p-4 bg-blue-50 rounded-lg">
             <p className="text-xs text-slate-600 text-center">
-              For demo purposes, use any email with &apos;admin&apos; in it
+              Default credentials: admin / admin123 (seed first via POST /api/admin/seed)
             </p>
           </div>
         </div>

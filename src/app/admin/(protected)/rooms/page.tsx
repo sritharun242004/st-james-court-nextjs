@@ -1,471 +1,367 @@
 'use client';
 
 import React from 'react';
-import { Search, Plus, Edit2, Trash2, X, Save, Ban, Calendar } from 'lucide-react';
+import { BedDouble, Calendar, Save, AlertCircle, X, RefreshCw } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
-interface Room {
-  id: string;
-  room_number: string;
-  category: 'Deluxe' | 'Super Deluxe' | 'Executive Suite';
-  base_price: number;
-  max_occupancy: number;
-  description: string;
-  is_active: boolean;
+interface RoomCategory {
+  id: number;
+  code: string;
+  name: string;
+  capacity: number;
+  max_occupancy_per_room: number;
+  max_extra_beds_per_room: number;
 }
 
-interface Blockage {
-  id: string;
-  room_id: string;
-  start_date: string;
-  end_date: string;
-  reason: string;
+interface InventoryRow {
+  id: number;
+  date: string;
+  base_available: number;
+  base_price: string;
+  extra_bed_price: string;
+  booked: number;
 }
 
 const RoomManagement = () => {
-  const [rooms, setRooms] = React.useState<Room[]>([
-    {
-      id: '1',
-      room_number: '101',
-      category: 'Deluxe',
-      base_price: 4500,
-      max_occupancy: 2,
-      description: 'Cozy room with garden view',
-      is_active: true
-    },
-    {
-      id: '2',
-      room_number: '201',
-      category: 'Super Deluxe',
-      base_price: 5500,
-      max_occupancy: 3,
-      description: 'Spacious room with sea view',
-      is_active: true
-    },
-    {
-      id: '3',
-      room_number: '301',
-      category: 'Executive Suite',
-      base_price: 6500,
-      max_occupancy: 4,
-      description: 'Luxury suite with private balcony',
-      is_active: true
-    }
-  ]);
+  const { getToken } = useAuth();
+  const [categories, setCategories] = React.useState<RoomCategory[]>([]);
+  const [inventory, setInventory] = React.useState<InventoryRow[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [inventoryLoading, setInventoryLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
+  const [success, setSuccess] = React.useState('');
 
-  const [blockages, setBlockages] = React.useState<Blockage[]>([]);
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const [showRoomModal, setShowRoomModal] = React.useState(false);
-  const [showBlockModal, setShowBlockModal] = React.useState(false);
-  const [editingRoom, setEditingRoom] = React.useState<Room | null>(null);
-  const [selectedRoomForBlock, setSelectedRoomForBlock] = React.useState<Room | null>(null);
+  // Filters
+  const [selectedCategory, setSelectedCategory] = React.useState<number | ''>('');
+  const today = new Date().toISOString().split('T')[0];
+  const defaultEnd = new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0];
+  const [startDate, setStartDate] = React.useState(today);
+  const [endDate, setEndDate] = React.useState(defaultEnd);
 
-  const [roomFormData, setRoomFormData] = React.useState({
-    room_number: '',
-    category: 'Deluxe' as Room['category'],
-    base_price: '',
-    max_occupancy: '',
-    description: '',
-    is_active: true
+  // Bulk update form
+  const [bulkForm, setBulkForm] = React.useState({
+    categoryId: '' as number | '',
+    startDate: today,
+    endDate: defaultEnd,
+    baseAvailable: '',
+    basePrice: '',
+    extraBedPrice: '',
+  });
+  const [updating, setUpdating] = React.useState(false);
+
+  const authHeaders = () => ({
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${getToken()}`,
   });
 
-  const [blockFormData, setBlockFormData] = React.useState({
-    start_date: '',
-    end_date: '',
-    reason: ''
-  });
-
-  const filteredRooms = rooms.filter(room =>
-    room.room_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    room.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleAddRoom = () => {
-    setEditingRoom(null);
-    setRoomFormData({
-      room_number: '',
-      category: 'Deluxe',
-      base_price: '',
-      max_occupancy: '',
-      description: '',
-      is_active: true
-    });
-    setShowRoomModal(true);
-  };
-
-  const handleEditRoom = (room: Room) => {
-    setEditingRoom(room);
-    setRoomFormData({
-      room_number: room.room_number,
-      category: room.category,
-      base_price: room.base_price.toString(),
-      max_occupancy: room.max_occupancy.toString(),
-      description: room.description,
-      is_active: room.is_active
-    });
-    setShowRoomModal(true);
-  };
-
-  const handleDeleteRoom = (roomId: string) => {
-    if (confirm('Are you sure you want to delete this room?')) {
-      setRooms(rooms.filter(r => r.id !== roomId));
-      setBlockages(blockages.filter(b => b.room_id !== roomId));
+  const fetchCategories = React.useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/rooms', { headers: { Authorization: `Bearer ${getToken()}` } });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      setCategories(json.data);
+      if (json.data.length > 0 && selectedCategory === '') {
+        setSelectedCategory(json.data[0].id);
+        setBulkForm(f => ({ ...f, categoryId: json.data[0].id }));
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load categories');
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [getToken, selectedCategory]);
 
-  const handleRoomSubmit = (e: React.FormEvent) => {
+  const fetchInventory = React.useCallback(async () => {
+    if (!selectedCategory) return;
+    setInventoryLoading(true);
+    try {
+      const params = new URLSearchParams({
+        categoryId: String(selectedCategory),
+        startDate,
+        endDate,
+      });
+      const res = await fetch(`/api/admin/rooms/inventory?${params}`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      setInventory(json.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load inventory');
+    } finally {
+      setInventoryLoading(false);
+    }
+  }, [getToken, selectedCategory, startDate, endDate]);
+
+  React.useEffect(() => { fetchCategories(); }, [fetchCategories]);
+  React.useEffect(() => { fetchInventory(); }, [fetchInventory]);
+
+  const handleBulkUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingRoom) {
-      setRooms(rooms.map(r => r.id === editingRoom.id ? {
-        ...r,
-        ...roomFormData,
-        base_price: parseFloat(roomFormData.base_price),
-        max_occupancy: parseInt(roomFormData.max_occupancy)
-      } : r));
-    } else {
-      const newRoom: Room = {
-        id: Math.random().toString(36).substring(7),
-        ...roomFormData,
-        base_price: parseFloat(roomFormData.base_price),
-        max_occupancy: parseInt(roomFormData.max_occupancy)
-      };
-      setRooms([...rooms, newRoom]);
-    }
-    setShowRoomModal(false);
-  };
-
-  const handleBlockRoom = (room: Room) => {
-    setSelectedRoomForBlock(room);
-    setBlockFormData({ start_date: '', end_date: '', reason: '' });
-    setShowBlockModal(true);
-  };
-
-  const handleBlockSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (selectedRoomForBlock) {
-      const newBlockage: Blockage = {
-        id: Math.random().toString(36).substring(7),
-        room_id: selectedRoomForBlock.id,
-        ...blockFormData
-      };
-      setBlockages([...blockages, newBlockage]);
-      setShowBlockModal(false);
+    setError('');
+    setSuccess('');
+    setUpdating(true);
+    try {
+      const res = await fetch('/api/admin/rooms/inventory', {
+        method: 'PUT',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          categoryId: bulkForm.categoryId,
+          startDate: bulkForm.startDate,
+          endDate: bulkForm.endDate,
+          baseAvailable: parseInt(bulkForm.baseAvailable),
+          basePrice: parseFloat(bulkForm.basePrice),
+          extraBedPrice: bulkForm.extraBedPrice ? parseFloat(bulkForm.extraBedPrice) : 0,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      setSuccess(json.data.message);
+      await fetchInventory();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Update failed');
+    } finally {
+      setUpdating(false);
     }
   };
 
-  const handleRemoveBlock = (blockId: string) => {
-    setBlockages(blockages.filter(b => b.id !== blockId));
-  };
-
-  const getRoomBlockages = (roomId: string) => {
-    return blockages.filter(b => b.room_id === roomId);
-  };
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Room Management</h1>
-          <p className="text-slate-600 mt-1">Manage room inventory and availability</p>
-        </div>
-        <button
-          onClick={handleAddRoom}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="h-5 w-5" />
-          Add Room
-        </button>
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">Room Inventory Management</h1>
+        <p className="text-slate-600 mt-1">Manage room categories and per-date inventory</p>
       </div>
 
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-2">
+          <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+          <span className="text-red-700 text-sm">{error}</span>
+          <button onClick={() => setError('')} className="ml-auto"><X className="h-4 w-4 text-red-500" /></button>
+        </div>
+      )}
+      {success && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-2">
+          <span className="text-green-700 text-sm">{success}</span>
+          <button onClick={() => setSuccess('')} className="ml-auto"><X className="h-4 w-4 text-green-500" /></button>
+        </div>
+      )}
+
+      {/* Category Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-          <div className="text-2xl font-bold text-blue-900">{rooms.filter(r => r.category === 'Deluxe').length}</div>
-          <div className="text-sm text-blue-700">Deluxe Rooms</div>
-        </div>
-        <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-          <div className="text-2xl font-bold text-green-900">{rooms.filter(r => r.category === 'Super Deluxe').length}</div>
-          <div className="text-sm text-green-700">Super Deluxe</div>
-        </div>
-        <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
-          <div className="text-2xl font-bold text-orange-900">{rooms.filter(r => r.category === 'Executive Suite').length}</div>
-          <div className="text-sm text-orange-700">Executive Suites</div>
-        </div>
+        {categories.map((cat) => (
+          <div key={cat.id} className={`rounded-lg p-4 border cursor-pointer transition-colors ${
+            selectedCategory === cat.id
+              ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-200'
+              : 'bg-white border-slate-200 hover:border-blue-300'
+          }`} onClick={() => {
+            setSelectedCategory(cat.id);
+            setBulkForm(f => ({ ...f, categoryId: cat.id }));
+          }}>
+            <div className="flex items-center gap-3 mb-2">
+              <BedDouble className="h-6 w-6 text-blue-600" />
+              <h3 className="font-bold text-slate-900">{cat.name}</h3>
+            </div>
+            <div className="text-sm text-slate-600 space-y-1">
+              <p>Code: <span className="font-mono text-slate-800">{cat.code}</span></p>
+              <p>Capacity: {cat.capacity} guests</p>
+              <p>Max occupancy/room: {cat.max_occupancy_per_room}</p>
+              <p>Extra beds: {cat.max_extra_beds_per_room}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
+      {/* Date Range Filter */}
       <div className="bg-white rounded-xl shadow-lg p-6">
-        <div className="mb-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+        <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <Calendar className="h-5 w-5" />
+          Inventory View
+        </h3>
+        <div className="flex flex-wrap gap-4 mb-4 items-end">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                setSelectedCategory(val);
+                setBulkForm(f => ({ ...f, categoryId: val }));
+              }}
+              className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              {categories.map(c => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Start Date</label>
             <input
-              type="text"
-              placeholder="Search rooms by number or category..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">End Date</label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <button
+            onClick={fetchInventory}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Refresh
+          </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-slate-200">
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Room No.</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Category</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Price</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Occupancy</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Status</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Blockages</th>
-                <th className="text-right py-3 px-4 font-semibold text-slate-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRooms.map((room) => {
-                const roomBlockages = getRoomBlockages(room.id);
-                return (
-                  <tr key={room.id} className="border-b border-slate-100 hover:bg-slate-50">
-                    <td className="py-4 px-4">
-                      <div className="font-semibold text-slate-900">{room.room_number}</div>
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
-                        {room.category}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 text-slate-700">₹{room.base_price.toLocaleString()}</td>
-                    <td className="py-4 px-4 text-slate-700">{room.max_occupancy} guests</td>
-                    <td className="py-4 px-4">
-                      {room.is_active ? (
-                        <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-                          Active
+        {inventoryLoading ? (
+          <div className="flex justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          </div>
+        ) : inventory.length === 0 ? (
+          <p className="text-slate-500 text-sm py-4">No inventory data for this date range. Use the bulk update form below to set up inventory.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-slate-200">
+                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Date</th>
+                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Available</th>
+                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Price (₹)</th>
+                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Extra Bed (₹)</th>
+                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Booked</th>
+                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Net Available</th>
+                </tr>
+              </thead>
+              <tbody>
+                {inventory.map((row) => {
+                  const net = row.base_available - row.booked;
+                  return (
+                    <tr key={row.id} className="border-b border-slate-100 hover:bg-slate-50">
+                      <td className="py-3 px-4 font-mono text-sm">{row.date}</td>
+                      <td className="py-3 px-4">{row.base_available}</td>
+                      <td className="py-3 px-4">₹{parseFloat(row.base_price).toLocaleString()}</td>
+                      <td className="py-3 px-4">₹{parseFloat(row.extra_bed_price).toLocaleString()}</td>
+                      <td className="py-3 px-4">
+                        <span className={row.booked > 0 ? 'text-orange-600 font-semibold' : ''}>
+                          {row.booked}
                         </span>
-                      ) : (
-                        <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">
-                          Inactive
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className={`font-semibold ${net <= 0 ? 'text-red-600' : net <= 3 ? 'text-orange-600' : 'text-green-600'}`}>
+                          {net}
                         </span>
-                      )}
-                    </td>
-                    <td className="py-4 px-4">
-                      {roomBlockages.length > 0 ? (
-                        <div className="space-y-1">
-                          {roomBlockages.map((block) => (
-                            <div key={block.id} className="text-xs bg-red-50 px-2 py-1 rounded flex items-center justify-between">
-                              <span className="text-red-700">
-                                {new Date(block.start_date).toLocaleDateString()} - {new Date(block.end_date).toLocaleDateString()}
-                              </span>
-                              <button
-                                onClick={() => handleRemoveBlock(block.id)}
-                                className="ml-2 text-red-600 hover:text-red-800"
-                              >
-                                <X className="h-3 w-3" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-slate-400 text-sm">None</span>
-                      )}
-                    </td>
-                    <td className="py-4 px-4">
-                      <div className="flex justify-end gap-2">
-                        <button
-                          onClick={() => handleBlockRoom(room)}
-                          className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                          title="Block Room"
-                        >
-                          <Ban className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => handleEditRoom(room)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                        >
-                          <Edit2 className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteRoom(room.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
-      {showRoomModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full">
-            <div className="border-b border-slate-200 px-6 py-4 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-slate-900">
-                {editingRoom ? 'Edit Room' : 'Add New Room'}
-              </h3>
-              <button onClick={() => setShowRoomModal(false)} className="p-2 hover:bg-slate-100 rounded-lg">
-                <X className="h-5 w-5" />
-              </button>
+      {/* Bulk Update Form */}
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">Bulk Update Inventory</h3>
+        <form onSubmit={handleBulkUpdate} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Category *</label>
+              <select
+                required
+                value={bulkForm.categoryId}
+                onChange={(e) => setBulkForm({ ...bulkForm, categoryId: parseInt(e.target.value) })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select category</option>
+                {categories.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
             </div>
-
-            <form onSubmit={handleRoomSubmit} className="p-6 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Room Number *</label>
-                  <input
-                    type="text"
-                    required
-                    value={roomFormData.room_number}
-                    onChange={(e) => setRoomFormData({ ...roomFormData, room_number: e.target.value })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Category *</label>
-                  <select
-                    required
-                    value={roomFormData.category}
-                    onChange={(e) => setRoomFormData({ ...roomFormData, category: e.target.value as Room['category'] })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="Deluxe">Deluxe</option>
-                    <option value="Super Deluxe">Super Deluxe</option>
-                    <option value="Executive Suite">Executive Suite</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Base Price (₹) *</label>
-                  <input
-                    type="number"
-                    required
-                    value={roomFormData.base_price}
-                    onChange={(e) => setRoomFormData({ ...roomFormData, base_price: e.target.value })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Max Occupancy *</label>
-                  <input
-                    type="number"
-                    required
-                    value={roomFormData.max_occupancy}
-                    onChange={(e) => setRoomFormData({ ...roomFormData, max_occupancy: e.target.value })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Description</label>
-                <textarea
-                  value={roomFormData.description}
-                  onChange={(e) => setRoomFormData({ ...roomFormData, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="is_active"
-                  checked={roomFormData.is_active}
-                  onChange={(e) => setRoomFormData({ ...roomFormData, is_active: e.target.checked })}
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label htmlFor="is_active" className="text-sm font-medium text-slate-700">
-                  Room is Active
-                </label>
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
-                >
-                  <Save className="h-5 w-5" />
-                  {editingRoom ? 'Update Room' : 'Create Room'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowRoomModal(false)}
-                  className="px-6 py-3 border border-slate-300 rounded-lg font-semibold hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showBlockModal && selectedRoomForBlock && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full">
-            <div className="border-b border-slate-200 px-6 py-4 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-slate-900">Block Room {selectedRoomForBlock.room_number}</h3>
-              <button onClick={() => setShowBlockModal(false)} className="p-2 hover:bg-slate-100 rounded-lg">
-                <X className="h-5 w-5" />
-              </button>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Start Date *</label>
+              <input
+                type="date"
+                required
+                value={bulkForm.startDate}
+                onChange={(e) => setBulkForm({ ...bulkForm, startDate: e.target.value })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
             </div>
-
-            <form onSubmit={handleBlockSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Start Date *</label>
-                <input
-                  type="date"
-                  required
-                  value={blockFormData.start_date}
-                  onChange={(e) => setBlockFormData({ ...blockFormData, start_date: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">End Date *</label>
-                <input
-                  type="date"
-                  required
-                  value={blockFormData.end_date}
-                  onChange={(e) => setBlockFormData({ ...blockFormData, end_date: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Reason</label>
-                <textarea
-                  value={blockFormData.reason}
-                  onChange={(e) => setBlockFormData({ ...blockFormData, reason: e.target.value })}
-                  rows={3}
-                  placeholder="e.g., Maintenance, Renovation, etc."
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700"
-                >
-                  <Calendar className="h-5 w-5" />
-                  Block Room
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowBlockModal(false)}
-                  className="px-6 py-3 border border-slate-300 rounded-lg font-semibold hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">End Date *</label>
+              <input
+                type="date"
+                required
+                value={bulkForm.endDate}
+                onChange={(e) => setBulkForm({ ...bulkForm, endDate: e.target.value })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
-        </div>
-      )}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Rooms Available *</label>
+              <input
+                type="number"
+                required
+                min="0"
+                value={bulkForm.baseAvailable}
+                onChange={(e) => setBulkForm({ ...bulkForm, baseAvailable: e.target.value })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Base Price (₹) *</label>
+              <input
+                type="number"
+                required
+                min="0"
+                step="0.01"
+                value={bulkForm.basePrice}
+                onChange={(e) => setBulkForm({ ...bulkForm, basePrice: e.target.value })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Extra Bed Price (₹)</label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={bulkForm.extraBedPrice}
+                onChange={(e) => setBulkForm({ ...bulkForm, extraBedPrice: e.target.value })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            disabled={updating}
+            className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+          >
+            <Save className="h-5 w-5" />
+            {updating ? 'Updating...' : 'Update Inventory'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

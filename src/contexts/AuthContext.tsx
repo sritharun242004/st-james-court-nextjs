@@ -10,15 +10,18 @@ export interface User {
   age?: number;
   nationality?: string;
   is_admin: boolean;
+  token?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  adminLogin: (username: string, token: string) => void;
   signUp: (email: string, password: string, userData: Partial<User>) => Promise<void>;
   logout: () => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
+  getToken: () => string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -63,6 +66,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const adminLogin = (username: string, token: string) => {
+    const adminUser: User = {
+      id: username,
+      email: '',
+      full_name: username,
+      phone: '',
+      is_admin: true,
+      token,
+    };
+    setUser(adminUser);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user', JSON.stringify(adminUser));
+    }
+  };
+
+  const getToken = (): string | null => {
+    return user?.token || null;
+  };
+
   const signUp = async (email: string, password: string, userData: Partial<User>) => {
     setLoading(true);
     try {
@@ -105,7 +127,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signUp, logout, updateProfile }}>
+    <AuthContext.Provider value={{ user, loading, login, adminLogin, signUp, logout, updateProfile, getToken }}>
       {children}
     </AuthContext.Provider>
   );
