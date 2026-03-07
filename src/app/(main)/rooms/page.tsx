@@ -1,0 +1,519 @@
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { Users, Star, Calendar, Clock, MapPin, Phone, Utensils, Wine, Waves, Heart } from 'lucide-react';
+import AnimatedSection from '@/components/AnimatedSection';
+
+const Rooms = () => {
+  const [roomFilter, setRoomFilter] = useState('all');
+  const [selectedRestaurant, setSelectedRestaurant] = useState('le-jardin');
+  const [amenityCategory, setAmenityCategory] = useState('beach');
+
+  // Room data
+  const rooms = [
+    {
+      id: 'deluxe-room',
+      name: "Deluxe Room",
+      category: "deluxe",
+      price: 4500,
+      weekendPrice: 5500,
+      size: "Standard",
+      occupancy: 2,
+      image: "https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=800",
+      amenities: ["Twin Beds", "French Window", "Air Conditioning", "Breakfast"],
+      description: "Comfortable room with twin beds and Fenesta French window, perfect for a relaxing stay.",
+      features: ["Twin Beds", "Fenesta French Window", "Air Conditioning", "24hrs Hot & Cold Water"]
+    },
+    {
+      id: 'super-deluxe',
+      name: "Super Deluxe",
+      category: "deluxe",
+      price: 5500,
+      weekendPrice: 7000,
+      size: "Spacious",
+      occupancy: 2,
+      image: "https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=800",
+      amenities: ["King Size Bed", "Cushion Chair", "Double Glazing Window", "Breakfast"],
+      description: "Upgraded room with king size bed and elegant furnishings for enhanced comfort.",
+      features: ["King Size Bed", "Cushion Chair", "Curtains with Scallops", "Double Glazing UPVC Window"]
+    },
+    {
+      id: 'executive-suite',
+      name: "Executive Suite Room",
+      category: "suite",
+      price: 6500,
+      weekendPrice: 7450,
+      size: "Luxury Suite",
+      occupancy: 2,
+      image: "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800",
+      amenities: ["King Size Bed", "Luxurious Sofa", "Private Balcony", "Bath Tub"],
+      description: "Premium suite with king size bed, luxurious cushion sofa and private balcony for the ultimate experience.",
+      features: ["King Size Bed", "Luxurious Cushion Sofa", "Private Balcony", "Shower and Bath Tub"]
+    }
+  ];
+
+  // Restaurant data
+  const restaurants = [
+    {
+      id: 'le-jardin',
+      name: 'Le Jardin',
+      type: 'Fine Dining',
+      cuisine: 'French-Indian Fusion',
+      hours: '7:00 PM - 11:00 PM',
+      image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'Our signature restaurant combines French culinary techniques with local Indian flavors, creating an unforgettable dining experience.',
+      specialties: ['Bouillabaisse with Local Fish', 'Coq au Vin with Indian Spices', 'French Onion Soup', 'Tandoori Duck Confit'],
+      priceRange: '₹₹₹₹',
+      rating: 4.8
+    },
+    {
+      id: 'beach-grill',
+      name: 'Beach Bar & Grill',
+      type: 'Casual Dining',
+      cuisine: 'Coastal & Continental',
+      hours: '12:00 PM - 11:00 PM',
+      image: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'Dine with your feet in the sand while enjoying fresh seafood and tropical cocktails with stunning ocean views.',
+      specialties: ['Fresh Grilled Seafood', 'Beach BBQ Platter', 'Tropical Cocktails', 'Wood-fired Pizza'],
+      priceRange: '₹₹₹',
+      rating: 4.6
+    },
+    {
+      id: 'rooftop-lounge',
+      name: 'Rooftop Lounge',
+      type: 'Bar & Lounge',
+      cuisine: 'Cocktails & Light Bites',
+      hours: '5:00 PM - 1:00 AM',
+      image: 'https://images.pexels.com/photos/1267697/pexels-photo-1267697.jpeg?auto=compress&cs=tinysrgb&w=800',
+      description: 'Panoramic ocean views accompany craft cocktails and light Mediterranean fare in our elegant rooftop setting.',
+      specialties: ['Signature Cocktails', 'Champagne Selection', 'Artisan Cheese Board', 'Sunset Tapas'],
+      priceRange: '₹₹₹',
+      rating: 4.7
+    }
+  ];
+
+  // Amenities data
+  const amenityCategories = [
+    {
+      id: 'beach',
+      title: "Beach & Water Activities",
+      icon: <Waves className="h-8 w-8" />,
+      items: [
+        { name: "Private Beach Access", description: "Exclusive beachfront with pristine sandy shores" },
+        { name: "Water Sports Center", description: "Kayaking, jet skiing, and parasailing" },
+        { name: "Swimming Pools", description: "Multiple pools including infinity and kids' pools" },
+        { name: "Beach Volleyball", description: "Professional court with equipment provided" },
+        { name: "Fishing Trips", description: "Organized deep-sea and coastal fishing excursions" },
+        { name: "Sunset Cruises", description: "Romantic boat trips along the coast" }
+      ]
+    },
+    {
+      id: 'wellness',
+      title: "Wellness & Recreation",
+      icon: <Heart className="h-8 w-8" />,
+      items: [
+        { name: "Ayurvedic Spa", description: "Traditional treatments with ocean views" },
+        { name: "Yoga Pavilion", description: "Daily sunrise and sunset yoga sessions" },
+        { name: "Fitness Center", description: "State-of-the-art gym with personal trainers" },
+        { name: "Meditation Garden", description: "Peaceful space for mindfulness practices" },
+        { name: "Tennis Court", description: "Professional court with equipment rental" },
+        { name: "Cycling Tours", description: "Guided bike tours through French Quarter" }
+      ]
+    },
+    {
+      id: 'dining',
+      title: "Dining & Entertainment",
+      icon: <Utensils className="h-8 w-8" />,
+      items: [
+        { name: "Le Jardin Restaurant", description: "Fine dining with French-Indian fusion cuisine" },
+        { name: "Beach Bar & Grill", description: "Casual dining with feet in the sand" },
+        { name: "Rooftop Lounge", description: "Cocktails with panoramic ocean views" },
+        { name: "Coffee Shop", description: "Artisanal coffee and fresh pastries" },
+        { name: "Room Service", description: "24-hour gourmet dining in your room" },
+        { name: "Cultural Shows", description: "Traditional Indian dance and music performances" }
+      ]
+    }
+  ];
+
+  const roomCategories = [
+    { id: 'all', name: 'All Rooms' },
+    { id: 'deluxe', name: 'Deluxe' },
+    { id: 'suite', name: 'Suites' }
+  ];
+
+  const filteredRooms = roomFilter === 'all' ? rooms : rooms.filter(room => room.category === roomFilter);
+
+  return (
+    <div>
+      {/* Hero Section */}
+      <section className="pt-52 pb-20 bg-gradient-to-r from-blue-600 to-teal-500 text-white">
+        <AnimatedSection className="max-w-7xl mx-auto px-4 text-center">
+          <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Rooms, Dining & Amenities</h1>
+          <p className="text-2xl max-w-4xl mx-auto leading-relaxed">
+            Discover our luxurious accommodations, world-class dining experiences,
+            and comprehensive amenities designed for your perfect getaway
+          </p>
+        </AnimatedSection>
+      </section>
+
+      {/* ROOMS SECTION */}
+      <section id="rooms" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Luxurious Accommodations</h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Choose from our collection of elegantly appointed rooms and suites,
+              each designed to provide comfort and stunning views
+            </p>
+          </AnimatedSection>
+
+
+          {/* Rooms Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredRooms.map((room, index) => (
+              <AnimatedSection
+                key={room.id}
+                delay={index * 0.1}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300"
+              >
+                <div className="relative">
+                  <img
+                    src={room.image}
+                    alt={room.name}
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                    <span className="text-blue-600 font-semibold">₹{room.price.toLocaleString()}/night</span>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">{room.name}</h3>
+                  <p className="text-slate-600 mb-4">{room.description}</p>
+
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-slate-500">Mon - Thu:</span>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xl font-bold text-blue-600">₹{room.price}</span>
+                        <span className="text-sm text-slate-500">+12% GST</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-500">Fri - Sun:</span>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xl font-bold text-green-600">₹{room.weekendPrice}</span>
+                        <span className="text-sm text-slate-500">+12% GST</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-4 text-sm text-slate-500">
+                      <span className="flex items-center">
+                        <Users className="h-4 w-4 mr-1" />
+                        {room.occupancy} guests
+                      </span>
+                      <span>{room.size}</span>
+                    </div>
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 mb-6">
+                    {room.features.slice(0, 4).map((feature, index) => (
+                      <div key={index} className="flex items-center text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex space-x-3">
+                    <Link
+                      href={`/rooms/${room.id}`}
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-3 rounded-lg text-center font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
+                    >
+                      View Details
+                    </Link>
+                  </div>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* DINING SECTION */}
+      <section id="dining" className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Culinary Excellence</h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Savor the unique fusion of French culinary artistry and Indian flavors,
+              from elegant fine dining to casual beachfront meals
+            </p>
+          </AnimatedSection>
+
+          {/* Restaurant Selection */}
+          <div className="flex flex-wrap gap-4 justify-center mb-12">
+            {restaurants.map((restaurant) => (
+              <button
+                key={restaurant.id}
+                onClick={() => setSelectedRestaurant(restaurant.id)}
+                className={`px-6 py-3 rounded-full transition-all duration-300 ${
+                  selectedRestaurant === restaurant.id
+                    ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-lg'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 shadow-sm'
+                }`}
+              >
+                {restaurant.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Featured Restaurant */}
+          {restaurants.filter(r => r.id === selectedRestaurant).map((restaurant) => (
+            <AnimatedSection key={restaurant.id} className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+              <div>
+                <div className="flex items-center mb-4">
+                  <span className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-3 py-1 rounded-full text-sm font-medium mr-3">
+                    {restaurant.type}
+                  </span>
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${i < Math.floor(restaurant.rating) ? 'text-yellow-400 fill-current' : 'text-slate-300'}`}
+                      />
+                    ))}
+                    <span className="ml-2 text-slate-600">{restaurant.rating}</span>
+                  </div>
+                </div>
+
+                <h3 className="text-3xl font-bold text-slate-900 mb-4">{restaurant.name}</h3>
+                <p className="text-lg text-slate-600 mb-6">{restaurant.description}</p>
+
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="flex items-center text-slate-600">
+                    <Utensils className="h-5 w-5 mr-2 text-blue-600" />
+                    {restaurant.cuisine}
+                  </div>
+                  <div className="flex items-center text-slate-600">
+                    <Clock className="h-5 w-5 mr-2 text-blue-600" />
+                    {restaurant.hours}
+                  </div>
+                  <div className="flex items-center text-slate-600">
+                    <Wine className="h-5 w-5 mr-2 text-blue-600" />
+                    {restaurant.priceRange}
+                  </div>
+                  <div className="flex items-center text-slate-600">
+                    <Phone className="h-5 w-5 mr-2 text-blue-600" />
+                    Reservations Available
+                  </div>
+                </div>
+
+                <div className="mb-8">
+                  <h4 className="text-xl font-semibold text-slate-900 mb-4">Signature Specialties</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {restaurant.specialties.map((specialty, index) => (
+                      <div key={index} className="flex items-center">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                        <span className="text-slate-700">{specialty}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative">
+                <img
+                  src={restaurant.image}
+                  alt={restaurant.name}
+                  className="rounded-lg shadow-xl w-full h-96 object-cover"
+                />
+                <div className="absolute -bottom-4 -right-4 bg-white p-4 rounded-lg shadow-lg">
+                  <div className="text-2xl font-bold text-blue-600">{restaurant.rating}</div>
+                  <div className="text-slate-600 text-sm">Guest Rating</div>
+                </div>
+              </div>
+            </AnimatedSection>
+          ))}
+
+          {/* All Restaurants Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {restaurants.map((restaurant, index) => (
+              <AnimatedSection
+                key={restaurant.id}
+                delay={index * 0.1}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300"
+              >
+                <img
+                  src={restaurant.image}
+                  alt={restaurant.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                      {restaurant.type}
+                    </span>
+                    <div className="flex items-center">
+                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                      <span className="ml-1 text-sm text-slate-600">{restaurant.rating}</span>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">{restaurant.name}</h3>
+                  <p className="text-slate-600 text-sm mb-3">{restaurant.cuisine}</p>
+                  <div className="flex items-center text-slate-500 text-sm mb-4">
+                    <Clock className="h-4 w-4 mr-1" />
+                    {restaurant.hours}
+                  </div>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* AMENITIES SECTION */}
+      <section id="amenities" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">World-Class Amenities</h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Everything you need for the perfect beach vacation, from luxury spa treatments
+              to thrilling water sports and cultural experiences
+            </p>
+          </AnimatedSection>
+
+          {/* Amenity Category Selection */}
+          <div className="flex flex-wrap gap-4 justify-center mb-12">
+            {amenityCategories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setAmenityCategory(category.id)}
+                className={`flex items-center px-6 py-3 rounded-full transition-all duration-300 ${
+                  amenityCategory === category.id
+                    ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-lg'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                {category.icon}
+                <span className="ml-2">{category.title}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Detailed Amenities */}
+          {amenityCategories.filter(cat => cat.id === amenityCategory).map((category) => (
+            <AnimatedSection key={category.id} className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl shadow-lg mb-10 p-8">
+              <div className="flex items-center mb-8">
+                <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-4 rounded-full mr-4">
+                  {category.icon}
+                </div>
+                <h3 className="text-3xl font-bold text-slate-900">{category.title}</h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {category.items.map((item, itemIndex) => (
+                  <div key={itemIndex} className="bg-white p-6 rounded-xl hover:shadow-md transition-shadow duration-300">
+                    <h4 className="text-lg font-semibold text-slate-900 mb-2">{item.name}</h4>
+                    <p className="text-slate-600">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </AnimatedSection>
+          ))}
+
+          {/* Featured Amenities */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <AnimatedSection className="relative group overflow-hidden rounded-xl">
+              <img
+                src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Spa Treatment"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                <div className="p-6 text-white">
+                  <h3 className="text-2xl font-bold mb-2">Ayurvedic Spa</h3>
+                  <p>Rejuvenating treatments with ocean views</p>
+                </div>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.2} className="relative group overflow-hidden rounded-xl">
+              <img
+                src="https://images.pexels.com/photos/863988/pexels-photo-863988.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Water Sports"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                <div className="p-6 text-white">
+                  <h3 className="text-2xl font-bold mb-2">Water Sports</h3>
+                  <p>Thrilling adventures on pristine waters</p>
+                </div>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.4} className="relative group overflow-hidden rounded-xl">
+              <img
+                src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Fine Dining"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                <div className="p-6 text-white">
+                  <h3 className="text-2xl font-bold mb-2">Fine Dining</h3>
+                  <p>French-Indian fusion culinary excellence</p>
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
+
+
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section
+        className="py-20 relative"
+        style={{
+          backgroundImage: 'url(https://images.pexels.com/photos/1320684/pexels-photo-1320684.jpeg?auto=compress&cs=tinysrgb&w=1920)'
+        }}
+      >
+        <div className="absolute inset-0 bg-blue-900/80"></div>
+        <AnimatedSection className="relative z-10 max-w-4xl mx-auto text-center px-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Ready to Experience Luxury?
+          </h2>
+          <p className="text-xl text-white/90 mb-8">
+            Book your stay at St James Court Beach Resort and indulge in our world-class
+            accommodations, dining, and amenities
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/booking"
+              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
+            >
+              <Calendar className="mr-2 h-5 w-5" />
+              Book Your Stay
+            </Link>
+            <Link
+              href="/contact"
+              className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
+            >
+              Contact Us
+            </Link>
+          </div>
+        </AnimatedSection>
+      </section>
+    </div>
+  );
+};
+
+export default Rooms;
