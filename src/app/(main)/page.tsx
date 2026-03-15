@@ -7,6 +7,9 @@ import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/AnimatedSection';
 
 const Home = () => {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+
   const [formData, setFormData] = React.useState({
     name: '',
     email: '',
@@ -68,20 +71,20 @@ const Home = () => {
 
   const testimonials = [
     {
-      name: "Sarah Mitchell",
-      location: "London, UK",
+      name: "Ananya & Vikram Nair",
+      location: "Kochi, Kerala",
       rating: 5,
       text: "An absolutely magical experience! The beachfront location and French colonial charm made our honeymoon unforgettable."
     },
     {
-      name: "Rahul Sharma",
+      name: "Rajesh Venkataraman",
       location: "Mumbai, India",
       rating: 5,
       text: "Perfect blend of luxury and local culture. The staff went above and beyond to make our family vacation special."
     },
     {
-      name: "Marie Dubois",
-      location: "Paris, France",
+      name: "Deepika & Suresh Iyer",
+      location: "Chennai, Tamil Nadu",
       rating: 5,
       text: "Felt like home away from home with the beautiful French architecture and warm Indian hospitality."
     }
@@ -92,7 +95,7 @@ const Home = () => {
       {/* Hero Section */}
       <motion.section
         className="relative h-screen flex items-center justify-center overflow-hidden px-4"
-        initial={{ opacity: 0 }}
+        initial={mounted ? { opacity: 0 } : false}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
@@ -107,13 +110,13 @@ const Home = () => {
 
         <motion.div
           className="relative z-10 text-center text-white max-w-4xl mx-auto"
-          initial={{ y: 50, opacity: 0 }}
+          initial={mounted ? { y: 50, opacity: 0 } : false}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
           <motion.div
             className="flex justify-center mb-8 mt-8 lg:mt-16"
-            initial={{ scale: 0, opacity: 0 }}
+            initial={mounted ? { scale: 0, opacity: 0 } : false}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
@@ -126,12 +129,12 @@ const Home = () => {
             Where Tranquility Meets the Sea
           </p>
           <p className="text-base sm:text-lg mb-12 max-w-2xl mx-auto opacity-80">
-            Experience luxury beachfront hospitality in the heart of Pondicherry's French Quarter,
-            where colonial charm meets modern comfort.
+            Experience luxury beachfront hospitality on Pondicherry's East Coast Road,
+            the only resort right on the beach.
           </p>
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ y: 30, opacity: 0 }}
+            initial={mounted ? { y: 30, opacity: 0 } : false}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 1 }}
           >
@@ -170,15 +173,17 @@ const Home = () => {
               <AnimatedSection
                 key={index}
                 delay={index * 0.1}
-                className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-teal-50 hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                className="p-6 rounded-xl bg-gradient-to-br from-blue-50 to-teal-50 hover:shadow-lg transform hover:scale-105 transition-all duration-300"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-full mb-4">
-                  {feature.icon}
+                <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
+                  <div className="flex-shrink-0 inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-full md:mb-4">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-lg md:text-xl font-playfair font-semibold text-slate-900 md:mb-2 md:text-center">
+                    {feature.title}
+                  </h3>
                 </div>
-                <h3 className="text-xl font-playfair font-semibold text-slate-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-slate-600">
+                <p className="text-slate-600 text-sm md:text-base md:text-center">
                   {feature.description}
                 </p>
               </AnimatedSection>
@@ -327,12 +332,12 @@ const Home = () => {
           </AnimatedSection>
 
           {/* Bento Grid Layout */}
-          <div className="grid grid-cols-4 grid-rows-3 gap-4 h-[700px]">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-3 md:gap-4 md:h-[700px]">
             {/* Main large image - spans 2x2 */}
-            <AnimatedSection className="col-span-2 row-span-2 relative group overflow-hidden rounded-2xl shadow-xl">
+            <AnimatedSection className="col-span-2 h-56 md:h-auto md:row-span-2 relative group overflow-hidden rounded-2xl shadow-xl">
               <img
-                src="https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&w=800"
-                alt="Beachfront Paradise"
+                src="/images/gallery/gallery-1.jpg"
+                alt="St James Court Beach Resort Grounds"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent">
@@ -343,92 +348,92 @@ const Home = () => {
               </div>
             </AnimatedSection>
 
-            {/* Ocean View Room */}
-            <AnimatedSection delay={0.1} className="col-span-1 row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
+            {/* Sea View Rooms */}
+            <AnimatedSection delay={0.1} className="col-span-1 h-40 md:h-auto md:row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
               <img
-                src="https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Ocean View Room"
+                src="/images/rooms/super-deluxe/super-deluxe-balcony-sea-view.jpg"
+                alt="Sea View Balcony Room"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-sm">Ocean View Rooms</h4>
+                  <h4 className="font-bold text-sm">Sea View Rooms</h4>
                   <p className="text-xs opacity-90">Luxury accommodations</p>
                 </div>
               </div>
             </AnimatedSection>
 
-            {/* Fine Dining */}
-            <AnimatedSection delay={0.2} className="col-span-1 row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
+            {/* Beachside Dining */}
+            <AnimatedSection delay={0.2} className="col-span-1 h-40 md:h-auto md:row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
               <img
-                src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Fine Dining"
+                src="/images/dining/dining-4.jpg"
+                alt="Beachside Dining"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-sm">Le Jardin Restaurant</h4>
-                  <p className="text-xs opacity-90">French-Indian fusion</p>
+                  <h4 className="font-bold text-sm">Sea Queen Restaurant</h4>
+                  <p className="text-xs opacity-90">Multi-cuisine dining</p>
                 </div>
               </div>
             </AnimatedSection>
 
-            {/* Spa */}
-            <AnimatedSection delay={0.3} className="col-span-1 row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
+            {/* Pool */}
+            <AnimatedSection delay={0.3} className="col-span-1 h-40 md:h-auto md:row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
               <img
-                src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Luxury Spa"
+                src="/images/gallery/gallery-20.jpg"
+                alt="Resort Swimming Pool"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-sm">Ayurvedic Spa</h4>
-                  <p className="text-xs opacity-90">Wellness treatments</p>
+                  <h4 className="font-bold text-sm">Swimming Pool</h4>
+                  <p className="text-xs opacity-90">Refreshing retreat</p>
                 </div>
               </div>
             </AnimatedSection>
 
-            {/* Water Sports */}
-            <AnimatedSection delay={0.4} className="col-span-1 row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
+            {/* Pool & Guests */}
+            <AnimatedSection delay={0.4} className="col-span-1 h-40 md:h-auto md:row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
               <img
-                src="https://images.pexels.com/photos/863988/pexels-photo-863988.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Water Sports"
+                src="/images/gallery/gallery-26.jpeg"
+                alt="Guests at the Pool"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-sm">Water Sports</h4>
-                  <p className="text-xs opacity-90">Adventure activities</p>
+                  <h4 className="font-bold text-sm">Pool & Recreation</h4>
+                  <p className="text-xs opacity-90">Fun in the sun</p>
                 </div>
               </div>
             </AnimatedSection>
 
-            {/* Beach Events */}
-            <AnimatedSection delay={0.5} className="col-span-1 row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
+            {/* Beach Celebrations */}
+            <AnimatedSection delay={0.5} className="col-span-1 h-44 md:col-span-2 md:h-auto md:row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
               <img
-                src="https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Beach Events"
+                src="/images/events/beach-engagement-2.jpeg"
+                alt="Beach Celebrations"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-sm">Beach Weddings</h4>
-                  <p className="text-xs opacity-90">Dream celebrations</p>
+                  <h4 className="font-bold text-sm">Beach Celebrations</h4>
+                  <p className="text-xs opacity-90">Dream events by the sea</p>
                 </div>
               </div>
             </AnimatedSection>
 
-            {/* Colonial Architecture */}
-            <AnimatedSection delay={0.6} className="col-span-1 row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
+            {/* Resort Exterior */}
+            <AnimatedSection delay={0.6} className="col-span-1 h-44 md:col-span-2 md:h-auto md:row-span-1 relative group overflow-hidden rounded-xl shadow-lg">
               <img
-                src="https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Colonial Architecture"
+                src="/images/gallery/resort-exterior-1.jpg"
+                alt="Resort Exterior"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-sm">French Quarter</h4>
-                  <p className="text-xs opacity-90">Colonial heritage</p>
+                  <h4 className="font-bold text-sm">Resort Grounds</h4>
+                  <p className="text-xs opacity-90">Scenic beachfront property</p>
                 </div>
               </div>
             </AnimatedSection>
@@ -455,17 +460,18 @@ const Home = () => {
                 A Heritage of Hospitality
               </h2>
               <p className="text-lg text-slate-600 mb-6">
-                Nestled in the charming French Quarter of Pondicherry, St James Court Beach Resort
-                offers a unique blend of colonial architecture and contemporary luxury. Our resort
-                celebrates the rich cultural heritage of this former French colony while providing
-                world-class amenities and service.
+                Situated on Pondicherry's East Coast Road in Chinna Kalapet, St James Court Beach Resort
+                is the only resort in Pondicherry right on the beach. A unit of the NTS Group — established
+                in 1998 with over 25 years of excellence in hospitality — we offer world-class amenities
+                and warm Indian hospitality.
               </p>
               <p className="text-lg text-slate-600 mb-8">
-                From our beachfront location overlooking the Bay of Bengal to our meticulously
-                designed rooms and suites, every detail has been crafted to ensure an unforgettable stay.
+                From our pristine beachfront overlooking the Bay of Bengal to our 40 elegantly
+                designed rooms and suites, 3 restaurants, and 2 event venues, every detail has
+                been crafted to ensure an unforgettable stay.
               </p>
               <Link
-                href="/explore"
+                href="/about"
                 className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors"
               >
                 Learn More About Us
@@ -523,13 +529,15 @@ const Home = () => {
           </div>
 
           <AnimatedSection className="text-center mt-12" delay={0.6}>
-            <Link
-              href="/testimonials"
+            <a
+              href="https://www.google.com/maps/place/St.+James+Court+Beach+Resort+in+Pondicherry/@12.014554,79.86009,16z/data=!4m11!3m10!1s0x3a53644f0648516b:0xd827eb825b2dce23!5m2!4m1!1i2!8m2!3d12.0145542!4d79.8600897!9m1!1b1!16s%2Fg%2F1tf5zqh9?hl=en&entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors"
             >
               Read More Reviews
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+            </a>
           </AnimatedSection>
         </div>
       </section>
@@ -588,7 +596,7 @@ const Home = () => {
                       <div className="max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500 ease-in-out">
                         <div className="pt-4 border-t border-slate-100 mt-4">
                           <p className="text-slate-600">
-                            We have multiple dining venues including Le Jardin fine dining, Beach Bar & Grill, Rooftop Lounge, and 24/7 room service.
+                            We have 3 dining venues — Sea Queen (family restaurant), Sea Breeze (beachfront open air), and The Ocean (bar & restaurant) — plus 24/7 room service.
                           </p>
                         </div>
                       </div>
@@ -668,7 +676,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-blue-900/80"></div>
         <motion.div
           className="relative z-10 max-w-4xl mx-auto text-center px-4"
-          initial={{ y: 50, opacity: 0 }}
+          initial={mounted ? { y: 50, opacity: 0 } : false}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
@@ -712,7 +720,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatedSection className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
               <img
-                src="https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src="/images/rooms/deluxe/deluxe-room-1.jpg"
                 alt="Deluxe Room"
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
@@ -735,7 +743,7 @@ const Home = () => {
 
             <AnimatedSection delay={0.2} className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
               <img
-                src="https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src="/images/rooms/super-deluxe/super-deluxe-balcony-sea-view.jpg"
                 alt="Super Deluxe"
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
@@ -758,7 +766,7 @@ const Home = () => {
 
             <AnimatedSection delay={0.4} className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500">
               <img
-                src="https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src="/images/rooms/suite/suite-room-1.jpg"
                 alt="Executive Suite Room"
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
@@ -801,26 +809,26 @@ const Home = () => {
                 Culinary Excellence
               </h2>
               <p className="text-lg text-slate-600 mb-6">
-                Indulge in our signature French-Indian fusion cuisine at Le Jardin, our award-winning
-                restaurant. From fresh seafood caught daily to authentic French pastries, every meal
-                is a celebration of flavors.
+                Savour an array of multi-cuisine delicacies across our three distinctive restaurants.
+                From fresh seafood caught daily to traditional South Indian favourites, every meal
+                is a celebration of flavours.
               </p>
               <div className="space-y-4 mb-8">
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-slate-700">Le Jardin - Fine Dining Restaurant</span>
+                  <span className="text-slate-700">Sea Queen — Family Restaurant (Multi-Cuisine)</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-slate-700">Beach Bar & Grill - Casual Beachfront Dining</span>
+                  <span className="text-slate-700">Sea Breeze — Beachfront Open Air Dining</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-slate-700">Rooftop Lounge - Cocktails with Ocean Views</span>
+                  <span className="text-slate-700">The Ocean — Bar & Restaurant</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-slate-700">24/7 Room Service - Dining at Your Convenience</span>
+                  <span className="text-slate-700">24/7 Room Service — Dining at Your Convenience</span>
                 </div>
               </div>
             </AnimatedSection>
@@ -960,12 +968,11 @@ const Home = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-slate-900">Email Us</h3>
-                      <p className="text-slate-600">info@stjamescourtresort.com</p>
-                      <p className="text-slate-600">reservations@stjamescourtresort.com</p>
+                      <p className="text-slate-600">Reservation@stjamescourtbeachresort.com</p>
                     </div>
                   </div>
                   <a
-                    href="mailto:info@stjamescourtresort.com"
+                    href="mailto:Reservation@stjamescourtbeachresort.com"
                     className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors"
                   >
                     <Mail className="h-4 w-4 mr-2" />

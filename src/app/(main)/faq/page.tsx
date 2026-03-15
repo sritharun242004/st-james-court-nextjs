@@ -23,7 +23,7 @@ const FAQ = () => {
       id: 1,
       category: 'booking',
       question: 'How can I make a reservation at St James Court Beach Resort?',
-      answer: 'You can make a reservation through our website using our online booking system, by calling our reservations team at +91 9443252776, or by emailing reservations@stjamescourtbeachresort.com. We recommend booking in advance, especially during peak season (December-February).'
+      answer: 'You can make a reservation through our website using our online booking system, by calling our reservations team at +91 9443252776, or by emailing Reservation@stjamescourtbeachresort.com. We recommend booking in advance, especially during peak season (December-February).'
     },
     {
       id: 2,
@@ -253,7 +253,7 @@ const FAQ = () => {
                 Send us your questions and we'll respond promptly
               </p>
               <div className="text-sm text-slate-700 mb-4">
-                info@stjamescourtresort.com
+                Reservation@stjamescourtbeachresort.com
               </div>
               <button className="bg-gradient-to-r from-green-600 to-emerald-500 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-200">
                 Send Email

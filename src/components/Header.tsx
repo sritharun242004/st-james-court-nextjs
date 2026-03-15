@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, X, Phone, MapPin, User, LogOut } from 'lucide-react';
+import { Menu, X, Phone, MapPin, User, LogOut, CalendarCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -11,11 +11,13 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuth();
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -48,8 +50,10 @@ const Header = () => {
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Rooms', href: '/rooms' },
-    { name: 'Events', href: '/events' },
+    { name: 'Dining', href: '/dining' },
+    { name: 'Gallery', href: '/gallery' },
     { name: 'Explore', href: '/explore' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
@@ -57,14 +61,14 @@ const Header = () => {
       {/* Top Bar */}
       <motion.div
         className="bg-slate-900 text-white py-2 text-sm fixed w-full top-0 z-50"
-        initial={{ y: -50, opacity: 0 }}
+        initial={mounted ? { y: -50, opacity: 0 } : false}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <motion.div
             className="flex items-center space-x-4"
-            initial={{ x: -20, opacity: 0 }}
+            initial={mounted ? { x: -20, opacity: 0 } : false}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
@@ -79,7 +83,7 @@ const Header = () => {
           </motion.div>
           <motion.div
             className="hidden md:block"
-            initial={{ x: 20, opacity: 0 }}
+            initial={mounted ? { x: 20, opacity: 0 } : false}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
@@ -95,7 +99,7 @@ const Header = () => {
             ? 'top-10 px-2 sm:px-4'
             : 'top-10 px-2 sm:px-4'
         }`}
-        initial={{ y: -100 }}
+        initial={mounted ? { y: -100 } : false}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
@@ -135,7 +139,7 @@ const Header = () => {
               {navigation.map((item, index) => (
                 <motion.div
                   key={item.name}
-                  initial={{ y: -20, opacity: 0 }}
+                  initial={mounted ? { y: -20, opacity: 0 } : false}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
@@ -162,7 +166,7 @@ const Header = () => {
                 </motion.div>
               ))}
               <motion.div
-                initial={{ scale: 0, opacity: 0 }}
+                initial={mounted ? { scale: 0, opacity: 0 } : false}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.8 }}
                 whileHover={{ scale: 1.05 }}
@@ -192,7 +196,7 @@ const Header = () => {
                 </div>
               ) : (
                 <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
+                  initial={mounted ? { scale: 0, opacity: 0 } : false}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.9 }}
                   className="ml-4"
@@ -266,6 +270,14 @@ const Header = () => {
               >
                 <User className="h-4 w-4" />
                 My Profile
+              </Link>
+              <Link
+                href="/my-bookings"
+                onClick={() => setShowUserMenu(false)}
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:bg-slate-50 transition-colors"
+              >
+                <CalendarCheck className="h-4 w-4" />
+                My Bookings
               </Link>
               {user.is_admin && (
                 <Link
@@ -346,6 +358,14 @@ const Header = () => {
                       >
                         <User className="h-5 w-5" />
                         My Profile
+                      </Link>
+                      <Link
+                        href="/my-bookings"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-2 w-full bg-slate-100 text-slate-900 px-6 py-3 rounded-xl font-jost font-semibold hover:bg-slate-200 transition-colors"
+                      >
+                        <CalendarCheck className="h-5 w-5" />
+                        My Bookings
                       </Link>
                       {user.is_admin && (
                         <Link

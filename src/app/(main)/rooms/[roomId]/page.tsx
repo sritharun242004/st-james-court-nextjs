@@ -1,14 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Users, Wifi, Coffee, Bath, Car, Utensils, Star, Calendar, Check, MapPin, Clock } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
 
+const slugToCategoryCode: Record<string, string> = {
+  'deluxe-room': 'DELUXE',
+  'super-deluxe': 'SUPER_DELUXE',
+  'executive-suite': 'SUITE',
+};
+
 const RoomDetail = () => {
   const params = useParams();
   const roomId = params.roomId as string;
+  const [dbPrice, setDbPrice] = useState<number | null>(null);
+
+  useEffect(() => {
+    const code = slugToCategoryCode[roomId];
+    if (!code) return;
+    fetch('/api/rooms')
+      .then(res => res.json())
+      .then(json => {
+        if (json.data) {
+          const match = json.data.find((r: { code: string }) => r.code === code);
+          if (match?.today_price) setDbPrice(Number(match.today_price));
+        }
+      })
+      .catch(() => {});
+  }, [roomId]);
 
   const roomsData = {
     'deluxe-room': {
@@ -20,12 +42,11 @@ const RoomDetail = () => {
       size: '350 sq ft',
       occupancy: 2,
       bedType: 'Twin Beds',
+      heroImage: '/images/rooms/deluxe/deluxe-room-1.jpg',
       images: [
-        'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=600',
-        'https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=600'
+        '/images/rooms/deluxe/deluxe-room-1.jpg',
+        '/images/rooms/deluxe/deluxe-room-2.jpg',
+        '/images/rooms/deluxe/deluxe-room-3.jpg',
       ],
       description: 'Our Deluxe Room offers a perfect blend of comfort and elegance with twin beds and a stunning Fenesta French window. Designed with colonial charm and modern amenities, this room provides a peaceful retreat after a day of exploring Pondicherry.',
       detailedDescription: 'Step into our beautifully appointed Deluxe Room, where French colonial architecture meets contemporary comfort. The room features twin beds with premium linens, ensuring a restful night\'s sleep. The highlight of the room is the elegant Fenesta French window that opens to reveal breathtaking views and fills the space with natural light. The room is thoughtfully designed with warm wood furnishings, local artwork, and modern amenities to create a welcoming atmosphere that reflects the unique character of Pondicherry.',
@@ -63,12 +84,12 @@ const RoomDetail = () => {
       size: '450 sq ft',
       occupancy: 2,
       bedType: 'King Size Bed',
+      heroImage: '/images/rooms/super-deluxe/super-deluxe-room-1.jpg',
       images: [
-        'https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=600',
-        'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=600'
+        '/images/rooms/super-deluxe/super-deluxe-room-1.jpg',
+        '/images/rooms/super-deluxe/super-deluxe-room-2.jpg',
+        '/images/rooms/super-deluxe/super-deluxe-room-3.jpg',
+        '/images/rooms/super-deluxe/super-deluxe-balcony-sea-view.jpg',
       ],
       description: 'Experience enhanced luxury in our Super Deluxe room featuring a king size bed and elegant cushion chair. The double glazing UPVC window ensures tranquility while the sophisticated decor creates an atmosphere of refined comfort.',
       detailedDescription: 'Our Super Deluxe room represents the perfect upgrade for discerning travelers seeking additional space and luxury. The centerpiece is a plush king size bed adorned with high-quality linens and multiple pillows for ultimate comfort. The room features an elegant cushion chair positioned perfectly for reading or enjoying the view through the double glazing UPVC window. The sophisticated interior design incorporates rich fabrics, tasteful artwork, and premium furnishings that reflect the French colonial heritage of Pondicherry while providing all modern conveniences.',
@@ -106,12 +127,11 @@ const RoomDetail = () => {
       size: '600 sq ft',
       occupancy: 2,
       bedType: 'King Size Bed',
+      heroImage: '/images/rooms/suite/suite-room-1.jpg',
       images: [
-        'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=600',
-        'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=600'
+        '/images/rooms/suite/suite-room-1.jpg',
+        '/images/rooms/suite/suite-room-2.jpg',
+        '/images/rooms/suite/suite-room-3.jpg',
       ],
       description: 'Indulge in ultimate luxury with our Executive Suite featuring a king size bed, luxurious cushion sofa, and private balcony. The suite includes both shower and bath tub facilities for a truly premium experience.',
       detailedDescription: 'Our Executive Suite Room represents the pinnacle of luxury accommodation at St James Court Beach Resort. This expansive suite features a separate living area with a luxurious cushion sofa, perfect for relaxation or entertaining. The bedroom area boasts a king size bed with the finest linens and multiple seating options. The crown jewel is the private balcony offering stunning views of the ocean or gardens, providing an intimate space to enjoy morning coffee or evening cocktails. The bathroom is a sanctuary of luxury featuring both a modern shower and a deep soaking bath tub, allowing guests to choose their preferred way to unwind.',
@@ -161,21 +181,30 @@ const RoomDetail = () => {
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="pt-40 pb-8 bg-gradient-to-r from-blue-600 to-teal-500 text-white">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* Hero Banner */}
+      <section className="relative pt-52 pb-20 text-white">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${room.heroImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30"></div>
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4">
           <Link
             href="/rooms"
-            className="inline-flex items-center text-white/90 hover:text-white mb-6 transition-colors"
+            className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors text-sm"
           >
-            <ArrowLeft className="h-5 w-5 mr-2" />
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Back to All Rooms
           </Link>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end">
             <div>
-              <h1 className="text-4xl md:text-5xl font-playfair font-bold mb-4">{room.name}</h1>
-              <p className="text-xl mb-6 opacity-90">{room.description}</p>
-              <div className="flex items-center space-x-6 text-lg">
+              <div className="inline-block bg-white/15 backdrop-blur-sm px-3 py-1 rounded-full text-sm mb-4">
+                {room.bedType} &middot; {room.size}
+              </div>
+              <h1 className="text-5xl md:text-6xl font-playfair font-bold mb-5">{room.name}</h1>
+              <p className="text-lg md:text-xl leading-relaxed text-white/90 mb-6 max-w-xl">{room.description}</p>
+              <div className="flex items-center space-x-6 text-white/80">
                 <div className="flex items-center">
                   <Users className="h-5 w-5 mr-2" />
                   Up to {room.occupancy} guests
@@ -184,20 +213,22 @@ const RoomDetail = () => {
                   <MapPin className="h-5 w-5 mr-2" />
                   {room.size}
                 </div>
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-              <div className="text-center mb-4">
-                <div className="text-3xl font-bold mb-2">₹{room.price.toLocaleString()}</div>
-                <div className="text-white/80">per night (Mon-Thu)</div>
-              </div>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8">
               <div className="text-center mb-6">
-                <div className="text-xl font-semibold text-green-200">₹{room.weekendPrice.toLocaleString()}</div>
-                <div className="text-white/80 text-sm">per night (Fri-Sun)</div>
+                <div className="text-sm text-white/70 mb-1">Starting from</div>
+                <div className="text-4xl font-bold">₹{(dbPrice ?? room.price).toLocaleString()}</div>
+                <div className="text-white/70 text-sm mt-1">per night + GST</div>
               </div>
               <Link
                 href="/booking"
-                className="w-full bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
+                className="w-full bg-white text-blue-600 px-6 py-3.5 rounded-xl font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center"
               >
                 <Calendar className="h-5 w-5 mr-2" />
                 Book This Room
@@ -211,29 +242,42 @@ const RoomDetail = () => {
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <AnimatedSection>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <img
-                  src={room.images[selectedImage]}
-                  alt={`${room.name} - Image ${selectedImage + 1}`}
-                  className="w-full h-96 lg:h-[500px] object-cover rounded-xl shadow-lg"
-                />
+            {/* Main Image */}
+            <div className="relative w-full h-96 lg:h-[520px] rounded-xl overflow-hidden shadow-lg mb-4">
+              <Image
+                src={room.images[selectedImage]}
+                alt={`${room.name} - Image ${selectedImage + 1}`}
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority
+              />
+              <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm">
+                {selectedImage + 1} / {room.images.length}
               </div>
-              <div className="space-y-4">
-                {room.images.slice(1, 5).map((image, index) => (
-                  <img
-                    key={index + 1}
+            </div>
+
+            {/* Thumbnail Strip */}
+            <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${room.images.length}, 1fr)` }}>
+              {room.images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`relative h-20 sm:h-24 rounded-lg overflow-hidden transition-all duration-200 ${
+                    selectedImage === index
+                      ? 'ring-3 ring-blue-500 shadow-lg scale-[1.02]'
+                      : 'opacity-70 hover:opacity-100 hover:shadow-md'
+                  }`}
+                >
+                  <Image
                     src={image}
-                    alt={`${room.name} - Thumbnail ${index + 2}`}
-                    onClick={() => setSelectedImage(index + 1)}
-                    className={`w-full h-24 object-cover rounded-lg cursor-pointer transition-all duration-200 ${
-                      selectedImage === index + 1
-                        ? 'ring-4 ring-blue-500 shadow-lg'
-                        : 'hover:shadow-md opacity-80 hover:opacity-100'
-                    }`}
+                    alt={`${room.name} - Thumbnail ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="25vw"
                   />
-                ))}
-              </div>
+                </button>
+              ))}
             </div>
           </AnimatedSection>
         </div>
@@ -291,14 +335,10 @@ const RoomDetail = () => {
                     <h4 className="font-semibold text-slate-900 mb-4">Pricing</h4>
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between">
-                        <span className="text-slate-600">Monday - Thursday:</span>
-                        <span className="font-semibold">₹{room.price.toLocaleString()}</span>
+                        <span className="text-slate-600">Today&apos;s rate:</span>
+                        <span className="font-semibold text-blue-600">₹{(dbPrice ?? room.price).toLocaleString()}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-600">Friday - Sunday:</span>
-                        <span className="font-semibold text-green-600">₹{room.weekendPrice.toLocaleString()}</span>
-                      </div>
-                      <div className="text-xs text-slate-500">*Prices exclude 12% GST</div>
+                      <div className="text-xs text-slate-500">*Prices exclude 12% GST. Rates may vary by date.</div>
                     </div>
 
                     <Link

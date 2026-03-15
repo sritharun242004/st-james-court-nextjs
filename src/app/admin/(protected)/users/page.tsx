@@ -203,7 +203,7 @@ const UserManagement = () => {
                       )}
                     </td>
                     <td className="py-4 px-4 text-slate-700">
-                      {new Date(user.created_at).toLocaleDateString()}
+                      {user.created_at.split('T')[0]}
                     </td>
                     <td className="py-4 px-4">
                       <div className="flex justify-end gap-2">

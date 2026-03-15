@@ -1,93 +1,147 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { Users, Star, Calendar, Clock, MapPin, Phone, Utensils, Wine, Waves, Heart } from 'lucide-react';
+import { Users, Star, Calendar, Clock, MapPin, Phone, Utensils, Wine, Waves, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
+
+// Static data that DB doesn't store (images, descriptions, features)
+const roomStaticData: Record<string, {
+  id: string;
+  category: string;
+  size: string;
+  image: string;
+  gallery: string[];
+  description: string;
+  features: string[];
+}> = {
+  DELUXE: {
+    id: 'deluxe-room',
+    category: 'deluxe',
+    size: 'Standard',
+    image: '/images/rooms/deluxe/deluxe-room-1.jpg',
+    gallery: [
+      '/images/rooms/deluxe/deluxe-room-1.jpg',
+      '/images/rooms/deluxe/deluxe-room-2.jpg',
+      '/images/rooms/deluxe/deluxe-room-3.jpg',
+    ],
+    description: 'Comfortable room with twin beds and Fenesta French window, perfect for a relaxing stay.',
+    features: ['Twin Beds', 'Fenesta French Window', 'Air Conditioning', '24hrs Hot & Cold Water'],
+  },
+  SUPER_DELUXE: {
+    id: 'super-deluxe',
+    category: 'deluxe',
+    size: 'Spacious',
+    image: '/images/rooms/super-deluxe/super-deluxe-room-1.jpg',
+    gallery: [
+      '/images/rooms/super-deluxe/super-deluxe-room-1.jpg',
+      '/images/rooms/super-deluxe/super-deluxe-room-2.jpg',
+      '/images/rooms/super-deluxe/super-deluxe-room-3.jpg',
+      '/images/rooms/super-deluxe/super-deluxe-balcony-sea-view.jpg',
+    ],
+    description: 'Upgraded room with king size bed and elegant furnishings for enhanced comfort.',
+    features: ['King Size Bed', 'Cushion Chair', 'Curtains with Scallops', 'Double Glazing UPVC Window'],
+  },
+  SUITE: {
+    id: 'executive-suite',
+    category: 'suite',
+    size: 'Luxury Suite',
+    image: '/images/rooms/suite/suite-room-1.jpg',
+    gallery: [
+      '/images/rooms/suite/suite-room-1.jpg',
+      '/images/rooms/suite/suite-room-2.jpg',
+      '/images/rooms/suite/suite-room-3.jpg',
+    ],
+    description: 'Premium suite with king size bed, luxurious cushion sofa and private balcony for the ultimate experience.',
+    features: ['King Size Bed', 'Luxurious Cushion Sofa', 'Private Balcony', 'Shower and Bath Tub'],
+  },
+};
 
 const Rooms = () => {
   const [roomFilter, setRoomFilter] = useState('all');
-  const [selectedRestaurant, setSelectedRestaurant] = useState('le-jardin');
+  const [selectedRestaurant, setSelectedRestaurant] = useState('sea-queen');
   const [amenityCategory, setAmenityCategory] = useState('beach');
+  const [dbRooms, setDbRooms] = useState<Array<{ code: string; name: string; capacity: number; today_price: number | null }>>([]);
 
-  // Room data
-  const rooms = [
-    {
-      id: 'deluxe-room',
-      name: "Deluxe Room",
-      category: "deluxe",
-      price: 4500,
-      weekendPrice: 5500,
-      size: "Standard",
-      occupancy: 2,
-      image: "https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=800",
-      amenities: ["Twin Beds", "French Window", "Air Conditioning", "Breakfast"],
-      description: "Comfortable room with twin beds and Fenesta French window, perfect for a relaxing stay.",
-      features: ["Twin Beds", "Fenesta French Window", "Air Conditioning", "24hrs Hot & Cold Water"]
-    },
-    {
-      id: 'super-deluxe',
-      name: "Super Deluxe",
-      category: "deluxe",
-      price: 5500,
-      weekendPrice: 7000,
-      size: "Spacious",
-      occupancy: 2,
-      image: "https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=800",
-      amenities: ["King Size Bed", "Cushion Chair", "Double Glazing Window", "Breakfast"],
-      description: "Upgraded room with king size bed and elegant furnishings for enhanced comfort.",
-      features: ["King Size Bed", "Cushion Chair", "Curtains with Scallops", "Double Glazing UPVC Window"]
-    },
-    {
-      id: 'executive-suite',
-      name: "Executive Suite Room",
-      category: "suite",
-      price: 6500,
-      weekendPrice: 7450,
-      size: "Luxury Suite",
-      occupancy: 2,
-      image: "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800",
-      amenities: ["King Size Bed", "Luxurious Sofa", "Private Balcony", "Bath Tub"],
-      description: "Premium suite with king size bed, luxurious cushion sofa and private balcony for the ultimate experience.",
-      features: ["King Size Bed", "Luxurious Cushion Sofa", "Private Balcony", "Shower and Bath Tub"]
-    }
-  ];
+  useEffect(() => {
+    fetch('/api/rooms')
+      .then(res => res.json())
+      .then(json => { if (json.data) setDbRooms(json.data); })
+      .catch(() => {});
+  }, []);
+
+  // Per-card carousel state
+  const [cardSlides, setCardSlides] = useState<Record<string, number>>({});
+  const setCardSlide = useCallback((roomId: string, idx: number) => {
+    setCardSlides(prev => ({ ...prev, [roomId]: idx }));
+  }, []);
+
+  // Merge DB data with static data
+  const rooms = dbRooms.length > 0
+    ? dbRooms.map(db => {
+        const staticInfo = roomStaticData[db.code] || roomStaticData.DELUXE;
+        return {
+          id: staticInfo.id,
+          name: db.name,
+          category: staticInfo.category,
+          price: db.today_price ? Number(db.today_price) : 0,
+          size: staticInfo.size,
+          occupancy: db.capacity || 2,
+          image: staticInfo.image,
+          gallery: staticInfo.gallery,
+          description: staticInfo.description,
+          features: staticInfo.features,
+        };
+      })
+    : Object.entries(roomStaticData).map(([code, s]) => ({
+        id: s.id,
+        name: code === 'DELUXE' ? 'Deluxe Room' : code === 'SUPER_DELUXE' ? 'Super Deluxe' : 'Executive Suite Room',
+        category: s.category,
+        price: code === 'DELUXE' ? 4500 : code === 'SUPER_DELUXE' ? 5500 : 6500,
+        size: s.size,
+        occupancy: 2,
+        image: s.image,
+        gallery: s.gallery,
+        description: s.description,
+        features: s.features,
+      }));
 
   // Restaurant data
   const restaurants = [
     {
-      id: 'le-jardin',
-      name: 'Le Jardin',
-      type: 'Fine Dining',
-      cuisine: 'French-Indian Fusion',
-      hours: '7:00 PM - 11:00 PM',
-      image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Our signature restaurant combines French culinary techniques with local Indian flavors, creating an unforgettable dining experience.',
-      specialties: ['Bouillabaisse with Local Fish', 'Coq au Vin with Indian Spices', 'French Onion Soup', 'Tandoori Duck Confit'],
-      priceRange: '₹₹₹₹',
+      id: 'sea-queen',
+      name: 'Sea Queen',
+      type: 'Family Restaurant',
+      cuisine: 'Multi-Cuisine',
+      hours: '7:00 AM - 11:00 PM',
+      image: '/images/dining/dining-1.jpg',
+      description: 'Our signature family restaurant serving a wide range of multi-cuisine dishes in a comfortable indoor setting, perfect for family gatherings and celebrations.',
+      specialties: ['South Indian Thali', 'North Indian Curries', 'Chinese Specials', 'Continental Dishes'],
+      priceRange: '₹₹₹',
       rating: 4.8
     },
     {
-      id: 'beach-grill',
-      name: 'Beach Bar & Grill',
-      type: 'Casual Dining',
-      cuisine: 'Coastal & Continental',
-      hours: '12:00 PM - 11:00 PM',
-      image: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Dine with your feet in the sand while enjoying fresh seafood and tropical cocktails with stunning ocean views.',
-      specialties: ['Fresh Grilled Seafood', 'Beach BBQ Platter', 'Tropical Cocktails', 'Wood-fired Pizza'],
+      id: 'sea-breeze',
+      name: 'Sea Breeze',
+      type: 'Beachfront Open Air',
+      cuisine: 'Coastal & Seafood',
+      hours: '7:00 AM - 10:30 PM',
+      image: '/images/dining/dining-3.jpg',
+      description: 'Dine under the open sky with the sound of waves as your backdrop. Fresh seafood and coastal delicacies served right on the waterfront.',
+      specialties: ['Fresh Grilled Seafood', 'Prawns Masala', 'Beach BBQ Platter', 'Coastal Fish Fry'],
       priceRange: '₹₹₹',
       rating: 4.6
     },
     {
-      id: 'rooftop-lounge',
-      name: 'Rooftop Lounge',
-      type: 'Bar & Lounge',
-      cuisine: 'Cocktails & Light Bites',
-      hours: '5:00 PM - 1:00 AM',
-      image: 'https://images.pexels.com/photos/1267697/pexels-photo-1267697.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Panoramic ocean views accompany craft cocktails and light Mediterranean fare in our elegant rooftop setting.',
-      specialties: ['Signature Cocktails', 'Champagne Selection', 'Artisan Cheese Board', 'Sunset Tapas'],
+      id: 'the-ocean',
+      name: 'The Ocean',
+      type: 'Bar & Restaurant',
+      cuisine: 'Contemporary & Cocktails',
+      hours: '11:00 AM - 11:00 PM',
+      image: '/images/dining/dining-5.jpg',
+      description: 'A stylish bar and restaurant offering contemporary cuisine paired with handcrafted cocktails and an extensive beverage menu.',
+      specialties: ['Signature Cocktails', 'Grilled Platters', 'Finger Foods', 'Premium Spirits'],
       priceRange: '₹₹₹',
       rating: 4.7
     }
@@ -126,9 +180,9 @@ const Rooms = () => {
       title: "Dining & Entertainment",
       icon: <Utensils className="h-8 w-8" />,
       items: [
-        { name: "Le Jardin Restaurant", description: "Fine dining with French-Indian fusion cuisine" },
-        { name: "Beach Bar & Grill", description: "Casual dining with feet in the sand" },
-        { name: "Rooftop Lounge", description: "Cocktails with panoramic ocean views" },
+        { name: "Sea Queen", description: "Family restaurant with multi-cuisine indoor dining" },
+        { name: "Sea Breeze", description: "Beachfront open-air dining with ocean views" },
+        { name: "The Ocean", description: "Bar & restaurant with cocktails and contemporary cuisine" },
         { name: "Coffee Shop", description: "Artisanal coffee and fresh pastries" },
         { name: "Room Service", description: "24-hour gourmet dining in your room" },
         { name: "Cultural Shows", description: "Traditional Indian dance and music performances" }
@@ -174,79 +228,126 @@ const Rooms = () => {
 
           {/* Rooms Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredRooms.map((room, index) => (
-              <AnimatedSection
-                key={room.id}
-                delay={index * 0.1}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300"
-              >
-                <div className="relative">
-                  <img
-                    src={room.image}
-                    alt={room.name}
-                    className="w-full h-64 object-cover"
-                  />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                    <span className="text-blue-600 font-semibold">₹{room.price.toLocaleString()}/night</span>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">{room.name}</h3>
-                  <p className="text-slate-600 mb-4">{room.description}</p>
-
-                  <div className="mb-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-slate-500">Mon - Thu:</span>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xl font-bold text-blue-600">₹{room.price}</span>
-                        <span className="text-sm text-slate-500">+12% GST</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-500">Fri - Sun:</span>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xl font-bold text-green-600">₹{room.weekendPrice}</span>
-                        <span className="text-sm text-slate-500">+12% GST</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-4 text-sm text-slate-500">
-                      <span className="flex items-center">
-                        <Users className="h-4 w-4 mr-1" />
-                        {room.occupancy} guests
-                      </span>
-                      <span>{room.size}</span>
-                    </div>
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 mb-6">
-                    {room.features.slice(0, 4).map((feature, index) => (
-                      <div key={index} className="flex items-center text-sm text-slate-600">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                        {feature}
+            {filteredRooms.map((room, index) => {
+              const currentSlide = cardSlides[room.id] || 0;
+              const gallery = room.gallery;
+              return (
+                <AnimatedSection
+                  key={room.id}
+                  delay={index * 0.1}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 group"
+                >
+                  {/* Image Carousel */}
+                  <div className="relative h-72 overflow-hidden">
+                    {gallery.map((img, i) => (
+                      <div
+                        key={i}
+                        className="absolute inset-0 transition-opacity duration-500"
+                        style={{ opacity: currentSlide === i ? 1 : 0 }}
+                      >
+                        <Image
+                          src={img}
+                          alt={`${room.name} - Photo ${i + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          priority={index === 0 && i === 0}
+                        />
                       </div>
                     ))}
+
+                    {/* Carousel Controls */}
+                    {gallery.length > 1 && (
+                      <>
+                        <button
+                          onClick={(e) => { e.preventDefault(); setCardSlide(room.id, (currentSlide - 1 + gallery.length) % gallery.length); }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); setCardSlide(room.id, (currentSlide + 1) % gallery.length); }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+
+                        {/* Dots */}
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                          {gallery.map((_, i) => (
+                            <button
+                              key={i}
+                              onClick={(e) => { e.preventDefault(); setCardSlide(room.id, i); }}
+                              className={`w-2 h-2 rounded-full transition-all ${
+                                currentSlide === i ? 'bg-white w-4' : 'bg-white/60 hover:bg-white/80'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Price Badge */}
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full z-10">
+                      <span className="text-blue-600 font-semibold">₹{room.price.toLocaleString()}/night</span>
+                    </div>
+
+                    {/* Image Count Badge */}
+                    <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-xs z-10">
+                      {currentSlide + 1}/{gallery.length}
+                    </div>
                   </div>
 
-                  <div className="flex space-x-3">
-                    <Link
-                      href={`/rooms/${room.id}`}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-3 rounded-lg text-center font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
-                    >
-                      View Details
-                    </Link>
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold text-slate-900 mb-2">{room.name}</h3>
+                    <p className="text-slate-600 mb-4">{room.description}</p>
+
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-slate-500">Starting from:</span>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-xl font-bold text-blue-600">₹{room.price.toLocaleString()}</span>
+                          <span className="text-sm text-slate-500">/night +GST</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-4 text-sm text-slate-500">
+                        <span className="flex items-center">
+                          <Users className="h-4 w-4 mr-1" />
+                          {room.occupancy} guests
+                        </span>
+                        <span>{room.size}</span>
+                      </div>
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 mb-6">
+                      {room.features.slice(0, 4).map((feature, fIdx) => (
+                        <div key={fIdx} className="flex items-center text-sm text-slate-600">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex space-x-3">
+                      <Link
+                        href={`/rooms/${room.id}`}
+                        className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-3 rounded-lg text-center font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
+                      >
+                        View Details
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </AnimatedSection>
-            ))}
+                </AnimatedSection>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -486,7 +587,7 @@ const Rooms = () => {
       <section
         className="py-20 relative"
         style={{
-          backgroundImage: 'url(https://images.pexels.com/photos/1320684/pexels-photo-1320684.jpeg?auto=compress&cs=tinysrgb&w=1920)'
+          backgroundImage: 'url(/images/gallery/resort-beach-view.jpg)'
         }}
       >
         <div className="absolute inset-0 bg-blue-900/80"></div>

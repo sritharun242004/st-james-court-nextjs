@@ -524,19 +524,19 @@ const Explore = () => {
                 mapUrl: 'https://www.google.com/maps/search/?api=1&query=Shore+Temple+Mahabalipuram',
               },
               {
-                name: 'Thanjavur Temple Circuit',
-                distance: '~150 km via NH32',
+                name: 'Pichavaram Mangroves & Chidambaram',
+                distance: '~65 km via ECR South',
                 duration: 'Full day',
-                image: 'https://images.pexels.com/photos/5124396/pexels-photo-5124396.jpeg?auto=compress&cs=tinysrgb&w=600',
+                image: 'https://images.pexels.com/photos/975771/pexels-photo-975771.jpeg?auto=compress&cs=tinysrgb&w=600',
                 highlights: [
-                  'Brihadeeswarar Temple (UNESCO, Chola) - ₹10/₹200',
-                  'Royal Palace & Bronze Gallery - ₹50/₹200',
-                  'Saraswati Mahal Library & Art Gallery',
-                  'Filter Coffee + Chettinad Lunch (~₹400)',
+                  'Pichavaram Mangrove Forest boat ride - ₹50-150/boat',
+                  'Chidambaram Nataraja Temple (Pancha Bhuta Stalam) - Free',
+                  'Porto Novo (Parangipettai) Beach viewpoint - Free',
+                  'Fresh seafood lunch on ECR (~₹400)',
                 ],
-                price: '₹3,000-3,500/person',
-                bestTime: 'Early winter mornings',
-                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Brihadeeswarar+Temple+Thanjavur',
+                price: '₹3,000-4,500/person',
+                bestTime: 'Early morning for mangrove boat ride',
+                mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pichavaram+Mangrove+Forest',
               },
               {
                 name: 'Chidambaram & Kumbakonam',
@@ -621,56 +621,72 @@ const Explore = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Utensils className="h-8 w-8 text-white" />
+            <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
+                <div className="flex-shrink-0 bg-gradient-to-r from-orange-500 to-red-500 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4">
+                  <Utensils className="h-7 w-7 md:h-8 md:w-8 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 md:mb-2 md:text-center">Auroville Cafes</h3>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Auroville Cafes</h3>
-              <p className="text-slate-600 text-sm mb-4">
+              <p className="text-slate-600 text-sm mb-4 md:text-center">
                 Wood-fired pizzas, vegan bowls, and artisan coffee in Auroville&apos;s cozy cafes
               </p>
-              <button onClick={() => setSelectedCategory('dining')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                Explore Cafes
-              </button>
+              <div className="md:text-center">
+                <button onClick={() => setSelectedCategory('dining')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+                  Explore Cafes
+                </button>
+              </div>
             </div>
 
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-gradient-to-r from-green-500 to-teal-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Camera className="h-8 w-8 text-white" />
+            <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
+                <div className="flex-shrink-0 bg-gradient-to-r from-green-500 to-teal-500 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4">
+                  <Camera className="h-7 w-7 md:h-8 md:w-8 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 md:mb-2 md:text-center">Beach Hopping</h3>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Beach Hopping</h3>
-              <p className="text-slate-600 text-sm mb-4">
+              <p className="text-slate-600 text-sm mb-4 md:text-center">
                 From Paradise Beach boat rides to Serenity Beach sunsets
               </p>
-              <button onClick={() => setSelectedCategory('beach')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                View Beaches
-              </button>
+              <div className="md:text-center">
+                <button onClick={() => setSelectedCategory('beach')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+                  View Beaches
+                </button>
+              </div>
             </div>
 
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Building className="h-8 w-8 text-white" />
+            <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
+                <div className="flex-shrink-0 bg-gradient-to-r from-purple-500 to-pink-500 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4">
+                  <Building className="h-7 w-7 md:h-8 md:w-8 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 md:mb-2 md:text-center">Temple Trail</h3>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Temple Trail</h3>
-              <p className="text-slate-600 text-sm mb-4">
+              <p className="text-slate-600 text-sm mb-4 md:text-center">
                 From nearby Sai Baba Temple to the iconic Manakula Vinayagar
               </p>
-              <button onClick={() => setSelectedCategory('temple')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                View Temples
-              </button>
+              <div className="md:text-center">
+                <button onClick={() => setSelectedCategory('temple')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+                  View Temples
+                </button>
+              </div>
             </div>
 
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TreePine className="h-8 w-8 text-white" />
+            <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
+                <div className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-indigo-500 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4">
+                  <TreePine className="h-7 w-7 md:h-8 md:w-8 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 md:mb-2 md:text-center">Nature Escapes</h3>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Nature Escapes</h3>
-              <p className="text-slate-600 text-sm mb-4">
+              <p className="text-slate-600 text-sm mb-4 md:text-center">
                 Birdwatching at Ousteri Lake and strolls through Botanical Gardens
               </p>
-              <button onClick={() => setSelectedCategory('nature')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                Explore Nature
-              </button>
+              <div className="md:text-center">
+                <button onClick={() => setSelectedCategory('nature')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+                  Explore Nature
+                </button>
+              </div>
             </div>
           </div>
         </div>

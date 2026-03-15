@@ -9,12 +9,11 @@ export const parseDate = (dateString: string): Date => {
 };
 
 export const formatDateForDisplay = (date: Date | string): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  return dateObj.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  if (typeof date === 'string') return date.split('T')[0];
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 };
 
 export const calculateNights = (checkIn: Date, checkOut: Date): number => {

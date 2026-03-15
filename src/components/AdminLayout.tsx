@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Users, BedDouble, Tag, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, CalendarCheck, Users, BedDouble, Tag, CreditCard, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface AdminLayoutProps {
@@ -23,9 +23,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   const navItems = [
     { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/admin/bookings', icon: CalendarCheck, label: 'Bookings' },
     { path: '/admin/users', icon: Users, label: 'User Management' },
     { path: '/admin/rooms', icon: BedDouble, label: 'Room Management' },
-    { path: '/admin/discounts', icon: Tag, label: 'Discounts' }
+    { path: '/admin/discounts', icon: Tag, label: 'Discounts' },
+    { path: '/admin/privilege-members', icon: CreditCard, label: 'Privilege Cards' }
   ];
 
   return (

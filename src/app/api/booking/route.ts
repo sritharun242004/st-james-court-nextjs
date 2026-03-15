@@ -23,6 +23,7 @@ interface BookingCreateReq {
   rooms: number;
   adults: number;
   children: number;
+  extraBeds: number;
   fullName: string;
   phone: string;
   email?: string;
@@ -59,20 +60,31 @@ export async function POST(request: NextRequest) {
 
     const sql = getDb();
 
-    // --- Get room category ---
-    const categories = await sql`
-      SELECT id, code, name FROM room_category WHERE code = ${body.categoryCode}
-    `;
+    // --- Phase 1: Parallel lookups (category + user + privilege card) ---
+    const [categories, users, ...privilegeResult] = await Promise.all([
+      sql`SELECT id, code, name, max_extra_beds_per_room FROM room_category WHERE code = ${body.categoryCode}`,
+      sql`SELECT id, full_name, phone, email FROM user_account WHERE phone = ${body.phone}`,
+      ...(body.privilegeCardNumber
+        ? [sql`SELECT id, active FROM privilege_member WHERE card_number = ${body.privilegeCardNumber}`]
+        : []),
+    ]);
+
     if (categories.length === 0) {
       return NextResponse.json({ error: `Unknown room category: ${body.categoryCode}` }, { status: 400 });
     }
     const category = categories[0];
 
-    // --- Get or create user ---
-    const users = await sql`
-      SELECT id, full_name, phone, email FROM user_account WHERE phone = ${body.phone}
-    `;
+    // --- Validate extra beds ---
+    const extraBeds = body.extraBeds || 0;
+    const maxExtraBeds = category.max_extra_beds_per_room * rooms;
+    if (extraBeds < 0 || extraBeds > maxExtraBeds) {
+      return NextResponse.json(
+        { error: `Extra beds must be between 0 and ${maxExtraBeds} (${category.max_extra_beds_per_room} per room × ${rooms} room${rooms > 1 ? 's' : ''})` },
+        { status: 400 }
+      );
+    }
 
+    // --- Resolve user ---
     let userId: number;
     if (users.length > 0) {
       userId = users[0].id;
@@ -88,13 +100,11 @@ export async function POST(request: NextRequest) {
       userId = newUsers[0].id;
     }
 
-    // --- Validate privilege card (optional) ---
+    // --- Validate privilege card ---
     let privilegeMemberId: number | null = null;
     let hasPrivilege = false;
     if (body.privilegeCardNumber) {
-      const members = await sql`
-        SELECT id, active FROM privilege_member WHERE card_number = ${body.privilegeCardNumber}
-      `;
+      const members = privilegeResult[0] || [];
       if (members.length === 0 || !members[0].active) {
         return NextResponse.json(
           { error: `Invalid or inactive privilege card: ${body.privilegeCardNumber}` },
@@ -115,48 +125,49 @@ export async function POST(request: NextRequest) {
 
     const lastNight = nightDates[nightDates.length - 1];
 
-    // Fetch inventory — cast dates as text to avoid TZ issues
-    const inventory = await sql`
-      SELECT date::text as date, base_available, base_price
-      FROM room_inventory
-      WHERE category_id = ${category.id}
-        AND date >= ${body.checkIn}::date
-        AND date <= ${lastNight}::date
-      ORDER BY date
-    `;
+    // --- Phase 2: Parallel fetch inventory + discounts + booked rooms ---
+    const [inventory, discountRows, bookedRows] = await Promise.all([
+      sql`
+        SELECT date::text as date, base_available, base_price, extra_bed_price
+        FROM room_inventory
+        WHERE category_id = ${category.id}
+          AND date >= ${body.checkIn}::date
+          AND date <= ${lastNight}::date
+        ORDER BY date
+      `,
+      hasPrivilege
+        ? sql`
+            SELECT date::text as date, room_discount
+            FROM discount_rule
+            WHERE active = true
+              AND date >= ${body.checkIn}::date
+              AND date <= ${lastNight}::date
+          `
+        : Promise.resolve([]),
+      sql`
+        SELECT date::text as date, COALESCE(SUM(rooms), 0) as booked
+        FROM booking_night
+        WHERE category_id = ${category.id}
+          AND date >= ${body.checkIn}::date
+          AND date <= ${lastNight}::date
+        GROUP BY date
+      `,
+    ]);
 
-    const inventoryByDate = new Map<string, { baseAvailable: number; basePrice: number }>();
+    const inventoryByDate = new Map<string, { baseAvailable: number; basePrice: number; extraBedPrice: number }>();
     for (const row of inventory) {
       inventoryByDate.set(row.date, {
         baseAvailable: row.base_available,
         basePrice: parseFloat(row.base_price),
+        extraBedPrice: parseFloat(row.extra_bed_price),
       });
     }
 
-    // Fetch discount rules if privilege member
     const discountByDate = new Map<string, number>();
-    if (hasPrivilege) {
-      const discounts = await sql`
-        SELECT date::text as date, room_discount
-        FROM discount_rule
-        WHERE active = true
-          AND date >= ${body.checkIn}::date
-          AND date <= ${lastNight}::date
-      `;
-      for (const row of discounts) {
-        discountByDate.set(row.date, row.room_discount);
-      }
+    for (const row of discountRows) {
+      discountByDate.set(row.date, row.room_discount);
     }
 
-    // Fetch booked rooms per night
-    const bookedRows = await sql`
-      SELECT date::text as date, COALESCE(SUM(rooms), 0) as booked
-      FROM booking_night
-      WHERE category_id = ${category.id}
-        AND date >= ${body.checkIn}::date
-        AND date <= ${lastNight}::date
-      GROUP BY date
-    `;
     const bookedByDate = new Map<string, number>();
     for (const row of bookedRows) {
       bookedByDate.set(row.date, parseInt(row.booked));
@@ -211,7 +222,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Calculate totals
-    const baseAmount = nightPrices.reduce((sum, n) => sum + n.basePrice, 0) * rooms;
+    const roomBaseAmount = nightPrices.reduce((sum, n) => sum + n.basePrice, 0) * rooms;
+    const extraBedTotal = nightPrices.reduce((sum, n) => {
+      const inv = inventoryByDate.get(n.date)!;
+      return sum + inv.extraBedPrice * extraBeds;
+    }, 0);
+    const baseAmount = roomBaseAmount + extraBedTotal;
     const discountAmount = nightPrices.reduce((sum, n) => sum + (n.basePrice - n.finalPrice), 0) * rooms;
     const finalAmount = baseAmount - discountAmount;
 
@@ -219,25 +235,23 @@ export async function POST(request: NextRequest) {
     const bookingRows = await sql`
       INSERT INTO booking (
         user_id, privilege_member_id, category_id,
-        check_in, check_out, rooms, adults, children, special_requests,
+        check_in, check_out, rooms, adults, children, extra_beds, special_requests,
         base_amount, discount_amount, final_amount, payment_status
       ) VALUES (
         ${userId}, ${privilegeMemberId}, ${category.id},
         ${body.checkIn}::date, ${body.checkOut}::date, ${rooms},
-        ${body.adults || 1}, ${body.children || 0}, ${body.specialRequests || null},
+        ${body.adults || 1}, ${body.children || 0}, ${extraBeds}, ${body.specialRequests || null},
         ${baseAmount}, ${discountAmount}, ${finalAmount}, 'PENDING'
       )
       RETURNING id
     `;
     const bookingId = bookingRows[0].id;
 
-    // --- Create booking nights ---
-    for (const dateStr of nightDates) {
-      await sql`
-        INSERT INTO booking_night (booking_id, category_id, date, rooms)
-        VALUES (${bookingId}, ${category.id}, ${dateStr}::date, ${rooms})
-      `;
-    }
+    // --- Create booking nights (single batch INSERT) ---
+    await sql`
+      INSERT INTO booking_night (booking_id, category_id, date, rooms)
+      SELECT ${bookingId}, ${category.id}, unnest(${nightDates}::date[]), ${rooms}
+    `;
 
     // --- Return response ---
     return NextResponse.json({
@@ -248,6 +262,8 @@ export async function POST(request: NextRequest) {
       rooms,
       adults: body.adults || 1,
       children: body.children || 0,
+      extraBeds,
+      extraBedTotal,
       privilegeApplied: hasPrivilege,
       privilegeCardNumber: body.privilegeCardNumber || null,
       nights: nightPrices,

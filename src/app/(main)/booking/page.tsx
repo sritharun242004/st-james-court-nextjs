@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Calendar, Users, Plus, Minus, CreditCard, Shield, Gift, CheckCircle, AlertCircle } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface GuestDetails {
   firstName: string;
@@ -20,6 +21,8 @@ interface BookingResult {
   checkIn: string;
   checkOut: string;
   rooms: number;
+  extraBeds: number;
+  extraBedTotal: number;
   nights: { date: string; basePrice: number; finalPrice: number; discountPercent: number | null }[];
   baseAmount: number;
   discountAmount: number;
@@ -29,6 +32,7 @@ interface BookingResult {
 }
 
 const Booking = () => {
+  const { user, getToken } = useAuth();
   const [checkIn, setCheckIn] = useState<Date | null>(new Date());
   const [checkOut, setCheckOut] = useState<Date | null>(
     new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
@@ -36,6 +40,7 @@ const Booking = () => {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [rooms, setRooms] = useState(1);
+  const [extraBeds, setExtraBeds] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState('');
   const [step, setStep] = useState(1);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
@@ -51,11 +56,15 @@ const Booking = () => {
     privilegeCardNumber: '',
   });
 
-  const roomTypes = [
+  const defaultRoomTypes = [
     { id: 'DELUXE', name: 'Deluxe Room', price: 4500 },
     { id: 'SUPER_DELUXE', name: 'Super Deluxe', price: 5500 },
     { id: 'SUITE', name: 'Executive Suite Room', price: 6500 }
   ];
+
+  const [roomTypes, setRoomTypes] = useState(defaultRoomTypes);
+  const [availabilityLoading, setAvailabilityLoading] = useState(false);
+  const [availabilityData, setAvailabilityData] = useState<Record<string, { available: number; avgPrice: number; avgMemberPrice: number | null; extraBedPrice: number; maxExtraBeds: number }>>({});
 
   const addOns = [
     { id: 'spa', name: 'Spa Package', price: 3500, description: 'Couples massage and wellness treatments' },
@@ -65,12 +74,104 @@ const Booking = () => {
   ];
 
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+  const [userHasPrivilege, setUserHasPrivilege] = useState(false);
+
+  // Auto-fill guest details from logged-in user profile
+  React.useEffect(() => {
+    const token = getToken();
+    if (!token || !user) return;
+
+    // Pre-fill guest name/email/phone
+    const nameParts = (user.full_name || '').split(' ');
+    setGuestDetails(prev => ({
+      ...prev,
+      firstName: prev.firstName || nameParts[0] || '',
+      lastName: prev.lastName || nameParts.slice(1).join(' ') || '',
+      email: prev.email || user.email || '',
+      phone: prev.phone || user.phone || '',
+    }));
+
+    // Fetch privilege card
+    fetch('/api/user/profile', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.privilegeCard?.active) {
+          setUserHasPrivilege(true);
+          setGuestDetails(prev => ({
+            ...prev,
+            privilegeCardNumber: prev.privilegeCardNumber || data.privilegeCard.cardNumber,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, [user, getToken]);
+
+  // Fetch real-time availability when dates change
+  React.useEffect(() => {
+    if (!checkIn || !checkOut || checkOut <= checkIn) return;
+
+    const fetchAvailability = async () => {
+      setAvailabilityLoading(true);
+      try {
+        const categories = ['DELUXE', 'SUPER_DELUXE', 'SUITE'];
+        const results: Record<string, { available: number; avgPrice: number; avgMemberPrice: number | null; extraBedPrice: number; maxExtraBeds: number }> = {};
+
+        const privilegeParam = userHasPrivilege ? '&hasPrivilege=true' : '';
+        await Promise.all(
+          categories.map(async (cat) => {
+            const res = await fetch(
+              `/api/availability?category=${cat}&start=${formatDate(checkIn)}&end=${formatDate(checkOut)}${privilegeParam}`
+            );
+            if (res.ok) {
+              const data = await res.json();
+              if (data.days && data.days.length > 0) {
+                const minAvailable = Math.min(...data.days.map((d: { available: number }) => d.available));
+                const avgPrice = data.days.reduce((sum: number, d: { basePrice: number }) => sum + d.basePrice, 0) / data.days.length;
+                const memberPrices = data.days.filter((d: { memberPrice: number | null }) => d.memberPrice !== null);
+                const avgMemberPrice = memberPrices.length > 0
+                  ? Math.round(memberPrices.reduce((sum: number, d: { memberPrice: number }) => sum + d.memberPrice, 0) / memberPrices.length)
+                  : null;
+                const extraBedPrice = data.days[0].extraBedPrice || 1500;
+                const maxExtraBeds = data.days[0].maxExtraBeds || 1;
+                results[cat] = { available: minAvailable, avgPrice: Math.round(avgPrice), avgMemberPrice, extraBedPrice, maxExtraBeds };
+              }
+            }
+          })
+        );
+
+        setAvailabilityData(results);
+
+        // Update room prices with real DB prices
+        setRoomTypes(prev =>
+          prev.map(room => ({
+            ...room,
+            price: results[room.id]?.avgPrice || room.price,
+          }))
+        );
+      } catch {
+        // Keep default prices on error
+      } finally {
+        setAvailabilityLoading(false);
+      }
+    };
+
+    fetchAvailability();
+  }, [checkIn, checkOut, userHasPrivilege]);
 
   const formatDate = (date: Date): string => {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
+  };
+
+  const displayDate = (date: Date): string => {
+    const d = String(date.getDate()).padStart(2, '0');
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const y = date.getFullYear();
+    return `${d}/${m}/${y}`;
   };
 
   const calculateBookingNights = () => {
@@ -85,11 +186,13 @@ const Booking = () => {
     const roomPrice = roomTypes.find(room => room.id === selectedRoom)?.price || 0;
     const nights = calculateBookingNights();
     const roomTotal = roomPrice * nights * rooms;
+    const extraBedPrice = selectedRoom ? (availabilityData[selectedRoom]?.extraBedPrice || 1500) : 1500;
+    const extraBedTotal = extraBeds * extraBedPrice * nights;
     const addOnTotal = selectedAddOns.reduce((total, addOnId) => {
       const addOn = addOns.find(a => a.id === addOnId);
       return total + (addOn?.price || 0);
     }, 0);
-    return roomTotal + addOnTotal;
+    return roomTotal + extraBedTotal + addOnTotal;
   };
 
   const toggleAddOn = (addOnId: string) => {
@@ -154,6 +257,7 @@ const Booking = () => {
           rooms,
           adults,
           children,
+          extraBeds,
           fullName: `${guestDetails.firstName} ${guestDetails.lastName}`.trim(),
           phone: guestDetails.phone,
           email: guestDetails.email || undefined,
@@ -191,14 +295,14 @@ const Booking = () => {
             <div className="absolute inset-0 bg-black/50"></div>
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-            <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Booking Confirmed</h1>
+            <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Reservation Confirmed</h1>
           </div>
         </section>
         <div className="max-w-2xl mx-auto px-4 py-12">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-slate-900 mb-2">Thank You!</h2>
-            <p className="text-slate-600 mb-8">Your booking has been confirmed.</p>
+            <p className="text-slate-600 mb-8">Your reservation has been confirmed. Payment will be collected at check-in.</p>
 
             <div className="bg-slate-50 rounded-lg p-6 text-left space-y-3">
               <div className="flex justify-between">
@@ -221,6 +325,12 @@ const Booking = () => {
                 <span className="text-slate-600">Rooms:</span>
                 <span className="font-medium">{bookingResult.rooms}</span>
               </div>
+              {bookingResult.extraBeds > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-slate-600">Extra Beds:</span>
+                  <span className="font-medium">{bookingResult.extraBeds} (+₹{bookingResult.extraBedTotal.toLocaleString()})</span>
+                </div>
+              )}
               {bookingResult.privilegeApplied && (
                 <div className="flex justify-between">
                   <span className="text-slate-600">Privilege Discount:</span>
@@ -282,7 +392,7 @@ const Booking = () => {
                 }`}>
                   {stepNumber === 1 && 'Select Dates & Room'}
                   {stepNumber === 2 && 'Add Services'}
-                  {stepNumber === 3 && 'Payment & Confirmation'}
+                  {stepNumber === 3 && 'Confirm Reservation'}
                 </span>
                 {stepNumber < 3 && <div className="w-8 h-px bg-slate-300 ml-4" />}
               </div>
@@ -318,7 +428,7 @@ const Booking = () => {
                         minDate={new Date()}
                         dateFormat="dd/MM/yyyy"
                       />
-                      <Calendar className="absolute right-3 top-3 h-5 w-5 text-slate-400" />
+                      <Calendar className="absolute right-3 top-3 h-5 w-5 text-slate-400 pointer-events-none" />
                     </div>
                     {validationErrors.checkIn && (
                       <p className="text-red-500 text-sm mt-1">{validationErrors.checkIn}</p>
@@ -334,7 +444,7 @@ const Booking = () => {
                         minDate={checkIn || new Date()}
                         dateFormat="dd/MM/yyyy"
                       />
-                      <Calendar className="absolute right-3 top-3 h-5 w-5 text-slate-400" />
+                      <Calendar className="absolute right-3 top-3 h-5 w-5 text-slate-400 pointer-events-none" />
                     </div>
                     {validationErrors.checkOut && (
                       <p className="text-red-500 text-sm mt-1">{validationErrors.checkOut}</p>
@@ -414,33 +524,88 @@ const Booking = () => {
 
                 {/* Room Selection */}
                 <div className="mb-8">
-                  <label className="block text-sm font-medium text-slate-700 mb-4">Select Room Type</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-4">
+                    Select Room Type
+                    {availabilityLoading && (
+                      <span className="ml-2 text-blue-500 text-xs font-normal">Checking availability...</span>
+                    )}
+                  </label>
                   <div className="space-y-4">
-                    {roomTypes.map((room) => (
-                      <div
-                        key={room.id}
-                        onClick={() => setSelectedRoom(room.id)}
-                        className={`border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
-                          selectedRoom === room.id
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h3 className="font-semibold text-slate-900">{room.name}</h3>
-                          </div>
-                          <div className="text-xl font-bold text-blue-600">
-                            ₹{room.price.toLocaleString()}/night
+                    {roomTypes.map((room) => {
+                      const avail = availabilityData[room.id];
+                      const soldOut = avail && avail.available < rooms;
+                      return (
+                        <div
+                          key={room.id}
+                          onClick={() => !soldOut && setSelectedRoom(room.id)}
+                          className={`border-2 rounded-lg p-4 transition-all duration-200 ${
+                            soldOut
+                              ? 'border-slate-200 bg-slate-50 opacity-60 cursor-not-allowed'
+                              : selectedRoom === room.id
+                                ? 'border-blue-500 bg-blue-50 cursor-pointer'
+                                : 'border-slate-200 hover:border-slate-300 cursor-pointer'
+                          }`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h3 className="font-semibold text-slate-900">{room.name}</h3>
+                              {avail && !soldOut && (
+                                <p className="text-sm text-green-600 mt-1">{avail.available} room{avail.available !== 1 ? 's' : ''} available</p>
+                              )}
+                              {soldOut && (
+                                <p className="text-sm text-red-500 mt-1">Not enough rooms available</p>
+                              )}
+                            </div>
+                            <div className="text-right">
+                              {avail?.avgMemberPrice ? (
+                                <>
+                                  <div className="text-sm text-slate-400 line-through">₹{room.price.toLocaleString()}/night</div>
+                                  <div className="text-xl font-bold text-green-600">₹{avail.avgMemberPrice.toLocaleString()}/night</div>
+                                  <div className="text-xs text-green-500">Member price</div>
+                                </>
+                              ) : (
+                                <div className="text-xl font-bold text-blue-600">
+                                  ₹{room.price.toLocaleString()}/night
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   {validationErrors.room && (
                     <p className="text-red-500 text-sm mt-2">{validationErrors.room}</p>
                   )}
                 </div>
+
+                {/* Extra Bed Toggle — only show once a room is selected */}
+                {selectedRoom && (
+                  <div className="mb-8">
+                    <label className="block text-sm font-medium text-slate-700 mb-3">Extra Bed</label>
+                    <button
+                      type="button"
+                      onClick={() => setExtraBeds(extraBeds === 1 ? 0 : 1)}
+                      className={`flex items-center justify-between w-full border-2 rounded-lg px-5 py-4 transition-all duration-200 ${
+                        extraBeds === 1
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-slate-200 hover:border-slate-300 bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                          extraBeds === 1 ? 'border-blue-500 bg-blue-500' : 'border-slate-300'
+                        }`}>
+                          {extraBeds === 1 && <div className="w-2 h-2 rounded-full bg-white" />}
+                        </div>
+                        <span className="font-semibold text-slate-900">Add Extra Bed</span>
+                      </div>
+                      <span className="font-bold text-blue-600">
+                        +₹{(availabilityData[selectedRoom]?.extraBedPrice || 1500).toLocaleString()}/night
+                      </span>
+                    </button>
+                  </div>
+                )}
 
                 <button
                   onClick={() => handleStepChange(2)}
@@ -491,7 +656,7 @@ const Booking = () => {
                     onClick={() => handleStepChange(3)}
                     className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200"
                   >
-                    Continue to Payment
+                    Continue to Reservation
                   </button>
                 </div>
               </div>
@@ -499,7 +664,7 @@ const Booking = () => {
 
             {step === 3 && (
               <div className="bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-3xl font-bold text-slate-900 mb-8">Guest Details & Confirmation</h2>
+                <h2 className="text-3xl font-bold text-slate-900 mb-8">Guest Details & Reservation</h2>
 
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold text-slate-900 mb-4">Guest Information</h3>
@@ -588,7 +753,7 @@ const Booking = () => {
                 <div className="flex items-center mb-8">
                   <Shield className="h-5 w-5 text-green-500 mr-2" />
                   <span className="text-sm text-slate-600">
-                    Your booking will be confirmed with payment at check-in
+                    Your reservation will be confirmed and payment collected at check-in
                   </span>
                 </div>
 
@@ -604,7 +769,7 @@ const Booking = () => {
                     disabled={isLoading}
                     className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
-                    {isLoading ? 'Confirming Booking...' : 'Confirm Booking'}
+                    {isLoading ? 'Reserving...' : 'Confirm Reservation'}
                   </button>
                 </div>
               </div>
@@ -619,11 +784,11 @@ const Booking = () => {
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">
                   <span className="text-slate-600">Check-in:</span>
-                  <span className="font-medium">{checkIn?.toLocaleDateString()}</span>
+                  <span className="font-medium">{checkIn ? displayDate(checkIn) : ''}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-600">Check-out:</span>
-                  <span className="font-medium">{checkOut?.toLocaleDateString()}</span>
+                  <span className="font-medium">{checkOut ? displayDate(checkOut) : ''}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-600">Nights:</span>
@@ -653,6 +818,14 @@ const Booking = () => {
                       ₹{((roomTypes.find(r => r.id === selectedRoom)?.price || 0) * calculateBookingNights() * rooms).toLocaleString()}
                     </span>
                   </div>
+                  {extraBeds > 0 && (
+                    <div className="flex justify-between mt-2">
+                      <span className="text-slate-600">Extra Beds ({extraBeds}):</span>
+                      <span className="font-medium">
+                        ₹{(extraBeds * (availabilityData[selectedRoom]?.extraBedPrice || 1500) * calculateBookingNights()).toLocaleString()}
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
 

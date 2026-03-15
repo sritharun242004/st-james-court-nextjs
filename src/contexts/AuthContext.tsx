@@ -47,19 +47,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-      const mockUser: User = {
-        id: Math.random().toString(36).substring(7),
-        email,
-        full_name: email.split('@')[0],
-        phone: '',
-        is_admin: email.includes('admin')
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      const loggedInUser: User = {
+        ...data.user,
+        token: data.token,
       };
 
-      setUser(mockUser);
+      setUser(loggedInUser);
       if (typeof window !== 'undefined') {
-        localStorage.setItem('user', JSON.stringify(mockUser));
+        localStorage.setItem('user', JSON.stringify(loggedInUser));
       }
     } finally {
       setLoading(false);
@@ -88,16 +95,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUp = async (email: string, password: string, userData: Partial<User>) => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          full_name: userData.full_name || '',
+          phone: userData.phone || '',
+          age: userData.age,
+          nationality: userData.nationality,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
 
       const newUser: User = {
-        id: Math.random().toString(36).substring(7),
-        email,
-        full_name: userData.full_name || '',
-        phone: userData.phone || '',
-        age: userData.age,
-        nationality: userData.nationality,
-        is_admin: false
+        ...data.user,
+        token: data.token,
       };
 
       setUser(newUser);
@@ -117,12 +136,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateProfile = async (data: Partial<User>) => {
-    if (user) {
-      const updatedUser = { ...user, ...data };
-      setUser(updatedUser);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-      }
+    if (!user || !user.token) return;
+
+    const res = await fetch('/api/user/profile', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      throw new Error(result.error || 'Failed to update profile');
+    }
+
+    const updatedUser = { ...user, ...result.user };
+    setUser(updatedUser);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user', JSON.stringify(updatedUser));
     }
   };
 
