@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
+import { sendBookingNotification, sendUserBookingConfirmation } from '@/lib/email';
 
 // Helper: extract yyyy-MM-dd from a DB date value (avoids timezone shifts)
 function toDateStr(dbDate: unknown): string {
@@ -252,6 +253,37 @@ export async function POST(request: NextRequest) {
       INSERT INTO booking_night (booking_id, category_id, date, rooms)
       SELECT ${bookingId}, ${category.id}, unnest(${nightDates}::date[]), ${rooms}
     `;
+
+    // --- Send reservation email (fire-and-forget — never blocks the response) ---
+    const emailPayload = {
+      bookingId,
+      fullName: body.fullName,
+      phone: body.phone,
+      email: body.email,
+      categoryName: category.name,
+      categoryCode: body.categoryCode,
+      checkIn: body.checkIn,
+      checkOut: body.checkOut,
+      nights: nightPrices,
+      rooms,
+      adults: body.adults || 1,
+      children: body.children || 0,
+      extraBeds,
+      extraBedTotal,
+      privilegeApplied: hasPrivilege,
+      privilegeCardNumber: body.privilegeCardNumber,
+      baseAmount,
+      discountAmount,
+      finalAmount,
+      paymentStatus: 'PENDING',
+      specialRequests: body.specialRequests,
+    };
+    sendBookingNotification(emailPayload).catch((err) =>
+      console.error('[Email] Admin booking notification failed:', err)
+    );
+    sendUserBookingConfirmation(emailPayload).catch((err) =>
+      console.error('[Email] User booking confirmation failed:', err)
+    );
 
     // --- Return response ---
     return NextResponse.json({

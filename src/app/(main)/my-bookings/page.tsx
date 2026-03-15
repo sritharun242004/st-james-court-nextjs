@@ -24,14 +24,34 @@ interface BookingItem {
   createdAt: string;
 }
 
-const getStatusStyle = (status: string) => {
+const getPaymentStyle = (status: string) => {
   switch (status) {
-    case 'PAID': return 'bg-green-100 text-green-800';
-    case 'PENDING': return 'bg-yellow-100 text-yellow-800';
+    case 'PAID':      return 'bg-green-100 text-green-800';
+    case 'PENDING':   return 'bg-yellow-100 text-yellow-800';
     case 'CANCELLED': return 'bg-red-100 text-red-800';
-    case 'REFUNDED': return 'bg-blue-100 text-blue-800';
-    default: return 'bg-slate-100 text-slate-800';
+    case 'REFUNDED':  return 'bg-blue-100 text-blue-800';
+    default:          return 'bg-slate-100 text-slate-800';
   }
+};
+
+type StayStatus = 'upcoming' | 'in-progress' | 'completed';
+
+const getStayStatus = (checkIn: string, checkOut: string, today: string): StayStatus => {
+  if (checkOut < today) return 'completed';
+  if (checkIn <= today && checkOut >= today) return 'in-progress';
+  return 'upcoming';
+};
+
+const stayStatusBadge: Record<StayStatus, { label: string; className: string }> = {
+  'upcoming':    { label: 'Upcoming',    className: 'bg-blue-100 text-blue-700' },
+  'in-progress': { label: 'Staying Now', className: 'bg-teal-100 text-teal-700' },
+  'completed':   { label: 'Completed',   className: 'bg-slate-100 text-slate-600' },
+};
+
+const stayBarColor: Record<StayStatus, string> = {
+  'upcoming':    'bg-gradient-to-r from-blue-600 to-teal-500',
+  'in-progress': 'bg-gradient-to-r from-teal-500 to-green-400',
+  'completed':   'bg-slate-200',
 };
 
 const formatDate = (dateStr: string) => {
@@ -49,7 +69,7 @@ const MyBookingsContent = () => {
   const { getToken } = useAuth();
   const [bookings, setBookings] = useState<BookingItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('all');
+  const [filter, setFilter] = useState<'all' | 'upcoming' | 'in-progress' | 'past'>('all');
 
   useEffect(() => {
     const token = getToken();
@@ -65,14 +85,18 @@ const MyBookingsContent = () => {
   }, [getToken]);
 
   const today = new Date().toISOString().split('T')[0];
+
   const filtered = bookings.filter(b => {
-    if (filter === 'upcoming') return b.checkIn >= today;
-    if (filter === 'past') return b.checkOut < today;
+    const s = getStayStatus(b.checkIn, b.checkOut, today);
+    if (filter === 'upcoming')    return s === 'upcoming';
+    if (filter === 'in-progress') return s === 'in-progress';
+    if (filter === 'past')        return s === 'completed';
     return true;
   });
 
-  const upcomingCount = bookings.filter(b => b.checkIn >= today).length;
-  const pastCount = bookings.filter(b => b.checkOut < today).length;
+  const upcomingCount    = bookings.filter(b => getStayStatus(b.checkIn, b.checkOut, today) === 'upcoming').length;
+  const inProgressCount  = bookings.filter(b => getStayStatus(b.checkIn, b.checkOut, today) === 'in-progress').length;
+  const pastCount        = bookings.filter(b => getStayStatus(b.checkIn, b.checkOut, today) === 'completed').length;
 
   return (
     <div>
@@ -89,16 +113,17 @@ const MyBookingsContent = () => {
 
       <div className="max-w-5xl mx-auto px-4 py-12">
         {/* Filter tabs */}
-        <div className="flex gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-8">
           {[
-            { key: 'all' as const, label: 'All', count: bookings.length },
-            { key: 'upcoming' as const, label: 'Upcoming', count: upcomingCount },
-            { key: 'past' as const, label: 'Past', count: pastCount },
+            { key: 'all'         as const, label: 'All',         count: bookings.length },
+            { key: 'upcoming'    as const, label: 'Upcoming',    count: upcomingCount   },
+            { key: 'in-progress' as const, label: 'Staying Now', count: inProgressCount },
+            { key: 'past'        as const, label: 'Completed',   count: pastCount       },
           ].map(tab => (
             <button
               key={tab.key}
               onClick={() => setFilter(tab.key)}
-              className={`px-5 py-2.5 rounded-full font-medium transition-all ${
+              className={`px-5 py-2.5 rounded-full font-medium transition-all text-sm ${
                 filter === tab.key
                   ? 'bg-blue-600 text-white shadow-lg'
                   : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
@@ -133,25 +158,24 @@ const MyBookingsContent = () => {
           <div className="space-y-6">
             {filtered.map((booking) => {
               const nights = getNights(booking.checkIn, booking.checkOut);
-              const isUpcoming = booking.checkIn >= today;
+              const stayStatus = getStayStatus(booking.checkIn, booking.checkOut, today);
+              const { label: stayLabel, className: stayClass } = stayStatusBadge[stayStatus];
 
               return (
                 <div key={booking.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                  <div className={`h-1.5 ${isUpcoming ? 'bg-gradient-to-r from-blue-600 to-teal-500' : 'bg-slate-300'}`} />
+                  <div className={`h-1.5 ${stayBarColor[stayStatus]}`} />
                   <div className="p-6 md:p-8">
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                       {/* Left */}
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-3">
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
                           <h3 className="text-xl font-bold text-slate-900">{booking.categoryName}</h3>
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusStyle(booking.paymentStatus)}`}>
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${stayClass}`}>
+                            {stayLabel}
+                          </span>
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${getPaymentStyle(booking.paymentStatus)}`}>
                             {booking.paymentStatus}
                           </span>
-                          {isUpcoming && (
-                            <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
-                              Upcoming
-                            </span>
-                          )}
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm text-slate-600">

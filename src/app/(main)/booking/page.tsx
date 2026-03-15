@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Calendar, Users, Plus, Minus, CreditCard, Shield, Gift, CheckCircle, AlertCircle } from 'lucide-react';
@@ -33,6 +33,7 @@ interface BookingResult {
 
 const Booking = () => {
   const { user, getToken } = useAuth();
+  const formTopRef = useRef<HTMLDivElement>(null);
   const [checkIn, setCheckIn] = useState<Date | null>(new Date());
   const [checkOut, setCheckOut] = useState<Date | null>(
     new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
@@ -57,9 +58,11 @@ const Booking = () => {
   });
 
   const defaultRoomTypes = [
-    { id: 'DELUXE', name: 'Deluxe Room', price: 4500 },
-    { id: 'SUPER_DELUXE', name: 'Super Deluxe', price: 5500 },
-    { id: 'SUITE', name: 'Executive Suite Room', price: 6500 }
+    { id: 'DELUXE',       name: 'Deluxe Room',                   price: 4500  },
+    { id: 'SUPER_DELUXE', name: 'Super Deluxe & Heritage Room',  price: 5500  },
+    { id: 'SUITE',        name: 'Executive Suite',               price: 6500  },
+    { id: 'FAMILY',       name: 'Family Room',                   price: 9000  },
+    { id: 'CLUB',         name: 'Club Room',                     price: 1500  },
   ];
 
   const [roomTypes, setRoomTypes] = useState(defaultRoomTypes);
@@ -115,7 +118,7 @@ const Booking = () => {
     const fetchAvailability = async () => {
       setAvailabilityLoading(true);
       try {
-        const categories = ['DELUXE', 'SUPER_DELUXE', 'SUITE'];
+        const categories = ['DELUXE', 'SUPER_DELUXE', 'SUITE', 'FAMILY', 'CLUB'];
         const results: Record<string, { available: number; avgPrice: number; avgMemberPrice: number | null; extraBedPrice: number; maxExtraBeds: number }> = {};
 
         const privilegeParam = userHasPrivilege ? '&hasPrivilege=true' : '';
@@ -236,6 +239,9 @@ const Booking = () => {
   const handleStepChange = async (nextStep: number) => {
     if (validateStep(step)) {
       setStep(nextStep);
+      setTimeout(() => {
+        formTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
     }
   };
 
@@ -275,6 +281,7 @@ const Booking = () => {
 
       setBookingResult(data);
       setStep(4);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
       setApiError('Network error. Please try again.');
     } finally {
@@ -367,41 +374,45 @@ const Booking = () => {
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Book Your Stay</h1>
-          <p className="text-2xl max-w-4xl mx-auto leading-relaxed">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-playfair font-bold mb-4 sm:mb-8">Book Your Stay</h1>
+          <p className="text-base sm:text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed px-4">
             Reserve your perfect beachfront escape at St James Court Beach Resort
           </p>
         </div>
       </section>
 
       {/* Booking Steps */}
-      <section className="py-8 bg-white border-b">
+      <section ref={formTopRef} className="py-6 bg-white border-b">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex items-center justify-center space-x-8">
+          <div className="flex items-start justify-center gap-0">
             {[1, 2, 3].map((stepNumber) => (
-              <div key={stepNumber} className="flex items-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                  step >= stepNumber
-                    ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white'
-                    : 'bg-slate-200 text-slate-600'
-                }`}>
-                  {stepNumber}
+              <React.Fragment key={stepNumber}>
+                <div className="flex flex-col items-center w-20 sm:w-28">
+                  <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-base flex-shrink-0 ${
+                    step >= stepNumber
+                      ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white'
+                      : 'bg-slate-200 text-slate-500'
+                  }`}>
+                    {stepNumber}
+                  </div>
+                  <span className={`mt-1.5 text-center font-medium leading-tight text-xs sm:text-sm ${
+                    step >= stepNumber ? 'text-blue-600' : 'text-slate-400'
+                  }`}>
+                    {stepNumber === 1 && <><span className="sm:hidden">Dates &amp;<br/>Room</span><span className="hidden sm:inline">Select Dates &amp; Room</span></>}
+                    {stepNumber === 2 && <><span className="sm:hidden">Add<br/>Services</span><span className="hidden sm:inline">Add Services</span></>}
+                    {stepNumber === 3 && <><span className="sm:hidden">Confirm</span><span className="hidden sm:inline">Confirm Reservation</span></>}
+                  </span>
                 </div>
-                <span className={`ml-2 font-medium ${
-                  step >= stepNumber ? 'text-blue-600' : 'text-slate-600'
-                }`}>
-                  {stepNumber === 1 && 'Select Dates & Room'}
-                  {stepNumber === 2 && 'Add Services'}
-                  {stepNumber === 3 && 'Confirm Reservation'}
-                </span>
-                {stepNumber < 3 && <div className="w-8 h-px bg-slate-300 ml-4" />}
-              </div>
+                {stepNumber < 3 && (
+                  <div className={`h-px w-8 sm:w-12 mt-4 flex-shrink-0 ${step > stepNumber ? 'bg-blue-400' : 'bg-slate-300'}`} />
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-12">
         {apiError && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-2">
             <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
@@ -409,12 +420,12 @@ const Booking = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">
           {/* Booking Form */}
           <div className="lg:col-span-2">
             {step === 1 && (
-              <div className="bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-3xl font-bold text-slate-900 mb-8">Select Your Dates & Room</h2>
+              <div className="bg-white rounded-xl shadow-lg p-5 sm:p-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-6 sm:mb-8">Select Your Dates &amp; Room</h2>
 
                 {/* Date Selection */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -618,8 +629,8 @@ const Booking = () => {
             )}
 
             {step === 2 && (
-              <div className="bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-3xl font-bold text-slate-900 mb-8">Add Services & Packages</h2>
+              <div className="bg-white rounded-xl shadow-lg p-5 sm:p-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-6 sm:mb-8">Add Services &amp; Packages</h2>
 
                 <div className="space-y-4 mb-8">
                   {addOns.map((addOn) => (
@@ -663,8 +674,8 @@ const Booking = () => {
             )}
 
             {step === 3 && (
-              <div className="bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-3xl font-bold text-slate-900 mb-8">Guest Details & Reservation</h2>
+              <div className="bg-white rounded-xl shadow-lg p-5 sm:p-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-6 sm:mb-8">Guest Details &amp; Reservation</h2>
 
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold text-slate-900 mb-4">Guest Information</h3>
@@ -778,8 +789,8 @@ const Booking = () => {
 
           {/* Booking Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-8 sticky top-32">
-              <h3 className="text-2xl font-bold text-slate-900 mb-6">Booking Summary</h3>
+            <div className="bg-white rounded-xl shadow-lg p-5 sm:p-8 lg:sticky lg:top-32">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-5 sm:mb-6">Booking Summary</h3>
 
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">
