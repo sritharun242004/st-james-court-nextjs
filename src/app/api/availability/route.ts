@@ -52,14 +52,16 @@ export async function GET(request: NextRequest) {
       ORDER BY date
     `;
 
-    // Fetch booked rooms per night
+    // Fetch booked rooms per night — only CONFIRMED or PAID bookings block availability
     const bookedRows = await sql`
-      SELECT date::text as date, COALESCE(SUM(rooms), 0) as booked
-      FROM booking_night
-      WHERE category_id = ${cat.id}
-        AND date >= ${start}::date
-        AND date <= ${lastNightStr}::date
-      GROUP BY date
+      SELECT bn.date::text as date, COALESCE(SUM(bn.rooms), 0) as booked
+      FROM booking_night bn
+      JOIN booking b ON b.id = bn.booking_id
+      WHERE bn.category_id = ${cat.id}
+        AND bn.date >= ${start}::date
+        AND bn.date <= ${lastNightStr}::date
+        AND b.payment_status IN ('CONFIRMED', 'PAID')
+      GROUP BY bn.date
     `;
     const bookedByDate = new Map<string, number>();
     for (const row of bookedRows) {

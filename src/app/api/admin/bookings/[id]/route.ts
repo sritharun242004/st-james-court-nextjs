@@ -61,7 +61,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const body = await request.json();
     const { payment_status, payment_ref, check_in, check_out, rooms, adults, children, extra_beds, special_requests, base_amount, discount_amount, final_amount } = body;
 
-    const validStatuses = ['PENDING', 'PAID', 'CANCELLED', 'REFUNDED'];
+    const validStatuses = ['PENDING', 'CONFIRMED', 'PAID', 'CANCELLED', 'REFUNDED'];
     if (payment_status && !validStatuses.includes(payment_status)) {
       return NextResponse.json({ error: `payment_status must be one of: ${validStatuses.join(', ')}` }, { status: 400 });
     }

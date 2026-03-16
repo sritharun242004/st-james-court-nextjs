@@ -146,12 +146,14 @@ export async function POST(request: NextRequest) {
           `
         : Promise.resolve([]),
       sql`
-        SELECT date::text as date, COALESCE(SUM(rooms), 0) as booked
-        FROM booking_night
-        WHERE category_id = ${category.id}
-          AND date >= ${body.checkIn}::date
-          AND date <= ${lastNight}::date
-        GROUP BY date
+        SELECT bn.date::text as date, COALESCE(SUM(bn.rooms), 0) as booked
+        FROM booking_night bn
+        JOIN booking b ON b.id = bn.booking_id
+        WHERE bn.category_id = ${category.id}
+          AND bn.date >= ${body.checkIn}::date
+          AND bn.date <= ${lastNight}::date
+          AND b.payment_status IN ('CONFIRMED', 'PAID')
+        GROUP BY bn.date
       `,
     ]);
 

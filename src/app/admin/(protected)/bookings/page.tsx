@@ -44,6 +44,7 @@ interface EditFormData {
 
 const statusColors: Record<string, string> = {
   PAID: 'bg-green-100 text-green-800',
+  CONFIRMED: 'bg-emerald-100 text-emerald-800',
   PENDING: 'bg-yellow-100 text-yellow-800',
   CANCELLED: 'bg-red-100 text-red-800',
   REFUNDED: 'bg-blue-100 text-blue-800',
@@ -339,6 +340,7 @@ const AdminBookings = () => {
           >
             <option value="">All Statuses</option>
             <option value="PENDING">Pending</option>
+            <option value="CONFIRMED">Confirmed</option>
             <option value="PAID">Paid</option>
             <option value="CANCELLED">Cancelled</option>
             <option value="REFUNDED">Refunded</option>
@@ -422,6 +424,7 @@ const AdminBookings = () => {
                           className="text-xs border border-slate-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
                         >
                           <option value="PENDING">Pending</option>
+                          <option value="CONFIRMED">Confirmed</option>
                           <option value="PAID">Paid</option>
                           <option value="CANCELLED">Cancelled</option>
                           <option value="REFUNDED">Refunded</option>
@@ -614,7 +617,7 @@ const AdminBookings = () => {
               <div className="border-t pt-4">
                 <h4 className="font-semibold text-slate-900 mb-3">Payment Status</h4>
                 <div className="flex gap-2 flex-wrap">
-                  {['PENDING', 'PAID', 'CANCELLED', 'REFUNDED'].map((s) => (
+                  {['PENDING', 'CONFIRMED', 'PAID', 'CANCELLED', 'REFUNDED'].map((s) => (
                     <button
                       key={s}
                       onClick={() => handleStatusUpdate(viewBooking.id, s)}
@@ -622,6 +625,7 @@ const AdminBookings = () => {
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                         viewBooking.payment_status === s
                           ? 'bg-slate-200 text-slate-500'
+                          : s === 'CONFIRMED' ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                           : s === 'PAID' ? 'bg-green-600 text-white hover:bg-green-700'
                           : s === 'CANCELLED' ? 'bg-red-600 text-white hover:bg-red-700'
                           : s === 'REFUNDED' ? 'bg-blue-600 text-white hover:bg-blue-700'
