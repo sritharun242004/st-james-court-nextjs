@@ -69,7 +69,7 @@ const Dining = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-36 pb-12 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 relative text-white">
+      <section className="pt-28 pb-8 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 relative text-white">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: 'url(/images/dining/dining-hero.jpg)' }}
@@ -77,10 +77,10 @@ const Dining = () => {
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
         <AnimatedSection className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">
             Dining
           </h1>
-          <p className="text-base sm:text-lg lg:text-2xl font-jost max-w-4xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-lg lg:text-2xl font-jost max-w-4xl mx-auto leading-relaxed">
             Savour exquisite flavours at our three signature restaurants, each
             offering a distinct culinary experience by the sea
           </p>
@@ -94,7 +94,7 @@ const Dining = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-teal-500 mb-6">
               <Utensils className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-4">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-4">
               Culinary Experiences
             </h2>
             <p className="text-base sm:text-lg lg:text-xl font-jost text-slate-600 leading-relaxed">
@@ -128,7 +128,7 @@ const Dining = () => {
                     <img
                       src={restaurant.image}
                       alt={restaurant.name}
-                      className="w-full h-64 sm:h-80 lg:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-44 sm:h-80 lg:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                   </div>
@@ -147,7 +147,7 @@ const Dining = () => {
                   <span className="inline-block bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold font-jost mb-4">
                     {restaurant.type}
                   </span>
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-2">
+                  <h3 className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-2">
                     {restaurant.name}
                   </h3>
                   <p className="text-base sm:text-lg font-jost text-blue-600 font-medium mb-6">
@@ -201,7 +201,7 @@ const Dining = () => {
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <AnimatedSection className="text-center mb-8 sm:mb-10 lg:mb-12">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-4">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-4">
               A Glimpse of Our Dining Spaces
             </h2>
             <p className="text-base sm:text-lg lg:text-xl font-jost text-slate-600 max-w-3xl mx-auto">
@@ -220,7 +220,7 @@ const Dining = () => {
                 <img
                   src={img.src}
                   alt={img.alt}
-                  className="w-full h-48 sm:h-56 lg:h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-36 sm:h-56 lg:h-72 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                   <p className="p-4 sm:p-5 lg:p-6 text-white font-jost font-medium">
@@ -242,7 +242,7 @@ const Dining = () => {
           <div className="absolute inset-0 bg-blue-900/80"></div>
         </div>
         <AnimatedSection className="relative z-10 max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-6">
+          <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-6">
             Ready to Dine with Us?
           </h2>
           <p className="text-base sm:text-lg lg:text-xl font-jost text-white/90 mb-4 sm:mb-6 lg:mb-8">
@@ -252,14 +252,14 @@ const Dining = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/booking"
-              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-base sm:text-lg font-semibold font-jost hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
+              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-full text-sm sm:text-lg font-semibold font-jost hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
             >
               <Utensils className="mr-2 h-5 w-5" />
               Book Your Stay
             </Link>
             <Link
               href="/contact"
-              className="border-2 border-white text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-base sm:text-lg font-semibold font-jost hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
+              className="border-2 border-white text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-full text-sm sm:text-lg font-semibold font-jost hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
             >
               Contact Us
             </Link>

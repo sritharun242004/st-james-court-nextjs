@@ -125,10 +125,10 @@ const FAQ = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-36 pb-12 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 bg-gradient-to-r from-blue-600 to-teal-500 text-white">
+      <section className="pt-28 pb-8 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 bg-gradient-to-r from-blue-600 to-teal-500 text-white">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Frequently Asked Questions</h1>
-          <p className="text-base sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Frequently Asked Questions</h1>
+          <p className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
             Find answers to common questions about your stay at St James Court Beach Resort.
             Can't find what you're looking for? Our team is here to help!
           </p>
@@ -147,7 +147,7 @@ const FAQ = () => {
                   placeholder="Search FAQs..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -157,7 +157,7 @@ const FAQ = () => {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
                     selectedCategory === category.id
                       ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -179,9 +179,9 @@ const FAQ = () => {
               <div key={faq.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
                 <button
                   onClick={() => toggleItem(faq.id)}
-                  className="w-full px-4 py-4 sm:px-6 sm:py-5 lg:py-6 text-left flex items-center justify-between hover:bg-slate-50 transition-colors duration-200"
+                  className="w-full px-3 py-3 sm:px-6 sm:py-5 lg:py-6 text-left flex items-center justify-between hover:bg-slate-50 transition-colors duration-200"
                 >
-                  <h3 className="text-lg font-semibold text-slate-900 pr-4">
+                  <h3 className="text-sm sm:text-lg font-semibold text-slate-900 pr-4">
                     {faq.question}
                   </h3>
                   {openItem === faq.id ? (
@@ -192,7 +192,7 @@ const FAQ = () => {
                 </button>
 
                 {openItem === faq.id && (
-                  <div className="px-4 pb-4 sm:px-6 sm:pb-6">
+                  <div className="px-3 pb-3 sm:px-6 sm:pb-6">
                     <div className="border-t border-slate-100 pt-4">
                       <p className="text-slate-600 leading-relaxed">
                         {faq.answer}
@@ -220,7 +220,7 @@ const FAQ = () => {
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Need More Help?</h2>
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Need More Help?</h2>
             <p className="text-base sm:text-lg lg:text-xl text-slate-600">
               Our friendly team is available 24/7 to assist you with any questions
             </p>
@@ -239,7 +239,7 @@ const FAQ = () => {
                 <div>General: +91 413 123 4567</div>
                 <div>Reservations: +91 413 123 4568</div>
               </div>
-              <button className="mt-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-200">
+              <button className="mt-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:shadow-lg transition-all duration-200">
                 Call Now
               </button>
             </div>
@@ -255,7 +255,7 @@ const FAQ = () => {
               <div className="text-sm text-slate-700 mb-4">
                 Reservation@stjamescourtbeachresort.com
               </div>
-              <button className="bg-gradient-to-r from-green-600 to-emerald-500 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-200">
+              <button className="bg-gradient-to-r from-green-600 to-emerald-500 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:shadow-lg transition-all duration-200">
                 Send Email
               </button>
             </div>
@@ -271,7 +271,7 @@ const FAQ = () => {
               <div className="text-sm text-slate-700 mb-4">
                 Available 24/7
               </div>
-              <button className="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-200">
+              <button className="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:shadow-lg transition-all duration-200">
                 Start Chat
               </button>
             </div>
@@ -280,35 +280,35 @@ const FAQ = () => {
       </section>
 
       {/* Common Topics */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">Popular Topics</h2>
-            <p className="text-xl text-slate-600">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Popular Topics</h2>
+            <p className="text-sm sm:text-lg lg:text-xl text-slate-600">
               Quick access to our most frequently asked questions
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
               <h3 className="font-bold text-slate-900 mb-2">Booking & Reservations</h3>
               <p className="text-slate-600 text-sm mb-3">Questions about making reservations, cancellations, and booking policies</p>
               <span className="text-blue-600 font-semibold text-sm">5 articles</span>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
               <h3 className="font-bold text-slate-900 mb-2">Resort Amenities</h3>
               <p className="text-slate-600 text-sm mb-3">Information about spa, pools, dining, and other resort facilities</p>
               <span className="text-blue-600 font-semibold text-sm">8 articles</span>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
               <h3 className="font-bold text-slate-900 mb-2">Activities & Tours</h3>
               <p className="text-slate-600 text-sm mb-3">Details about water sports, cultural tours, and local experiences</p>
               <span className="text-blue-600 font-semibold text-sm">6 articles</span>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
               <h3 className="font-bold text-slate-900 mb-2">Resort Policies</h3>
               <p className="text-slate-600 text-sm mb-3">Information about check-in/out, smoking, pets, and other policies</p>
               <span className="text-blue-600 font-semibold text-sm">4 articles</span>

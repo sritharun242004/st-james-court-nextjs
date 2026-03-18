@@ -60,7 +60,7 @@ const Header = () => {
     <>
       {/* Top Bar */}
       <motion.div
-        className="bg-slate-900 text-white py-1.5 sm:py-2 text-xs sm:text-sm fixed w-full top-0 z-50"
+        className="bg-slate-900 text-white py-1 sm:py-2 text-[10px] sm:text-sm fixed w-full top-0 z-50"
         initial={mounted ? { y: -50, opacity: 0 } : false}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -96,8 +96,8 @@ const Header = () => {
       <motion.header
         className={`fixed w-full z-40 transition-all duration-500 ${
           isScrolled
-            ? 'top-8 sm:top-10 px-2 sm:px-4'
-            : 'top-8 sm:top-10 px-2 sm:px-4'
+            ? 'top-7 sm:top-10 px-2 sm:px-4'
+            : 'top-7 sm:top-10 px-2 sm:px-4'
         }`}
         initial={mounted ? { y: -100 } : false}
         animate={{ y: 0 }}
@@ -106,8 +106,8 @@ const Header = () => {
         <motion.nav
           className={`max-w-6xl mx-auto transition-all duration-500 ${
             isScrolled
-              ? 'bg-white/95 backdrop-blur-xl shadow-2xl rounded-2xl border border-white/20 py-3 px-3 sm:px-6'
-              : 'bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 py-4 px-3 sm:px-6'
+              ? 'bg-white/95 backdrop-blur-xl shadow-2xl rounded-2xl border border-white/20 py-2 sm:py-3 px-3 sm:px-6'
+              : 'bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 py-2.5 sm:py-4 px-3 sm:px-6'
           }`}
           layout
         >
@@ -121,13 +121,13 @@ const Header = () => {
                 <img
                   src="/logo.jpeg"
                   alt="St James Court Beach Resort Logo"
-                  className="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain rounded-lg shadow-lg -ml-1 sm:-ml-2"
+                  className="h-8 w-8 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain rounded-lg shadow-lg -ml-1 sm:-ml-2"
                 />
                 <div>
-                  <h1 className={`font-playfair font-bold text-base sm:text-lg lg:text-xl ${isScrolled ? 'text-slate-900' : 'text-white'} transition-colors duration-300 ml-1`}>
+                  <h1 className={`font-playfair font-bold text-sm sm:text-lg lg:text-xl ${isScrolled ? 'text-slate-900' : 'text-white'} transition-colors duration-300 ml-1`}>
                     St James Court
                   </h1>
-                  <p className={`text-[10px] sm:text-xs font-jost ${isScrolled ? 'text-slate-600' : 'text-white/90'} transition-colors duration-300 ml-1`}>
+                  <p className={`text-[9px] sm:text-xs font-jost ${isScrolled ? 'text-slate-600' : 'text-white/90'} transition-colors duration-300 ml-1`}>
                     Beach Resort
                   </p>
                 </div>
@@ -232,7 +232,7 @@ const Header = () => {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className="h-6 w-6" />
+                    <X className="h-5 w-5 sm:h-6 sm:w-6" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -242,7 +242,7 @@ const Header = () => {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className="h-6 w-6" />
+                    <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -344,7 +344,7 @@ const Header = () => {
                   <Link
                     href="/booking"
                     onClick={() => setIsMenuOpen(false)}
-                    className="block w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-3 sm:px-6 sm:py-4 rounded-xl text-center font-jost text-sm sm:text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="block w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-6 sm:py-4 text-sm sm:text-base rounded-xl text-center font-jost font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Book Your Stay
                   </Link>

@@ -325,9 +325,9 @@ const Explore = () => {
         alt={attraction.name}
         className="w-full h-48 object-cover"
       />
-      <div className="p-4 sm:p-5 lg:p-6">
+      <div className="p-3 sm:p-5 lg:p-6">
         <div className="flex items-center justify-between mb-3">
-          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
             {attraction.distance}
           </span>
           {attraction.rating && (
@@ -362,7 +362,7 @@ const Explore = () => {
             href={attraction.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:shadow-lg transition-all duration-200"
+            className="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:shadow-lg transition-all duration-200"
           >
             <Navigation className="h-4 w-4" />
             Get Directions
@@ -371,7 +371,7 @@ const Explore = () => {
             href={attraction.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 px-3 py-2 sm:px-4 sm:py-2 border border-blue-600 text-blue-600 rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all duration-200"
+            className="flex items-center gap-1 px-2.5 py-1.5 sm:px-4 sm:py-2 border border-blue-600 text-blue-600 rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all duration-200"
           >
             <ExternalLink className="h-4 w-4" />
             Maps
@@ -384,13 +384,13 @@ const Explore = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-36 pb-12 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 relative text-white">
+      <section className="pt-28 pb-8 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 relative text-white">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/1799730/pexels-photo-1799730.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Explore Pondicherry</h1>
-          <p className="text-base sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Explore Pondicherry</h1>
+          <p className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
             Discover the rich cultural heritage, stunning beaches, and unique Franco-Tamil culture —
             all just minutes from St James Court Beach Resort
           </p>
@@ -405,7 +405,7 @@ const Explore = () => {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex items-center px-3 py-2 sm:px-5 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 ${
+                className={`flex items-center px-2.5 py-1.5 sm:px-5 sm:py-3 text-xs sm:text-base rounded-full transition-all duration-300 ${
                   selectedCategory === category.id
                     ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-lg'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -423,7 +423,7 @@ const Explore = () => {
       <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Must-Visit Attractions</h2>
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Must-Visit Attractions</h2>
             <p className="text-base sm:text-lg lg:text-xl text-slate-600">
               Discover the best of Pondicherry&apos;s culture, history, and natural beauty
             </p>
@@ -461,7 +461,7 @@ const Explore = () => {
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Suggested Day Itineraries</h2>
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Suggested Day Itineraries</h2>
             <p className="text-base sm:text-lg lg:text-xl text-slate-600">
               Curated one-day plans to make the most of your stay
             </p>
@@ -500,7 +500,7 @@ const Explore = () => {
       <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Day Trip Packages</h2>
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Day Trip Packages</h2>
             <p className="text-base sm:text-lg lg:text-xl text-slate-600">
               Explore beyond Pondicherry with our curated day trip experiences
             </p>
@@ -614,7 +614,7 @@ const Explore = () => {
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Cultural Experiences</h2>
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Cultural Experiences</h2>
             <p className="text-base sm:text-lg lg:text-xl text-slate-600">
               Immerse yourself in the unique Franco-Tamil culture of Pondicherry
             </p>

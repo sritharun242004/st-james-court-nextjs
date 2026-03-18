@@ -161,14 +161,14 @@ const Gallery = () => {
   return (
     <div className="bg-slate-50">
       {/* Hero Section */}
-      <section className="pt-36 pb-14 sm:pt-44 sm:pb-18 lg:pt-52 lg:pb-24 relative text-white">
+      <section className="pt-28 pb-8 sm:pt-44 sm:pb-18 lg:pt-52 lg:pb-24 relative text-white">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(/images/gallery/gallery-bg.jpg)' }}>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-slate-50"></div>
         </div>
         <AnimatedSection className="relative z-10 max-w-7xl mx-auto px-4 text-center">
           <p className="text-sm uppercase tracking-[0.3em] text-teal-300 font-jost mb-4">St James Court Beach Resort</p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-6">Gallery</h1>
-          <p className="text-base sm:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed text-white/80">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-6">Gallery</h1>
+          <p className="text-sm sm:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed text-white/80">
             A visual journey through our resort — from sunlit rooms to beachside celebrations
           </p>
         </AnimatedSection>
@@ -187,7 +187,7 @@ const Gallery = () => {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`flex-shrink-0 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
                     activeCategory === cat.id
                       ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-lg shadow-blue-500/15'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'

@@ -152,7 +152,7 @@ const Rooms = () => {
     {
       id: 'beach',
       title: "Beach & Water Activities",
-      icon: <Waves className="h-8 w-8" />,
+      icon: <Waves className="h-5 w-5 sm:h-8 sm:w-8" />,
       items: [
         { name: "Private Beach Access", description: "Exclusive beachfront with pristine sandy shores" },
         { name: "Water Sports Center", description: "Kayaking, jet skiing, and parasailing" },
@@ -165,7 +165,7 @@ const Rooms = () => {
     {
       id: 'wellness',
       title: "Wellness & Recreation",
-      icon: <Heart className="h-8 w-8" />,
+      icon: <Heart className="h-5 w-5 sm:h-8 sm:w-8" />,
       items: [
         { name: "Ayurvedic Spa", description: "Traditional treatments with ocean views" },
         { name: "Yoga Pavilion", description: "Daily sunrise and sunset yoga sessions" },
@@ -178,7 +178,7 @@ const Rooms = () => {
     {
       id: 'dining',
       title: "Dining & Entertainment",
-      icon: <Utensils className="h-8 w-8" />,
+      icon: <Utensils className="h-5 w-5 sm:h-8 sm:w-8" />,
       items: [
         { name: "Sea Queen", description: "Family restaurant with multi-cuisine indoor dining" },
         { name: "Sea Breeze", description: "Beachfront open-air dining with ocean views" },
@@ -201,13 +201,13 @@ const Rooms = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-36 pb-12 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 relative text-white">
+      <section className="pt-28 pb-8 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 relative text-white">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
         <AnimatedSection className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Rooms, Dining & Amenities</h1>
-          <p className="text-base sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Rooms, Dining & Amenities</h1>
+          <p className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
             Discover our luxurious accommodations, world-class dining experiences,
             and comprehensive amenities designed for your perfect getaway
           </p>
@@ -218,8 +218,8 @@ const Rooms = () => {
       <section id="rooms" className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <AnimatedSection className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Luxurious Accommodations</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Luxurious Accommodations</h2>
+            <p className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
               Choose from our collection of elegantly appointed rooms and suites,
               each designed to provide comfort and stunning views
             </p>
@@ -238,7 +238,7 @@ const Rooms = () => {
                   className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 group"
                 >
                   {/* Image Carousel */}
-                  <div className="relative h-72 overflow-hidden">
+                  <div className="relative h-48 sm:h-64 lg:h-72 overflow-hidden">
                     {gallery.map((img, i) => (
                       <div
                         key={i}
@@ -298,9 +298,9 @@ const Rooms = () => {
                     </div>
                   </div>
 
-                  <div className="p-4 sm:p-5 lg:p-6">
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-900 mb-2">{room.name}</h3>
-                    <p className="text-slate-600 mb-4">{room.description}</p>
+                  <div className="p-3 sm:p-5 lg:p-6">
+                    <h3 className="text-base sm:text-xl lg:text-2xl font-bold text-slate-900 mb-2">{room.name}</h3>
+                    <p className="text-sm sm:text-base text-slate-600 mb-4">{room.description}</p>
 
                     <div className="mb-4">
                       <div className="flex items-center justify-between">
@@ -339,7 +339,7 @@ const Rooms = () => {
                     <div className="flex space-x-3">
                       <Link
                         href={`/rooms/${room.id}`}
-                        className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-2.5 sm:py-3 rounded-lg text-center font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
+                        className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg text-center font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
                       >
                         View Details
                       </Link>
@@ -356,8 +356,8 @@ const Rooms = () => {
       <section id="dining" className="py-12 sm:py-16 lg:py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
           <AnimatedSection className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Culinary Excellence</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Culinary Excellence</h2>
+            <p className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
               Savor the unique fusion of French culinary artistry and Indian flavors,
               from elegant fine dining to casual beachfront meals
             </p>
@@ -399,8 +399,8 @@ const Rooms = () => {
                   </div>
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4">{restaurant.name}</h3>
-                <p className="text-base sm:text-lg text-slate-600 mb-6">{restaurant.description}</p>
+                <h3 className="text-xl sm:text-3xl font-bold text-slate-900 mb-4">{restaurant.name}</h3>
+                <p className="text-sm sm:text-lg text-slate-600 mb-6">{restaurant.description}</p>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="flex items-center text-slate-600">
@@ -438,7 +438,7 @@ const Rooms = () => {
                 <img
                   src={restaurant.image}
                   alt={restaurant.name}
-                  className="rounded-lg shadow-xl w-full h-56 sm:h-72 lg:h-96 object-cover"
+                  className="rounded-lg shadow-xl w-full h-40 sm:h-72 lg:h-96 object-cover"
                 />
                 <div className="absolute -bottom-2 -right-2 sm:-bottom-4 sm:-right-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg">
                   <div className="text-lg sm:text-2xl font-bold text-blue-600">{restaurant.rating}</div>
@@ -459,7 +459,7 @@ const Rooms = () => {
                 <img
                   src={restaurant.image}
                   alt={restaurant.name}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-36 sm:h-48 object-cover"
                 />
                 <div className="p-4 sm:p-5 lg:p-6">
                   <div className="flex items-center justify-between mb-2">
@@ -488,8 +488,8 @@ const Rooms = () => {
       <section id="amenities" className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <AnimatedSection className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">World-Class Amenities</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">World-Class Amenities</h2>
+            <p className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
               Everything you need for the perfect beach vacation, from luxury spa treatments
               to thrilling water sports and cultural experiences
             </p>
@@ -515,17 +515,17 @@ const Rooms = () => {
 
           {/* Detailed Amenities */}
           {amenityCategories.filter(cat => cat.id === amenityCategory).map((category) => (
-            <AnimatedSection key={category.id} className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl shadow-lg mb-10 p-4 sm:p-6 lg:p-8">
+            <AnimatedSection key={category.id} className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl shadow-lg mb-10 p-3 sm:p-6 lg:p-8">
               <div className="flex items-center mb-8">
                 <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-4 rounded-full mr-4">
                   {category.icon}
                 </div>
-                <h3 className="text-3xl font-bold text-slate-900">{category.title}</h3>
+                <h3 className="text-xl sm:text-3xl font-bold text-slate-900">{category.title}</h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {category.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="bg-white p-4 sm:p-5 lg:p-6 rounded-xl hover:shadow-md transition-shadow duration-300">
+                  <div key={itemIndex} className="bg-white p-3 sm:p-5 lg:p-6 rounded-xl hover:shadow-md transition-shadow duration-300">
                     <h4 className="text-lg font-semibold text-slate-900 mb-2">{item.name}</h4>
                     <p className="text-slate-600">{item.description}</p>
                   </div>
@@ -540,11 +540,11 @@ const Rooms = () => {
               <img
                 src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Spa Treatment"
-                className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-36 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                 <div className="p-4 sm:p-5 lg:p-6 text-white">
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2">Ayurvedic Spa</h3>
+                  <h3 className="text-base sm:text-xl lg:text-2xl font-bold mb-2">Ayurvedic Spa</h3>
                   <p>Rejuvenating treatments with ocean views</p>
                 </div>
               </div>
@@ -554,11 +554,11 @@ const Rooms = () => {
               <img
                 src="https://images.pexels.com/photos/863988/pexels-photo-863988.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Water Sports"
-                className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-36 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                 <div className="p-4 sm:p-5 lg:p-6 text-white">
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2">Water Sports</h3>
+                  <h3 className="text-base sm:text-xl lg:text-2xl font-bold mb-2">Water Sports</h3>
                   <p>Thrilling adventures on pristine waters</p>
                 </div>
               </div>
@@ -568,11 +568,11 @@ const Rooms = () => {
               <img
                 src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Fine Dining"
-                className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-36 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                 <div className="p-4 sm:p-5 lg:p-6 text-white">
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2">Fine Dining</h3>
+                  <h3 className="text-base sm:text-xl lg:text-2xl font-bold mb-2">Fine Dining</h3>
                   <p>French-Indian fusion culinary excellence</p>
                 </div>
               </div>
@@ -592,24 +592,24 @@ const Rooms = () => {
       >
         <div className="absolute inset-0 bg-blue-900/80"></div>
         <AnimatedSection className="relative z-10 max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="text-xl sm:text-3xl lg:text-4xl md:text-5xl font-bold text-white mb-6">
             Ready to Experience Luxury?
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-white/90 mb-8">
+          <p className="text-sm sm:text-lg lg:text-xl text-white/90 mb-8">
             Book your stay at St James Court Beach Resort and indulge in our world-class
             accommodations, dining, and amenities
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/booking"
-              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
+              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
             >
               <Calendar className="mr-2 h-5 w-5" />
               Book Your Stay
             </Link>
             <Link
               href="/contact"
-              className="border-2 border-white text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
+              className="border-2 border-white text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
             >
               Contact Us
             </Link>

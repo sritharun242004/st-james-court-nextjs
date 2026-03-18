@@ -48,22 +48,22 @@ const Home = () => {
 
   const features = [
     {
-      icon: <Waves className="h-8 w-8" />,
+      icon: <Waves className="h-5 w-5 sm:h-8 sm:w-8" />,
       title: "Beachfront Access",
       description: "Direct access to pristine sandy beaches"
     },
     {
-      icon: <Utensils className="h-8 w-8" />,
+      icon: <Utensils className="h-5 w-5 sm:h-8 sm:w-8" />,
       title: "Fine Dining",
       description: "French-Indian fusion cuisine & local delicacies"
     },
     {
-      icon: <Sparkles className="h-8 w-8" />,
+      icon: <Sparkles className="h-5 w-5 sm:h-8 sm:w-8" />,
       title: "Lawn",
       description: "Refreshing natural open lawn for events"
     },
     {
-      icon: <Users className="h-8 w-8" />,
+      icon: <Users className="h-5 w-5 sm:h-8 sm:w-8" />,
       title: "Event Spaces",
       description: "Perfect venues for weddings & celebrations"
     }
@@ -140,14 +140,14 @@ const Home = () => {
           >
             <Link
               href="/booking"
-              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
+              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
             >
               Book Now
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
               href="/rooms"
-              className="border-2 border-white text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
+              className="border-2 border-white text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
             >
               View Rooms
             </Link>
@@ -168,22 +168,22 @@ const Home = () => {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-8">
             {features.map((feature, index) => (
               <AnimatedSection
                 key={index}
                 delay={index * 0.1}
-                className="p-4 sm:p-5 lg:p-6 rounded-xl bg-gradient-to-br from-blue-50 to-teal-50 hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                className="p-3 sm:p-5 lg:p-6 rounded-xl bg-gradient-to-br from-blue-50 to-teal-50 hover:shadow-lg transform hover:scale-105 transition-all duration-300"
               >
                 <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
-                  <div className="flex-shrink-0 inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-full md:mb-4">
+                  <div className="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-full md:mb-4">
                     {feature.icon}
                   </div>
-                  <h3 className="text-lg md:text-xl font-playfair font-semibold text-slate-900 md:mb-2 md:text-center">
+                  <h3 className="text-sm sm:text-lg md:text-xl font-playfair font-semibold text-slate-900 md:mb-2 md:text-center">
                     {feature.title}
                   </h3>
                 </div>
-                <p className="text-slate-600 text-sm md:text-base md:text-center">
+                <p className="text-slate-600 text-xs sm:text-sm md:text-base md:text-center">
                   {feature.description}
                 </p>
               </AnimatedSection>
@@ -204,7 +204,7 @@ const Home = () => {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
             <AnimatedSection direction="left">
               <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8">
                 <h3 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-6">Quick Booking</h3>
@@ -215,14 +215,14 @@ const Home = () => {
                       <label className="block text-sm font-medium text-slate-700 mb-2">Check-in Date</label>
                       <input
                         type="date"
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-2.5 sm:p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">Check-out Date</label>
                       <input
                         type="date"
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full p-2.5 sm:p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -230,7 +230,7 @@ const Home = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">Adults</label>
-                      <select className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                      <select className="w-full p-2.5 sm:p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option>1 Adult</option>
                         <option>2 Adults</option>
                         <option>3 Adults</option>
@@ -239,7 +239,7 @@ const Home = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">Children</label>
-                      <select className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                      <select className="w-full p-2.5 sm:p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option>0 Children</option>
                         <option>1 Child</option>
                         <option>2 Children</option>
@@ -250,7 +250,7 @@ const Home = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Room Type</label>
-                    <select className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <select className="w-full p-2.5 sm:p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                       <option>Any Room Type</option>
                       <option>Deluxe Room</option>
                       <option>Super Deluxe</option>
@@ -260,7 +260,7 @@ const Home = () => {
 
                   <Link
                     href="/booking"
-                    className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
+                    className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
                   >
                     <Calendar className="mr-2 h-5 w-5" />
                     Check Availability
@@ -271,7 +271,7 @@ const Home = () => {
 
             <AnimatedSection direction="right">
               <div className="space-y-6">
-                <div className="bg-white rounded-xl p-6 shadow-lg">
+                <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg">
                   <div className="flex items-center mb-4">
                     <div className="bg-green-100 p-2 rounded-full mr-3">
                       <Star className="h-5 w-5 text-green-600" />
@@ -283,7 +283,7 @@ const Home = () => {
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-lg">
+                <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg">
                   <div className="flex items-center mb-4">
                     <div className="bg-blue-100 p-2 rounded-full mr-3">
                       <Users className="h-5 w-5 text-blue-600" />
@@ -295,7 +295,7 @@ const Home = () => {
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-lg">
+                <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg">
                   <div className="flex items-center mb-4">
                     <div className="bg-orange-100 p-2 rounded-full mr-3">
                       <Sparkles className="h-5 w-5 text-orange-600" />
@@ -444,7 +444,7 @@ const Home = () => {
       {/* About Preview */}
       <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
             <AnimatedSection direction="left">
               <div className="flex items-center mb-6">
                 <div className=" rounded-xl shadow-lg mr-4">
@@ -459,13 +459,13 @@ const Home = () => {
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-6">
                 A Heritage of Hospitality
               </h2>
-              <p className="text-lg text-slate-600 mb-6">
+              <p className="text-sm sm:text-lg text-slate-600 mb-6">
                 Situated on Pondicherry's East Coast Road in Chinna Kalapet, St James Court Beach Resort
                 is the only resort in Pondicherry right on the beach. A unit of the NTS Group — established
                 in 1998 with over 25 years of excellence in hospitality — we offer world-class amenities
                 and warm Indian hospitality.
               </p>
-              <p className="text-lg text-slate-600 mb-8">
+              <p className="text-sm sm:text-lg text-slate-600 mb-8">
                 From our pristine beachfront overlooking the Bay of Bengal to our 40 elegantly
                 designed rooms and suites, 3 restaurants, and 2 event venues, every detail has
                 been crafted to ensure an unforgettable stay.
@@ -484,8 +484,8 @@ const Home = () => {
                 alt="Resort Architecture"
                 className="rounded-lg shadow-xl"
               />
-              <div className="absolute -bottom-4 -left-4 bg-white p-4 sm:p-6 rounded-lg shadow-lg">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-600">25+</div>
+              <div className="absolute -bottom-4 -left-4 bg-white p-3 sm:p-6 rounded-lg shadow-lg">
+                <div className="text-xl sm:text-3xl font-bold text-blue-600">25+</div>
                 <div className="text-slate-600">Years of Excellence</div>
               </div>
             </AnimatedSection>
@@ -505,24 +505,24 @@ const Home = () => {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {testimonials.map((testimonial, index) => (
               <AnimatedSection
                 key={index}
                 delay={index * 0.2}
-                className="bg-gradient-to-br from-blue-50 to-teal-50 p-4 sm:p-5 lg:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="bg-gradient-to-br from-blue-50 to-teal-50 p-3 sm:p-5 lg:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-slate-700 mb-4 italic">
+                <p className="text-slate-700 mb-4 italic text-sm sm:text-base">
                   "{testimonial.text}"
                 </p>
                 <div>
-                  <div className="font-semibold text-slate-900">{testimonial.name}</div>
-                  <div className="text-slate-600 text-sm">{testimonial.location}</div>
+                  <div className="font-semibold text-slate-900 text-sm sm:text-base">{testimonial.name}</div>
+                  <div className="text-slate-600 text-xs sm:text-sm">{testimonial.location}</div>
                 </div>
               </AnimatedSection>
             ))}
@@ -556,16 +556,16 @@ const Home = () => {
 
           <div className="max-w-4xl mx-auto">
             <AnimatedSection>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="space-y-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6">
+                <div className="space-y-3 sm:space-y-4">
                   <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div className="p-4 sm:p-5 lg:p-6 cursor-pointer">
-                      <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="p-3 sm:p-5 lg:p-6 cursor-pointer">
+                      <h3 className="text-sm sm:text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                         What are your check-in and check-out times?
                       </h3>
                       <div className="max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500 ease-in-out">
                         <div className="pt-4 border-t border-slate-100 mt-4">
-                          <p className="text-slate-600">
+                          <p className="text-slate-600 text-sm">
                             Check-in is at 3:00 PM and check-out is at 11:00 AM. Early check-in and late check-out may be available upon request.
                           </p>
                         </div>
@@ -574,13 +574,13 @@ const Home = () => {
                   </div>
 
                   <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div className="p-4 sm:p-5 lg:p-6 cursor-pointer">
-                      <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="p-3 sm:p-5 lg:p-6 cursor-pointer">
+                      <h3 className="text-sm sm:text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                         Do you provide airport transportation?
                       </h3>
                       <div className="max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500 ease-in-out">
                         <div className="pt-4 border-t border-slate-100 mt-4">
-                          <p className="text-slate-600">
+                          <p className="text-slate-600 text-sm">
                             Yes, we offer complimentary airport pickup and drop-off service from Puducherry Airport. Please inform us 24 hours in advance.
                           </p>
                         </div>
@@ -589,13 +589,13 @@ const Home = () => {
                   </div>
 
                   <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div className="p-4 sm:p-5 lg:p-6 cursor-pointer">
-                      <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="p-3 sm:p-5 lg:p-6 cursor-pointer">
+                      <h3 className="text-sm sm:text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                         What dining options are available?
                       </h3>
                       <div className="max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500 ease-in-out">
                         <div className="pt-4 border-t border-slate-100 mt-4">
-                          <p className="text-slate-600">
+                          <p className="text-slate-600 text-sm">
                             We have 3 dining venues — Sea Queen (family restaurant), Sea Breeze (beachfront open air), and The Ocean (bar & restaurant) — plus 24/7 room service.
                           </p>
                         </div>
@@ -604,15 +604,15 @@ const Home = () => {
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div className="p-4 sm:p-5 lg:p-6 cursor-pointer">
-                      <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="p-3 sm:p-5 lg:p-6 cursor-pointer">
+                      <h3 className="text-sm sm:text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                         Is WiFi available throughout the resort?
                       </h3>
                       <div className="max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500 ease-in-out">
                         <div className="pt-4 border-t border-slate-100 mt-4">
-                          <p className="text-slate-600">
+                          <p className="text-slate-600 text-sm">
                             Yes, complimentary high-speed WiFi is available throughout the resort, including all rooms and common areas.
                           </p>
                         </div>
@@ -621,13 +621,13 @@ const Home = () => {
                   </div>
 
                   <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div className="p-4 sm:p-5 lg:p-6 cursor-pointer">
-                      <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="p-3 sm:p-5 lg:p-6 cursor-pointer">
+                      <h3 className="text-sm sm:text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                         Are pets allowed at the resort?
                       </h3>
                       <div className="max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500 ease-in-out">
                         <div className="pt-4 border-t border-slate-100 mt-4">
-                          <p className="text-slate-600">
+                          <p className="text-slate-600 text-sm">
                             Currently, we do not allow pets at the resort, with the exception of certified service animals.
                           </p>
                         </div>
@@ -636,13 +636,13 @@ const Home = () => {
                   </div>
 
                   <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div className="p-4 sm:p-5 lg:p-6 cursor-pointer">
-                      <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="p-3 sm:p-5 lg:p-6 cursor-pointer">
+                      <h3 className="text-sm sm:text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                         What activities are available for children?
                       </h3>
                       <div className="max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500 ease-in-out">
                         <div className="pt-4 border-t border-slate-100 mt-4">
-                          <p className="text-slate-600">
+                          <p className="text-slate-600 text-sm">
                             We offer a kids' club with supervised activities, children's pool, playground, and special children's menu at our restaurants.
                           </p>
                         </div>
@@ -680,23 +680,23 @@ const Home = () => {
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-playfair font-bold text-white mb-6">
+          <h2 className="text-xl sm:text-3xl md:text-5xl font-playfair font-bold text-white mb-6">
             Ready for Your Perfect Getaway?
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-white/90 mb-8">
+          <p className="text-sm sm:text-lg lg:text-xl text-white/90 mb-8">
             Book your stay at St James Court Beach Resort and create memories that will last a lifetime.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/booking"
-              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
+              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
             >
               <Calendar className="mr-2 h-5 w-5" />
               Book Your Stay
             </Link>
             <a
               href="#contact"
-              className="border-2 border-white text-white px-6 py-3 sm:px-8 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
+              className="border-2 border-white text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
             >
               Get in Touch
             </a>
@@ -722,11 +722,11 @@ const Home = () => {
               <img
                 src="/images/rooms/deluxe/deluxe-room-1.jpg"
                 alt="Deluxe Room"
-                className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-40 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <h3 className="text-xl font-playfair font-bold mb-2">Deluxe Room</h3>
+                  <h3 className="text-base sm:text-xl font-playfair font-bold mb-2">Deluxe Room</h3>
                   <p className="text-sm mb-3">Twin beds with Fenesta French window and modern amenities</p>
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-semibold">₹4,500/night</span>
@@ -745,11 +745,11 @@ const Home = () => {
               <img
                 src="/images/rooms/super-deluxe/super-deluxe-balcony-sea-view.jpg"
                 alt="Super Deluxe"
-                className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-40 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <h3 className="text-xl font-playfair font-bold mb-2">Super Deluxe</h3>
+                  <h3 className="text-base sm:text-xl font-playfair font-bold mb-2">Super Deluxe</h3>
                   <p className="text-sm mb-3">King size bed with cushion chair and premium amenities</p>
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-semibold">₹5,500/night</span>
@@ -768,11 +768,11 @@ const Home = () => {
               <img
                 src="/images/rooms/suite/suite-room-1.jpg"
                 alt="Executive Suite Room"
-                className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-40 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <h3 className="text-xl font-playfair font-bold mb-2">Executive Suite Room</h3>
+                  <h3 className="text-base sm:text-xl font-playfair font-bold mb-2">Executive Suite Room</h3>
                   <p className="text-sm mb-3">Premium suite with private balcony and luxurious amenities</p>
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-semibold">₹6,500/night</span>
@@ -854,11 +854,11 @@ const Home = () => {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
             {/* Contact Form */}
             <AnimatedSection direction="left">
-              <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8">
-                <h3 className="text-2xl font-playfair font-bold text-slate-900 mb-6">Send us a Message</h3>
+              <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
+                <h3 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-6">Send us a Message</h3>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input
@@ -868,7 +868,7 @@ const Home = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className={`w-full p-3 sm:p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      className={`w-full p-2.5 sm:p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                         validationErrors.name ? 'border-red-500' : 'border-slate-300'
                       }`}
                     />
@@ -879,7 +879,7 @@ const Home = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className={`w-full p-3 sm:p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      className={`w-full p-2.5 sm:p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                         validationErrors.email ? 'border-red-500' : 'border-slate-300'
                       }`}
                     />
@@ -892,7 +892,7 @@ const Home = () => {
                       placeholder="Phone Number"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full p-3 sm:p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full p-2.5 sm:p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                     <input
                       type="text"
@@ -901,7 +901,7 @@ const Home = () => {
                       value={formData.subject}
                       onChange={handleInputChange}
                       required
-                      className={`w-full p-3 sm:p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      className={`w-full p-2.5 sm:p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                         validationErrors.subject ? 'border-red-500' : 'border-slate-300'
                       }`}
                     />
@@ -927,7 +927,7 @@ const Home = () => {
 
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center"
+                    className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-lg font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center"
                   >
                     <Send className="h-5 w-5 mr-2" />
                     Send Message
@@ -938,22 +938,22 @@ const Home = () => {
 
             {/* Contact Information */}
             <AnimatedSection direction="right">
-              <div className="space-y-8">
+              <div className="space-y-4 sm:space-y-8">
                 {/* Call Us */}
-                <div className="bg-white rounded-xl shadow-lg px-5 py-4 sm:px-8 sm:py-5">
+                <div className="bg-white rounded-xl shadow-lg px-4 py-3 sm:px-8 sm:py-5">
                   <div className="flex items-center mb-6">
-                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-3 rounded-full mr-4">
-                      <Phone className="h-6 w-6" />
+                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-2 sm:p-3 rounded-full mr-4">
+                      <Phone className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900">Call Us</h3>
-                      <p className="text-slate-600">+91 94432 52776</p>
-                      <p className="text-slate-600">+91 94432 52777 (Reservations)</p>
+                      <h3 className="text-base sm:text-xl font-bold text-slate-900">Call Us</h3>
+                      <p className="text-slate-600 text-sm sm:text-base">+91 94432 52776</p>
+                      <p className="text-slate-600 text-sm sm:text-base">+91 94432 52777 (Reservations)</p>
                     </div>
                   </div>
                   <a
                     href="tel:+919443252776"
-                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors text-sm sm:text-base"
                   >
                     <Phone className="h-4 w-4 mr-2" />
                     Call Now
@@ -961,19 +961,19 @@ const Home = () => {
                 </div>
 
                 {/* Email Us */}
-                <div className="bg-white rounded-xl shadow-lg px-5 py-4 sm:px-8 sm:py-5">
+                <div className="bg-white rounded-xl shadow-lg px-4 py-3 sm:px-8 sm:py-5">
                   <div className="flex items-center mb-6">
-                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-3 rounded-full mr-4">
-                      <Mail className="h-6 w-6" />
+                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-2 sm:p-3 rounded-full mr-4">
+                      <Mail className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900">Email Us</h3>
-                      <p className="text-slate-600">Reservation@stjamescourtbeachresort.com</p>
+                      <h3 className="text-base sm:text-xl font-bold text-slate-900">Email Us</h3>
+                      <p className="text-slate-600 text-sm sm:text-base">Reservation@stjamescourtbeachresort.com</p>
                     </div>
                   </div>
                   <a
                     href="mailto:Reservation@stjamescourtbeachresort.com"
-                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors text-sm sm:text-base"
                   >
                     <Mail className="h-4 w-4 mr-2" />
                     Send Email
@@ -981,15 +981,15 @@ const Home = () => {
                 </div>
 
                 {/* Visit Us */}
-                <div className="bg-white rounded-xl shadow-lg px-5 py-4 sm:px-8 sm:py-5">
+                <div className="bg-white rounded-xl shadow-lg px-4 py-3 sm:px-8 sm:py-5">
                   <div className="flex items-center mb-6">
-                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-3 rounded-full mr-4">
-                      <MapPin className="h-6 w-6" />
+                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-2 sm:p-3 rounded-full mr-4">
+                      <MapPin className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900">Visit Us</h3>
-                      <p className="text-slate-600">State Highway 49, opp. Pondicherry Engg. College,</p>
-                      <p className="text-slate-600">Chinna Kalapet, Puducherry 605014, India</p>
+                      <h3 className="text-base sm:text-xl font-bold text-slate-900">Visit Us</h3>
+                      <p className="text-slate-600 text-sm sm:text-base">State Highway 49, opp. Pondicherry Engg. College,</p>
+                      <p className="text-slate-600 text-sm sm:text-base">Chinna Kalapet, Puducherry 605014, India</p>
                     </div>
                   </div>
 
@@ -997,7 +997,7 @@ const Home = () => {
                     href="https://maps.app.goo.gl/nBSzW6Xhiu3XetNK6"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors text-sm sm:text-base"
                   >
                     <MapPin className="h-4 w-4 mr-2" />
                     Get Directions

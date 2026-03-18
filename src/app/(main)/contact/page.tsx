@@ -45,7 +45,7 @@ const Contact = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-36 pb-14 sm:pt-44 sm:pb-18 lg:pt-52 lg:pb-24 relative text-white">
+      <section className="pt-28 pb-8 sm:pt-44 sm:pb-18 lg:pt-52 lg:pb-24 relative text-white">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: 'url(/images/gallery/resort-exterior-2.jpg)' }}
@@ -56,8 +56,8 @@ const Contact = () => {
           <p className="text-sm uppercase tracking-[0.3em] text-teal-300 font-jost mb-4">
             St James Court Beach Resort
           </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-6">Contact Us</h1>
-          <p className="text-base sm:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed text-white/80">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-6">Contact Us</h1>
+          <p className="text-sm sm:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed text-white/80">
             We would love to hear from you. Reach out for reservations, inquiries, or just to say hello.
           </p>
         </AnimatedSection>
@@ -69,11 +69,11 @@ const Contact = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {/* Left Column — Contact Form */}
             <AnimatedSection direction="left">
-              <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-6 md:p-8 lg:p-10">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold text-slate-900 mb-2">
+              <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 lg:p-10">
+                <h2 className="text-lg sm:text-2xl lg:text-3xl font-playfair font-bold text-slate-900 mb-2">
                   Send Us a Message
                 </h2>
-                <p className="text-slate-600 font-jost mb-8">
+                <p className="text-slate-600 font-jost text-sm sm:text-base mb-6 sm:mb-8">
                   Fill in the form below and our team will get back to you within 24 hours.
                 </p>
 
@@ -89,7 +89,7 @@ const Contact = () => {
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                   {/* Name */}
                   <div>
                     <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
@@ -103,7 +103,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       placeholder="Your full name"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-jost text-slate-900 placeholder:text-slate-400"
+                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-jost text-slate-900 placeholder:text-slate-400"
                     />
                   </div>
 
@@ -120,7 +120,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       placeholder="you@example.com"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-jost text-slate-900 placeholder:text-slate-400"
+                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-jost text-slate-900 placeholder:text-slate-400"
                     />
                   </div>
 
@@ -136,7 +136,7 @@ const Contact = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       placeholder="+91 XXXXX XXXXX"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-jost text-slate-900 placeholder:text-slate-400"
+                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-jost text-slate-900 placeholder:text-slate-400"
                     />
                   </div>
 
@@ -151,9 +151,9 @@ const Contact = () => {
                       value={formData.message}
                       onChange={handleChange}
                       required
-                      rows={5}
+                      rows={4}
                       placeholder="How can we help you?"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-jost text-slate-900 placeholder:text-slate-400 resize-none"
+                      className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-jost text-slate-900 placeholder:text-slate-400 resize-none"
                     />
                   </div>
 
@@ -161,7 +161,7 @@ const Contact = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                    className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-lg text-sm sm:text-lg font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
                   >
                     <Send className="h-5 w-5" />
                     {loading ? 'Sending...' : 'Send Message'}
@@ -172,15 +172,15 @@ const Contact = () => {
 
             {/* Right Column — Contact Info Cards */}
             <AnimatedSection direction="right">
-              <div className="space-y-6">
+              <div className="space-y-3 sm:space-y-6">
                 {/* Resort Address */}
-                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-white rounded-2xl shadow-lg p-3 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-start gap-4">
-                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-white" />
+                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                      <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900 font-playfair mb-1">Resort Address</h3>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 font-playfair mb-1">Resort Address</h3>
                       <p className="text-slate-600 font-jost leading-relaxed">
                         State Highway 49, opp. Pondicherry Engg. College,<br />
                         Chinna Kalapet, Puducherry 605014
@@ -190,13 +190,13 @@ const Contact = () => {
                 </div>
 
                 {/* Corporate Office */}
-                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-white rounded-2xl shadow-lg p-3 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-start gap-4">
-                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-white" />
+                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                      <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900 font-playfair mb-1">Corporate Office</h3>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 font-playfair mb-1">Corporate Office</h3>
                       <p className="text-slate-600 font-jost leading-relaxed">
                         NTS Group, 211 Chetty St,<br />
                         Pondicherry - 605001
@@ -206,13 +206,13 @@ const Contact = () => {
                 </div>
 
                 {/* Phone Numbers */}
-                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-white rounded-2xl shadow-lg p-3 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-start gap-4">
-                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Phone className="h-6 w-6 text-white" />
+                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900 font-playfair mb-1">Phone</h3>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 font-playfair mb-1">Phone</h3>
                       <div className="space-y-1 text-slate-600 font-jost">
                         <p>0413 2655 174</p>
                         <p>0413 2655275 / 76</p>
@@ -234,13 +234,13 @@ const Contact = () => {
                 </div>
 
                 {/* Email */}
-                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-white rounded-2xl shadow-lg p-3 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-start gap-4">
-                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Mail className="h-6 w-6 text-white" />
+                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900 font-playfair mb-1">Email</h3>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 font-playfair mb-1">Email</h3>
                       <Link
                         href="mailto:info@stjamescourtbeachresort.com"
                         className="text-slate-600 font-jost hover:text-blue-600 transition-colors"
@@ -252,13 +252,13 @@ const Contact = () => {
                 </div>
 
                 {/* Hours */}
-                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-white rounded-2xl shadow-lg p-3 sm:p-5 lg:p-6 hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-start gap-4">
-                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Clock className="h-6 w-6 text-white" />
+                    <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900 font-playfair mb-1">Hours</h3>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 font-playfair mb-1">Hours</h3>
                       <p className="text-slate-600 font-jost">24/7 Reception</p>
                       <p className="text-slate-500 font-jost text-sm mt-1">
                         Our front desk is available around the clock for all your needs.
@@ -276,8 +276,8 @@ const Contact = () => {
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <AnimatedSection className="text-center mb-8 sm:mb-10 lg:mb-12">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-4">Find Us</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 font-jost max-w-2xl mx-auto">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-4">Find Us</h2>
+            <p className="text-sm sm:text-lg lg:text-xl text-slate-600 font-jost max-w-2xl mx-auto">
               Located along the scenic East Coast Road, our resort is easily accessible
               from Puducherry city centre and Chennai.
             </p>
