@@ -5,7 +5,7 @@ export default function CancellationPolicy() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-52 pb-20 relative text-white">
+      <section className="pt-32 pb-12 sm:pt-52 sm:pb-20 relative text-white">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: 'url(/images/gallery/resort-beach-view.jpg)' }}
@@ -13,17 +13,17 @@ export default function CancellationPolicy() {
           <div className="absolute inset-0 bg-black/60"></div>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-7xl font-playfair font-bold mb-6">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-playfair font-bold mb-3 sm:mb-6">
             Cancellation Policy
           </h1>
-          <p className="text-xl max-w-3xl mx-auto leading-relaxed text-white/90">
+          <p className="text-sm sm:text-xl max-w-3xl mx-auto leading-relaxed text-white/90">
             Please review our cancellation, check-in, and refund policies before making your reservation.
           </p>
         </div>
       </section>
 
       {/* Content */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-8 sm:py-16 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4">
           <AnimatedSection>
             <p className="text-sm text-slate-500 mb-10">Last Updated: March 2026</p>
@@ -31,8 +31,8 @@ export default function CancellationPolicy() {
 
           {/* Check-in / Check-out */}
           <AnimatedSection>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-6">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-4 sm:mb-6">
                 Check-in &amp; Check-out
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -54,8 +54,8 @@ export default function CancellationPolicy() {
 
           {/* Cancellation Rules */}
           <AnimatedSection delay={0.1}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-6">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-4 sm:mb-6">
                 Cancellation Rules
               </h2>
               <div className="space-y-4">
@@ -92,8 +92,8 @@ export default function CancellationPolicy() {
 
           {/* No-Show Policy */}
           <AnimatedSection delay={0.15}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 No-Show Policy
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -106,8 +106,8 @@ export default function CancellationPolicy() {
 
           {/* Modifications */}
           <AnimatedSection delay={0.2}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Booking Modifications
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -120,8 +120,8 @@ export default function CancellationPolicy() {
 
           {/* Group Bookings */}
           <AnimatedSection delay={0.25}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Group Bookings
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -135,8 +135,8 @@ export default function CancellationPolicy() {
 
           {/* Contact */}
           <AnimatedSection delay={0.3}>
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Contact for Cancellations
               </h2>
               <p className="text-slate-600 leading-relaxed mb-4">

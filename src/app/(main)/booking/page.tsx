@@ -297,21 +297,21 @@ const Booking = () => {
   if (step === 4 && bookingResult) {
     return (
       <div>
-        <section className="pt-52 pb-20 relative text-white">
+        <section className="pt-32 pb-12 sm:pt-52 sm:pb-20 relative text-white">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
             <div className="absolute inset-0 bg-black/50"></div>
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-            <h1 className="text-6xl md:text-7xl font-playfair font-bold mb-8">Reservation Confirmed</h1>
+            <h1 className="text-3xl sm:text-6xl md:text-7xl font-playfair font-bold mb-4 sm:mb-8">Reservation Confirmed</h1>
           </div>
         </section>
-        <div className="max-w-2xl mx-auto px-4 py-12">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Thank You!</h2>
+        <div className="max-w-2xl mx-auto px-4 py-6 sm:py-12">
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 text-center">
+            <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green-500 mx-auto mb-4 sm:mb-6" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Thank You!</h2>
             <p className="text-slate-600 mb-8">Your reservation has been confirmed. Payment will be collected at check-in.</p>
 
-            <div className="bg-slate-50 rounded-lg p-6 text-left space-y-3">
+            <div className="bg-slate-50 rounded-lg p-4 sm:p-6 text-left space-y-3">
               <div className="flex justify-between">
                 <span className="text-slate-600">Booking ID:</span>
                 <span className="font-bold text-blue-600">#{bookingResult.bookingId}</span>
@@ -369,7 +369,7 @@ const Booking = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-52 pb-20 relative text-white">
+      <section className="pt-32 pb-12 sm:pt-52 sm:pb-20 relative text-white">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
@@ -621,7 +621,7 @@ const Booking = () => {
                 <button
                   onClick={() => handleStepChange(2)}
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   Continue to Services
                 </button>
@@ -659,13 +659,13 @@ const Booking = () => {
                 <div className="flex gap-4">
                   <button
                     onClick={() => handleStepChange(1)}
-                    className="flex-1 border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 hover:text-white transition-all duration-200"
+                    className="flex-1 border-2 border-blue-600 text-blue-600 px-4 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-blue-600 hover:text-white transition-all duration-200"
                   >
                     Back
                   </button>
                   <button
                     onClick={() => handleStepChange(3)}
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200"
                   >
                     Continue to Reservation
                   </button>
@@ -771,14 +771,14 @@ const Booking = () => {
                 <div className="flex gap-4">
                   <button
                     onClick={() => handleStepChange(2)}
-                    className="flex-1 border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 hover:text-white transition-all duration-200"
+                    className="flex-1 border-2 border-blue-600 text-blue-600 px-4 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-blue-600 hover:text-white transition-all duration-200"
                   >
                     Back
                   </button>
                   <button
                     onClick={handleBookingSubmit}
                     disabled={isLoading}
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
                     {isLoading ? 'Reserving...' : 'Confirm Reservation'}
                   </button>

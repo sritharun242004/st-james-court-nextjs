@@ -180,7 +180,7 @@ const RoomManagement = () => {
       </div>
 
       {/* Date Range Filter */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="bg-white rounded-xl shadow-lg p-3 sm:p-6">
         <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
           <Calendar className="h-5 w-5" />
           Inventory View
@@ -277,7 +277,7 @@ const RoomManagement = () => {
       </div>
 
       {/* Bulk Update Form */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="bg-white rounded-xl shadow-lg p-3 sm:p-6">
         <h3 className="text-lg font-semibold text-slate-900 mb-4">Bulk Update Inventory</h3>
         <form onSubmit={handleBulkUpdate} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

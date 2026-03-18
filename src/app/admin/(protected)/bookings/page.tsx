@@ -260,7 +260,7 @@ const AdminBookings = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Bookings Management</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Bookings Management</h1>
         <p className="text-slate-600 mt-1">View and manage all guest bookings</p>
       </div>
 
@@ -281,7 +281,7 @@ const AdminBookings = () => {
             </div>
             <div>
               <p className="text-sm text-slate-500">Total Bookings</p>
-              <p className="text-2xl font-bold text-slate-900">{totalBookings}</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-900">{totalBookings}</p>
             </div>
           </div>
         </div>
@@ -292,7 +292,7 @@ const AdminBookings = () => {
             </div>
             <div>
               <p className="text-sm text-slate-500">Pending Payments</p>
-              <p className="text-2xl font-bold text-slate-900">{pendingPayments}</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-900">{pendingPayments}</p>
             </div>
           </div>
         </div>
@@ -303,7 +303,7 @@ const AdminBookings = () => {
             </div>
             <div>
               <p className="text-sm text-slate-500">Today&apos;s Check-ins</p>
-              <p className="text-2xl font-bold text-slate-900">{todayCheckins}</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-900">{todayCheckins}</p>
             </div>
           </div>
         </div>
@@ -314,14 +314,14 @@ const AdminBookings = () => {
             </div>
             <div>
               <p className="text-sm text-slate-500">Revenue (Paid)</p>
-              <p className="text-2xl font-bold text-slate-900">₹{totalRevenue.toLocaleString()}</p>
+              <p className="text-xl sm:text-2xl font-bold text-slate-900">₹{totalRevenue.toLocaleString()}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
         <div className="flex flex-col md:flex-row gap-3 mb-6">
           <div className="relative flex-1 min-w-0">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
@@ -345,18 +345,18 @@ const AdminBookings = () => {
             <option value="CANCELLED">Cancelled</option>
             <option value="REFUNDED">Refunded</option>
           </select>
-          <div className="flex gap-2 shrink-0">
+          <div className="flex flex-col sm:flex-row gap-2 shrink-0">
             <input
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="w-36 px-2 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full sm:w-36 px-2 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             />
             <input
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="w-36 px-2 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full sm:w-36 px-2 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             />
           </div>
         </div>

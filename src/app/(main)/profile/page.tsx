@@ -101,22 +101,22 @@ const ProfileContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 py-6 px-3 sm:py-12 sm:px-4">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-teal-500 px-8 py-12 text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-teal-500 px-4 py-6 sm:px-8 sm:py-12 text-white">
             <div className="flex items-center gap-6">
-              <div className="h-24 w-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <User className="h-12 w-12" />
+              <div className="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <User className="h-8 w-8 sm:h-12 sm:w-12" />
               </div>
               <div>
-                <h1 className="text-3xl font-playfair font-bold">{user?.full_name}</h1>
+                <h1 className="text-xl sm:text-3xl font-playfair font-bold">{user?.full_name}</h1>
                 <p className="text-blue-100 mt-1">{user?.email}</p>
               </div>
             </div>
           </div>
 
-          <div className="p-8">
+          <div className="p-4 sm:p-6 md:p-8">
             {success && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-600">
                 Profile updated successfully!
@@ -131,7 +131,7 @@ const ProfileContent = () => {
             )}
 
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900">Profile Information</h2>
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900">Profile Information</h2>
               {!isEditing ? (
                 <button
                   onClick={() => setIsEditing(true)}
@@ -252,18 +252,18 @@ const ProfileContent = () => {
         </div>
 
         {/* Privilege Membership */}
-        <div className="mt-8 bg-white rounded-2xl shadow-xl p-8">
+        <div className="mt-8 bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
           <div className="flex items-center gap-3 mb-6">
             <CreditCard className="h-6 w-6 text-blue-600" />
-            <h2 className="text-2xl font-playfair font-bold text-slate-900">Privilege Membership</h2>
+            <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900">Privilege Membership</h2>
           </div>
 
           {privilegeCard ? (
-            <div className="bg-gradient-to-r from-blue-600 to-teal-500 rounded-xl p-6 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-teal-500 rounded-xl p-4 sm:p-6 text-white">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                   <p className="text-blue-100 text-sm mb-1">Card Number</p>
-                  <p className="text-2xl font-mono font-bold tracking-wider">{privilegeCard.cardNumber}</p>
+                  <p className="text-lg sm:text-2xl font-mono font-bold tracking-wider">{privilegeCard.cardNumber}</p>
                 </div>
                 <div className="text-right">
                   <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
@@ -292,10 +292,10 @@ const ProfileContent = () => {
         </div>
 
         {/* Booking History */}
-        <div className="mt-8 bg-white rounded-2xl shadow-xl p-8">
+        <div className="mt-8 bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
           <div className="flex items-center gap-3 mb-6">
             <BedDouble className="h-6 w-6 text-blue-600" />
-            <h2 className="text-2xl font-playfair font-bold text-slate-900">My Bookings</h2>
+            <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900">My Bookings</h2>
           </div>
 
           {bookingsLoading ? (
@@ -317,7 +317,7 @@ const ProfileContent = () => {
           ) : (
             <div className="space-y-4">
               {bookings.map((booking) => (
-                <div key={booking.id} className="border border-slate-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+                <div key={booking.id} className="border border-slate-200 rounded-xl p-4 sm:p-6 hover:shadow-md transition-shadow">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
@@ -332,7 +332,7 @@ const ProfileContent = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-blue-600">
+                      <div className="text-xl sm:text-2xl font-bold text-blue-600">
                         ₹{booking.finalAmount.toLocaleString()}
                       </div>
                       {booking.discountAmount > 0 && (

@@ -38,8 +38,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           } fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white transform transition-transform duration-300 lg:translate-x-0 lg:static`}
         >
-          <div className="p-6 border-b border-slate-700">
-            <h1 className="text-2xl font-playfair font-bold">Admin Portal</h1>
+          <div className="p-4 sm:p-6 border-b border-slate-700">
+            <h1 className="text-xl sm:text-2xl font-playfair font-bold">Admin Portal</h1>
             <p className="text-sm text-slate-400 mt-1">{user?.full_name || user?.email}</p>
           </div>
 
@@ -104,7 +104,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             </div>
           </header>
 
-          <main className="p-6">
+          <main className="p-3 sm:p-6">
             {children}
           </main>
         </div>

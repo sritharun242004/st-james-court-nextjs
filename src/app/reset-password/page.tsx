@@ -60,7 +60,7 @@ const ResetPasswordForm = () => {
             <CheckCircle className="h-10 w-10 text-green-600" />
           </div>
         </div>
-        <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-3">Password Updated!</h2>
+        <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3">Password Updated!</h2>
         <p className="text-slate-600 text-sm mb-2">Your password has been successfully reset.</p>
         <p className="text-slate-500 text-xs">Redirecting you to login in 3 seconds…</p>
         <Link href="/login" className="mt-6 inline-block text-blue-600 font-semibold hover:text-blue-700 text-sm">
@@ -78,7 +78,7 @@ const ResetPasswordForm = () => {
             <AlertCircle className="h-10 w-10 text-red-500" />
           </div>
         </div>
-        <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-3">Invalid Link</h2>
+        <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3">Invalid Link</h2>
         <p className="text-slate-600 text-sm mb-6">This reset link is invalid or has already been used.</p>
         <Link href="/forgot-password" className="text-blue-600 font-semibold hover:text-blue-700 text-sm">
           Request a new reset link
@@ -95,7 +95,7 @@ const ResetPasswordForm = () => {
             <Lock className="h-8 w-8 text-purple-600" />
           </div>
         </div>
-        <h2 className="text-3xl font-playfair font-bold text-slate-900 mb-2">Set New Password</h2>
+        <h2 className="text-2xl sm:text-3xl font-playfair font-bold text-slate-900 mb-2">Set New Password</h2>
         <p className="text-slate-600 text-sm">Choose a strong password for your account.</p>
       </div>
 
@@ -155,7 +155,7 @@ const ResetPasswordForm = () => {
 const ResetPassword = () => (
   <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 flex items-center justify-center py-12 px-4">
     <div className="max-w-md w-full">
-      <div className="bg-white rounded-2xl shadow-xl p-8">
+      <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
         <Suspense fallback={<div className="text-center text-slate-500">Loading...</div>}>
           <ResetPasswordForm />
         </Suspense>

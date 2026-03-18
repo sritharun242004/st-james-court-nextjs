@@ -158,7 +158,7 @@ const DiscountManagement = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Discount Management</h1>
           <p className="text-slate-600 mt-1">Manage per-date discount rules for privilege members</p>
@@ -221,17 +221,17 @@ const DiscountManagement = () => {
       </div>
 
       {/* Discount Rules Table */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="bg-white rounded-xl shadow-lg p-3 sm:p-6">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-200">
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Date</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Room %</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Food %</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Bar %</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-700">Status</th>
-                <th className="text-right py-3 px-4 font-semibold text-slate-700">Actions</th>
+                <th className="text-left py-3 px-2 sm:px-4 font-semibold text-slate-700">Date</th>
+                <th className="text-left py-3 px-2 sm:px-4 font-semibold text-slate-700">Room %</th>
+                <th className="text-left py-3 px-2 sm:px-4 font-semibold text-slate-700">Food %</th>
+                <th className="text-left py-3 px-2 sm:px-4 font-semibold text-slate-700">Bar %</th>
+                <th className="text-left py-3 px-2 sm:px-4 font-semibold text-slate-700">Status</th>
+                <th className="text-right py-3 px-2 sm:px-4 font-semibold text-slate-700">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -244,30 +244,30 @@ const DiscountManagement = () => {
               ) : (
                 discounts.map((d) => (
                   <tr key={d.id} className="border-b border-slate-100 hover:bg-slate-50">
-                    <td className="py-3 px-4 font-mono text-sm">{d.date}</td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-2 sm:px-4 font-mono text-sm">{d.date}</td>
+                    <td className="py-3 px-2 sm:px-4">
                       <span className={d.room_discount > 0 ? 'text-blue-600 font-semibold' : 'text-slate-400'}>
                         {d.room_discount}%
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-2 sm:px-4">
                       <span className={d.food_discount > 0 ? 'text-green-600 font-semibold' : 'text-slate-400'}>
                         {d.food_discount}%
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-2 sm:px-4">
                       <span className={d.bar_discount > 0 ? 'text-orange-600 font-semibold' : 'text-slate-400'}>
                         {d.bar_discount}%
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-2 sm:px-4">
                       {d.active ? (
                         <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Active</span>
                       ) : (
                         <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">Inactive</span>
                       )}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-2 sm:px-4">
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => handleEdit(d)}

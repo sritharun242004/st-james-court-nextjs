@@ -37,9 +37,9 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-playfair font-bold text-slate-900 mb-2">Welcome Back</h2>
+            <h2 className="text-2xl sm:text-3xl font-playfair font-bold text-slate-900 mb-2">Welcome Back</h2>
             <p className="text-slate-600">Sign in to your account</p>
           </div>
 

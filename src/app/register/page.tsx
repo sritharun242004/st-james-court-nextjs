@@ -57,9 +57,9 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-playfair font-bold text-slate-900 mb-2">Create Account</h2>
+            <h2 className="text-2xl sm:text-3xl font-playfair font-bold text-slate-900 mb-2">Create Account</h2>
             <p className="text-slate-600">Join St James Court Beach Resort</p>
           </div>
 
@@ -124,7 +124,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Age

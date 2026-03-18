@@ -33,7 +33,7 @@ const ForgotPassword = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
 
           {sent ? (
             <div className="text-center">
@@ -42,7 +42,7 @@ const ForgotPassword = () => {
                   <CheckCircle className="h-10 w-10 text-green-600" />
                 </div>
               </div>
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-3">Check your inbox</h2>
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3">Check your inbox</h2>
               <p className="text-slate-600 text-sm leading-relaxed mb-6">
                 If an account with <strong>{email}</strong> exists, we&apos;ve sent a password reset link. It expires in <strong>1 hour</strong>.
               </p>
@@ -65,7 +65,7 @@ const ForgotPassword = () => {
                     <Mail className="h-8 w-8 text-blue-600" />
                   </div>
                 </div>
-                <h2 className="text-3xl font-playfair font-bold text-slate-900 mb-2">Forgot Password?</h2>
+                <h2 className="text-2xl sm:text-3xl font-playfair font-bold text-slate-900 mb-2">Forgot Password?</h2>
                 <p className="text-slate-600 text-sm">
                   Enter your email and we&apos;ll send you a link to reset your password.
                 </p>

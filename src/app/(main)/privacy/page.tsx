@@ -5,7 +5,7 @@ export default function PrivacyPolicy() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-52 pb-20 relative text-white">
+      <section className="pt-32 pb-12 sm:pt-52 sm:pb-20 relative text-white">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: 'url(/images/gallery/resort-beach-view.jpg)' }}
@@ -13,17 +13,17 @@ export default function PrivacyPolicy() {
           <div className="absolute inset-0 bg-black/60"></div>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-7xl font-playfair font-bold mb-6">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-playfair font-bold mb-3 sm:mb-6">
             Privacy Policy
           </h1>
-          <p className="text-xl max-w-3xl mx-auto leading-relaxed text-white/90">
+          <p className="text-sm sm:text-xl max-w-3xl mx-auto leading-relaxed text-white/90">
             Your privacy matters to us. Learn how we collect, use, and protect your personal information.
           </p>
         </div>
       </section>
 
       {/* Content */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-8 sm:py-16 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4">
           <AnimatedSection>
             <p className="text-sm text-slate-500 mb-10">Last Updated: March 2026</p>
@@ -31,8 +31,8 @@ export default function PrivacyPolicy() {
 
           {/* Introduction */}
           <AnimatedSection>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Introduction
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -46,8 +46,8 @@ export default function PrivacyPolicy() {
 
           {/* Information We Collect */}
           <AnimatedSection delay={0.1}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-6">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4 sm:mb-6">
                 Information We Collect
               </h2>
               <p className="text-slate-600 leading-relaxed mb-4">
@@ -76,8 +76,8 @@ export default function PrivacyPolicy() {
 
           {/* How We Use Information */}
           <AnimatedSection delay={0.15}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-6">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4 sm:mb-6">
                 How We Use Your Information
               </h2>
               <p className="text-slate-600 leading-relaxed mb-4">
@@ -116,8 +116,8 @@ export default function PrivacyPolicy() {
 
           {/* Data Security */}
           <AnimatedSection delay={0.2}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Data Security
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -132,8 +132,8 @@ export default function PrivacyPolicy() {
 
           {/* Cookies */}
           <AnimatedSection delay={0.25}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Cookies
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -147,8 +147,8 @@ export default function PrivacyPolicy() {
 
           {/* Third-Party Sharing */}
           <AnimatedSection delay={0.3}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Third-Party Sharing
               </h2>
               <div className="space-y-3 text-slate-600 leading-relaxed">
@@ -180,8 +180,8 @@ export default function PrivacyPolicy() {
 
           {/* Guest ID Requirements */}
           <AnimatedSection delay={0.35}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-6">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4 sm:mb-6">
                 Guest ID Requirements
               </h2>
               <p className="text-slate-600 leading-relaxed mb-4">
@@ -205,8 +205,8 @@ export default function PrivacyPolicy() {
 
           {/* Data Retention */}
           <AnimatedSection delay={0.4}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Data Retention
               </h2>
               <p className="text-slate-600 leading-relaxed">
@@ -220,8 +220,8 @@ export default function PrivacyPolicy() {
 
           {/* Your Rights */}
           <AnimatedSection delay={0.45}>
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Your Rights
               </h2>
               <div className="space-y-3 text-slate-600 leading-relaxed">
@@ -240,8 +240,8 @@ export default function PrivacyPolicy() {
 
           {/* Contact */}
           <AnimatedSection delay={0.5}>
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-2xl font-playfair font-bold text-slate-900 mb-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-3 sm:mb-4">
                 Contact Us
               </h2>
               <p className="text-slate-600 leading-relaxed mb-4">

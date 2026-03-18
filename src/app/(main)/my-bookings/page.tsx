@@ -101,17 +101,17 @@ const MyBookingsContent = () => {
   return (
     <div>
       {/* Hero */}
-      <section className="pt-52 pb-16 relative text-white">
+      <section className="pt-32 pb-10 sm:pt-52 sm:pb-16 relative text-white">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl font-playfair font-bold mb-4">My Reservations</h1>
-          <p className="text-xl max-w-2xl mx-auto opacity-90">View and manage your bookings at St James Court Beach Resort</p>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-playfair font-bold mb-2 sm:mb-4">My Reservations</h1>
+          <p className="text-sm sm:text-xl max-w-2xl mx-auto opacity-90">View and manage your bookings at St James Court Beach Resort</p>
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 py-12">
+      <div className="max-w-5xl mx-auto px-4 py-6 sm:py-12">
         {/* Filter tabs */}
         <div className="flex flex-wrap gap-2 mb-8">
           {[
@@ -123,7 +123,7 @@ const MyBookingsContent = () => {
             <button
               key={tab.key}
               onClick={() => setFilter(tab.key)}
-              className={`px-5 py-2.5 rounded-full font-medium transition-all text-sm ${
+              className={`px-3 py-2 sm:px-5 sm:py-2.5 rounded-full font-medium transition-all text-sm ${
                 filter === tab.key
                   ? 'bg-blue-600 text-white shadow-lg'
                   : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
@@ -139,7 +139,7 @@ const MyBookingsContent = () => {
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl shadow-lg">
+          <div className="text-center py-12 sm:py-20 bg-white rounded-2xl shadow-lg">
             <BedDouble className="h-16 w-16 text-slate-300 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-slate-700 mb-2">
               {filter === 'all' ? 'No reservations yet' : `No ${filter} reservations`}
@@ -164,7 +164,7 @@ const MyBookingsContent = () => {
               return (
                 <div key={booking.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                   <div className={`h-1.5 ${stayBarColor[stayStatus]}`} />
-                  <div className="p-6 md:p-8">
+                  <div className="p-4 sm:p-6 md:p-8">
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                       {/* Left */}
                       <div className="flex-1">
@@ -199,7 +199,7 @@ const MyBookingsContent = () => {
 
                       {/* Right */}
                       <div className="text-right flex-shrink-0">
-                        <div className="text-2xl font-bold text-blue-600">
+                        <div className="text-xl sm:text-2xl font-bold text-blue-600">
                           ₹{booking.finalAmount.toLocaleString()}
                         </div>
                         {booking.discountAmount > 0 && (
