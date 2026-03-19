@@ -7,6 +7,21 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        blue: {
+          50: '#f0f4fa',
+          100: '#d9e3f0',
+          200: '#b3c7e1',
+          300: '#8dabd2',
+          400: '#5580b3',
+          500: '#2a5a9e',
+          600: '#103D80',
+          700: '#0d326a',
+          800: '#0a2754',
+          900: '#071c3e',
+          950: '#041128',
+        },
+      },
       fontFamily: {
         'playfair': ['Playfair Display', 'serif'],
         'jost': ['Jost', 'sans-serif'],

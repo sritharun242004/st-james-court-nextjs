@@ -282,8 +282,8 @@ function buildContactEnquiryHtml(data: ContactEmailData): string {
     ${sectionHeading('Contact Details')}
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
       ${infoRow('Name', data.name)}
-      ${infoRow('Email', `<a href="mailto:${data.email}" style="color:#2563eb;text-decoration:none;">${data.email}</a>`)}
-      ${data.phone ? infoRow('Phone', `<a href="tel:${data.phone}" style="color:#2563eb;text-decoration:none;">${data.phone}</a>`) : ''}
+      ${infoRow('Email', `<a href="mailto:${data.email}" style="color:#103D80;text-decoration:none;">${data.email}</a>`)}
+      ${data.phone ? infoRow('Phone', `<a href="tel:${data.phone}" style="color:#103D80;text-decoration:none;">${data.phone}</a>`) : ''}
       ${infoRow('Submitted At', submittedAt)}
     </table>
 
@@ -303,7 +303,7 @@ function buildContactEnquiryHtml(data: ContactEmailData): string {
       </tr>
     </table>`;
 
-  return wrapEmail('linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%)', header, body);
+  return wrapEmail('linear-gradient(135deg,#1e3a5f 0%,#103D80 100%)', header, body);
 }
 
 // ===========================================================================
