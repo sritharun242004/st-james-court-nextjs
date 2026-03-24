@@ -4,7 +4,22 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Users, Star, Calendar, Clock, MapPin, Phone, Utensils, Wine, Waves, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedSection from '@/components/AnimatedSection';
+import WaveDivider from '@/components/ui/wave-divider';
+import GoldSeparator from '@/components/ui/gold-separator';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
 
 // Static data that DB doesn't store (images, descriptions, features)
 const roomStaticData: Record<string, {
@@ -20,11 +35,11 @@ const roomStaticData: Record<string, {
     id: 'deluxe-room',
     category: 'deluxe',
     size: 'Standard',
-    image: '/images/rooms/deluxe/deluxe-room-1.jpg',
+    image: '/images/newrooms/deluxe/room1.JPG',
     gallery: [
-      '/images/rooms/deluxe/deluxe-room-1.jpg',
-      '/images/rooms/deluxe/deluxe-room-2.jpg',
-      '/images/rooms/deluxe/deluxe-room-3.jpg',
+      '/images/newrooms/deluxe/room1.JPG',
+      '/images/newrooms/deluxe/room2.JPG',
+      '/images/newrooms/deluxe/unnamed.jpg',
     ],
     description: 'Comfortable room with twin beds and Fenesta French window, perfect for a relaxing stay.',
     features: ['Twin Beds', 'Fenesta French Window', 'Air Conditioning', '24hrs Hot & Cold Water'],
@@ -33,12 +48,11 @@ const roomStaticData: Record<string, {
     id: 'super-deluxe',
     category: 'deluxe',
     size: 'Spacious',
-    image: '/images/rooms/super-deluxe/super-deluxe-room-1.jpg',
+    image: '/images/newrooms/super-deluxe/room1.jpg',
     gallery: [
-      '/images/rooms/super-deluxe/super-deluxe-room-1.jpg',
-      '/images/rooms/super-deluxe/super-deluxe-room-2.jpg',
-      '/images/rooms/super-deluxe/super-deluxe-room-3.jpg',
-      '/images/rooms/super-deluxe/super-deluxe-balcony-sea-view.jpg',
+      '/images/newrooms/super-deluxe/room1.jpg',
+      '/images/newrooms/super-deluxe/room2.JPG',
+      '/images/newrooms/super-deluxe/room3.JPG',
     ],
     description: 'Upgraded room with king size bed and elegant furnishings for enhanced comfort.',
     features: ['King Size Bed', 'Cushion Chair', 'Curtains with Scallops', 'Double Glazing UPVC Window'],
@@ -47,11 +61,11 @@ const roomStaticData: Record<string, {
     id: 'executive-suite',
     category: 'suite',
     size: 'Luxury Suite',
-    image: '/images/rooms/suite/suite-room-1.jpg',
+    image: '/images/newrooms/suite/room1.JPG',
     gallery: [
-      '/images/rooms/suite/suite-room-1.jpg',
-      '/images/rooms/suite/suite-room-2.jpg',
-      '/images/rooms/suite/suite-room-3.jpg',
+      '/images/newrooms/suite/room1.JPG',
+      '/images/newrooms/suite/room2.JPG',
+      '/images/newrooms/suite/room3.JPG',
     ],
     description: 'Premium suite with king size bed, luxurious cushion sofa and private balcony for the ultimate experience.',
     features: ['King Size Bed', 'Luxurious Cushion Sofa', 'Private Balcony', 'Shower and Bath Tub'],
@@ -203,39 +217,60 @@ const Rooms = () => {
       {/* Hero Section */}
       <section className="pt-28 pb-8 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 relative text-white">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-950/70 via-blue-900/50 to-resort-cream"></div>
         </div>
-        <AnimatedSection className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Rooms, Dining & Amenities</h1>
-          <p className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="relative z-10 max-w-7xl mx-auto px-4 text-center"
+        >
+          <motion.h1 variants={fadeInUp} custom={0} className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Rooms, Dining & Amenities</motion.h1>
+          <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
             Discover our luxurious accommodations, world-class dining experiences,
             and comprehensive amenities designed for your perfect getaway
-          </p>
-        </AnimatedSection>
+          </motion.p>
+        </motion.div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* ROOMS SECTION */}
-      <section id="rooms" className="py-12 sm:py-16 lg:py-20 bg-white">
+      <section id="rooms" className="py-12 sm:py-16 lg:py-20 bg-resort-cream">
         <div className="max-w-7xl mx-auto px-4">
-          <AnimatedSection className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Luxurious Accommodations</h2>
-            <p className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">Luxurious Accommodations</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
               Choose from our collection of elegantly appointed rooms and suites,
               each designed to provide comfort and stunning views
-            </p>
-          </AnimatedSection>
-
+            </motion.p>
+          </motion.div>
 
           {/* Rooms Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+          >
             {filteredRooms.map((room, index) => {
               const currentSlide = cardSlides[room.id] || 0;
               const gallery = room.gallery;
               return (
-                <AnimatedSection
+                <motion.div
                   key={room.id}
-                  delay={index * 0.1}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 group"
+                  variants={fadeInUp}
+                  custom={index}
+                  whileHover={{ y: -6 }}
+                  className="glass-card rounded-2xl shadow-resort overflow-hidden hover:shadow-glass-lg transition-shadow duration-300 group"
                 >
                   {/* Image Carousel */}
                   <div className="relative h-48 sm:h-64 lg:h-72 overflow-hidden">
@@ -261,13 +296,13 @@ const Rooms = () => {
                       <>
                         <button
                           onClick={(e) => { e.preventDefault(); setCardSlide(room.id, (currentSlide - 1 + gallery.length) % gallery.length); }}
-                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 cursor-pointer"
                         >
                           <ChevronLeft className="h-4 w-4" />
                         </button>
                         <button
                           onClick={(e) => { e.preventDefault(); setCardSlide(room.id, (currentSlide + 1) % gallery.length); }}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10 cursor-pointer"
                         >
                           <ChevronRight className="h-4 w-4" />
                         </button>
@@ -278,7 +313,7 @@ const Rooms = () => {
                             <button
                               key={i}
                               onClick={(e) => { e.preventDefault(); setCardSlide(room.id, i); }}
-                              className={`w-2 h-2 rounded-full transition-all ${
+                              className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
                                 currentSlide === i ? 'bg-white w-4' : 'bg-white/60 hover:bg-white/80'
                               }`}
                             />
@@ -299,7 +334,7 @@ const Rooms = () => {
                   </div>
 
                   <div className="p-3 sm:p-5 lg:p-6">
-                    <h3 className="text-base sm:text-xl lg:text-2xl font-bold text-slate-900 mb-2">{room.name}</h3>
+                    <h3 className="text-base sm:text-xl lg:text-2xl font-bold text-blue-900 mb-2">{room.name}</h3>
                     <p className="text-sm sm:text-base text-slate-600 mb-4">{room.description}</p>
 
                     <div className="mb-4">
@@ -330,62 +365,80 @@ const Rooms = () => {
                     <div className="grid grid-cols-2 gap-2 mb-6">
                       {room.features.slice(0, 4).map((feature, fIdx) => (
                         <div key={fIdx} className="flex items-center text-sm text-slate-600">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                          <div className="w-2 h-2 bg-resort-gold rounded-full mr-2"></div>
                           {feature}
                         </div>
                       ))}
                     </div>
 
                     <div className="flex space-x-3">
-                      <Link
-                        href={`/rooms/${room.id}`}
-                        className="flex-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg text-center font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
-                      >
-                        View Details
-                      </Link>
+                      <motion.div whileHover={{ scale: 1.05, y: -2 }} className="flex-1">
+                        <Link
+                          href={`/rooms/${room.id}`}
+                          className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 sm:py-3 text-sm sm:text-base rounded-full text-center font-semibold shadow-lg hover:shadow-ocean transition-all duration-200 flex items-center justify-center cursor-pointer"
+                        >
+                          View Details
+                        </Link>
+                      </motion.div>
                     </div>
                   </div>
-                </AnimatedSection>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
+      <WaveDivider fill="#f8f6f3" />
+
       {/* DINING SECTION */}
-      <section id="dining" className="py-12 sm:py-16 lg:py-20 bg-slate-50">
+      <section id="dining" className="py-12 sm:py-16 lg:py-20 bg-resort-pearl">
         <div className="max-w-7xl mx-auto px-4">
-          <AnimatedSection className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Culinary Excellence</h2>
-            <p className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">Culinary Excellence</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
               Savor the unique fusion of French culinary artistry and Indian flavors,
               from elegant fine dining to casual beachfront meals
-            </p>
-          </AnimatedSection>
+            </motion.p>
+          </motion.div>
 
           {/* Restaurant Selection */}
           <div className="flex flex-wrap gap-4 justify-center mb-8 sm:mb-10 lg:mb-12">
             {restaurants.map((restaurant) => (
-              <button
+              <motion.button
                 key={restaurant.id}
+                whileHover={{ scale: 1.05, y: -2 }}
                 onClick={() => setSelectedRestaurant(restaurant.id)}
-                className={`px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 ${
+                className={`px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 cursor-pointer ${
                   selectedRestaurant === restaurant.id
-                    ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-lg'
-                    : 'bg-white text-slate-700 hover:bg-slate-100 shadow-sm'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:shadow-ocean'
+                    : 'glass-card text-slate-700 hover:bg-white/80 shadow-sm'
                 }`}
               >
                 {restaurant.name}
-              </button>
+              </motion.button>
             ))}
           </div>
 
           {/* Featured Restaurant */}
           {restaurants.filter(r => r.id === selectedRestaurant).map((restaurant) => (
-            <AnimatedSection key={restaurant.id} className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center mb-8 sm:mb-12 lg:mb-16">
+            <motion.div
+              key={restaurant.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center mb-8 sm:mb-12 lg:mb-16"
+            >
               <div>
                 <div className="flex items-center mb-4">
-                  <span className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-3 py-1 rounded-full text-sm font-medium mr-3">
+                  <span className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-1 rounded-full text-sm font-medium mr-3">
                     {restaurant.type}
                   </span>
                   <div className="flex items-center">
@@ -399,7 +452,7 @@ const Rooms = () => {
                   </div>
                 </div>
 
-                <h3 className="text-xl sm:text-3xl font-bold text-slate-900 mb-4">{restaurant.name}</h3>
+                <h3 className="text-xl sm:text-3xl font-bold text-blue-900 mb-4">{restaurant.name}</h3>
                 <p className="text-sm sm:text-lg text-slate-600 mb-6">{restaurant.description}</p>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
@@ -422,11 +475,11 @@ const Rooms = () => {
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="text-xl font-semibold text-slate-900 mb-4">Signature Specialties</h4>
+                  <h4 className="text-xl font-semibold text-blue-900 mb-4">Signature Specialties</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {restaurant.specialties.map((specialty, index) => (
                       <div key={index} className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                        <div className="w-2 h-2 bg-resort-gold rounded-full mr-3"></div>
                         <span className="text-slate-700">{specialty}</span>
                       </div>
                     ))}
@@ -438,23 +491,31 @@ const Rooms = () => {
                 <img
                   src={restaurant.image}
                   alt={restaurant.name}
-                  className="rounded-lg shadow-xl w-full h-40 sm:h-72 lg:h-96 object-cover"
+                  className="rounded-2xl shadow-resort w-full h-40 sm:h-72 lg:h-96 object-cover"
                 />
-                <div className="absolute -bottom-2 -right-2 sm:-bottom-4 sm:-right-4 bg-white p-3 sm:p-4 rounded-lg shadow-lg">
+                <div className="absolute -bottom-2 -right-2 sm:-bottom-4 sm:-right-4 glass-card p-3 sm:p-4 rounded-2xl shadow-glass">
                   <div className="text-lg sm:text-2xl font-bold text-blue-600">{restaurant.rating}</div>
                   <div className="text-slate-600 text-sm">Guest Rating</div>
                 </div>
               </div>
-            </AnimatedSection>
+            </motion.div>
           ))}
 
           {/* All Restaurants Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+          >
             {restaurants.map((restaurant, index) => (
-              <AnimatedSection
+              <motion.div
                 key={restaurant.id}
-                delay={index * 0.1}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300"
+                variants={fadeInUp}
+                custom={index}
+                whileHover={{ y: -6 }}
+                className="glass-card rounded-2xl shadow-resort overflow-hidden hover:shadow-glass-lg transition-shadow duration-300"
               >
                 <img
                   src={restaurant.image}
@@ -463,7 +524,7 @@ const Rooms = () => {
                 />
                 <div className="p-4 sm:p-5 lg:p-6">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                    <span className="bg-blue-50/80 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
                       {restaurant.type}
                     </span>
                     <div className="flex items-center">
@@ -471,72 +532,106 @@ const Rooms = () => {
                       <span className="ml-1 text-sm text-slate-600">{restaurant.rating}</span>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">{restaurant.name}</h3>
+                  <h3 className="text-xl font-bold text-blue-900 mb-2">{restaurant.name}</h3>
                   <p className="text-slate-600 text-sm mb-3">{restaurant.cuisine}</p>
                   <div className="flex items-center text-slate-500 text-sm mb-4">
                     <Clock className="h-4 w-4 mr-1" />
                     {restaurant.hours}
                   </div>
                 </div>
-              </AnimatedSection>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* AMENITIES SECTION */}
-      <section id="amenities" className="py-12 sm:py-16 lg:py-20 bg-white">
+      <section id="amenities" className="py-12 sm:py-16 lg:py-20 bg-resort-cream">
         <div className="max-w-7xl mx-auto px-4">
-          <AnimatedSection className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">World-Class Amenities</h2>
-            <p className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">World-Class Amenities</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
               Everything you need for the perfect beach vacation, from luxury spa treatments
               to thrilling water sports and cultural experiences
-            </p>
-          </AnimatedSection>
+            </motion.p>
+          </motion.div>
 
           {/* Amenity Category Selection */}
           <div className="flex flex-wrap gap-4 justify-center mb-8 sm:mb-10 lg:mb-12">
             {amenityCategories.map((category) => (
-              <button
+              <motion.button
                 key={category.id}
+                whileHover={{ scale: 1.05, y: -2 }}
                 onClick={() => setAmenityCategory(category.id)}
-                className={`flex items-center px-3 py-2 sm:px-5 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 ${
+                className={`flex items-center px-3 py-2 sm:px-5 sm:py-3 text-sm sm:text-base rounded-full transition-all duration-300 cursor-pointer ${
                   amenityCategory === category.id
-                    ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-lg'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:shadow-ocean'
+                    : 'glass-card text-slate-700 hover:bg-white/80'
                 }`}
               >
                 {category.icon}
                 <span className="ml-2">{category.title}</span>
-              </button>
+              </motion.button>
             ))}
           </div>
 
           {/* Detailed Amenities */}
           {amenityCategories.filter(cat => cat.id === amenityCategory).map((category) => (
-            <AnimatedSection key={category.id} className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl shadow-lg mb-10 p-3 sm:p-6 lg:p-8">
+            <motion.div
+              key={category.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="glass-card bg-blue-50/40 rounded-2xl shadow-resort mb-10 p-3 sm:p-6 lg:p-8"
+            >
               <div className="flex items-center mb-8">
-                <div className="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-4 rounded-full mr-4">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-full mr-4">
                   {category.icon}
                 </div>
-                <h3 className="text-xl sm:text-3xl font-bold text-slate-900">{category.title}</h3>
+                <h3 className="text-xl sm:text-3xl font-bold text-blue-900">{category.title}</h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
                 {category.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="bg-white p-3 sm:p-5 lg:p-6 rounded-xl hover:shadow-md transition-shadow duration-300">
-                    <h4 className="text-lg font-semibold text-slate-900 mb-2">{item.name}</h4>
+                  <motion.div
+                    key={itemIndex}
+                    variants={fadeInUp}
+                    custom={itemIndex}
+                    whileHover={{ y: -6 }}
+                    className="bg-white/80 backdrop-blur-sm p-3 sm:p-5 lg:p-6 rounded-2xl hover:shadow-glass transition-shadow duration-300"
+                  >
+                    <h4 className="text-lg font-semibold text-blue-900 mb-2">{item.name}</h4>
                     <p className="text-slate-600">{item.description}</p>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
-            </AnimatedSection>
+              </motion.div>
+            </motion.div>
           ))}
 
           {/* Featured Amenities */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8">
-            <AnimatedSection className="relative group overflow-hidden rounded-xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8"
+          >
+            <motion.div variants={fadeInUp} custom={0} whileHover={{ y: -6 }} className="relative group overflow-hidden rounded-2xl">
               <img
                 src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Spa Treatment"
@@ -548,9 +643,9 @@ const Rooms = () => {
                   <p>Rejuvenating treatments with ocean views</p>
                 </div>
               </div>
-            </AnimatedSection>
+            </motion.div>
 
-            <AnimatedSection delay={0.2} className="relative group overflow-hidden rounded-xl">
+            <motion.div variants={fadeInUp} custom={1} whileHover={{ y: -6 }} className="relative group overflow-hidden rounded-2xl">
               <img
                 src="https://images.pexels.com/photos/863988/pexels-photo-863988.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Water Sports"
@@ -562,9 +657,9 @@ const Rooms = () => {
                   <p>Thrilling adventures on pristine waters</p>
                 </div>
               </div>
-            </AnimatedSection>
+            </motion.div>
 
-            <AnimatedSection delay={0.4} className="relative group overflow-hidden rounded-xl">
+            <motion.div variants={fadeInUp} custom={2} whileHover={{ y: -6 }} className="relative group overflow-hidden rounded-2xl">
               <img
                 src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Fine Dining"
@@ -576,10 +671,8 @@ const Rooms = () => {
                   <p>French-Indian fusion culinary excellence</p>
                 </div>
               </div>
-            </AnimatedSection>
-          </div>
-
-
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -590,31 +683,41 @@ const Rooms = () => {
           backgroundImage: 'url(/images/gallery/resort-beach-view.jpg)'
         }}
       >
-        <div className="absolute inset-0 bg-blue-900/80"></div>
-        <AnimatedSection className="relative z-10 max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-xl sm:text-3xl lg:text-4xl md:text-5xl font-bold text-white mb-6">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/85 to-blue-950/90"></div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="relative z-10 max-w-4xl mx-auto text-center px-4"
+        >
+          <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl md:text-5xl font-bold text-white mb-6">
             Ready to Experience Luxury?
-          </h2>
-          <p className="text-sm sm:text-lg lg:text-xl text-white/90 mb-8">
+          </motion.h2>
+          <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-xl text-white/90 mb-8">
             Book your stay at St James Court Beach Resort and indulge in our world-class
             accommodations, dining, and amenities
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/booking"
-              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
-            >
-              <Calendar className="mr-2 h-5 w-5" />
-              Book Your Stay
-            </Link>
-            <Link
-              href="/contact"
-              className="border-2 border-white text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </AnimatedSection>
+          </motion.p>
+          <motion.div variants={fadeInUp} custom={2} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.div whileHover={{ scale: 1.05, y: -2 }}>
+              <Link
+                href="/booking"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold shadow-lg hover:shadow-ocean transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Book Your Stay
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05, y: -2 }}>
+              <Link
+                href="/contact"
+                className="border-2 border-white text-white px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:bg-white hover:text-blue-900 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+              >
+                Contact Us
+              </Link>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </section>
     </div>
   );

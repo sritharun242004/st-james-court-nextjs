@@ -29,6 +29,17 @@ yarn-error.log*
 # vercel
 .vercel
 
+# large video files
+public/IMG_3929.MOV
+public/hero-video.mp4
+public/Untitled design.mp4
+public/download.mp4
+
+# media source files
+latest-photo/
+*.MOV
+*.AAE
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

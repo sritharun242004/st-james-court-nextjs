@@ -5,7 +5,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Users, Wifi, Coffee, Bath, Car, Utensils, Star, Calendar, Check, MapPin, Clock } from 'lucide-react';
+import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/AnimatedSection';
+import WaveDivider from '@/components/ui/wave-divider';
+import GoldSeparator from '@/components/ui/gold-separator';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
 
 const slugToCategoryCode: Record<string, string> = {
   'deluxe-room': 'DELUXE',
@@ -42,11 +57,11 @@ const RoomDetail = () => {
       size: '350 sq ft',
       occupancy: 2,
       bedType: 'Twin Beds',
-      heroImage: '/images/rooms/deluxe/deluxe-room-1.jpg',
+      heroImage: '/images/newrooms/deluxe/room1.JPG',
       images: [
-        '/images/rooms/deluxe/deluxe-room-1.jpg',
-        '/images/rooms/deluxe/deluxe-room-2.jpg',
-        '/images/rooms/deluxe/deluxe-room-3.jpg',
+        '/images/newrooms/deluxe/room1.JPG',
+        '/images/newrooms/deluxe/room2.JPG',
+        '/images/newrooms/deluxe/unnamed.jpg',
       ],
       description: 'Our Deluxe Room offers a perfect blend of comfort and elegance with twin beds and a stunning Fenesta French window. Designed with colonial charm and modern amenities, this room provides a peaceful retreat after a day of exploring Pondicherry.',
       detailedDescription: 'Step into our beautifully appointed Deluxe Room, where French colonial architecture meets contemporary comfort. The room features twin beds with premium linens, ensuring a restful night\'s sleep. The highlight of the room is the elegant Fenesta French window that opens to reveal breathtaking views and fills the space with natural light. The room is thoughtfully designed with warm wood furnishings, local artwork, and modern amenities to create a welcoming atmosphere that reflects the unique character of Pondicherry.',
@@ -84,12 +99,11 @@ const RoomDetail = () => {
       size: '450 sq ft',
       occupancy: 2,
       bedType: 'King Size Bed',
-      heroImage: '/images/rooms/super-deluxe/super-deluxe-room-1.jpg',
+      heroImage: '/images/newrooms/super-deluxe/room1.jpg',
       images: [
-        '/images/rooms/super-deluxe/super-deluxe-room-1.jpg',
-        '/images/rooms/super-deluxe/super-deluxe-room-2.jpg',
-        '/images/rooms/super-deluxe/super-deluxe-room-3.jpg',
-        '/images/rooms/super-deluxe/super-deluxe-balcony-sea-view.jpg',
+        '/images/newrooms/super-deluxe/room1.jpg',
+        '/images/newrooms/super-deluxe/room2.JPG',
+        '/images/newrooms/super-deluxe/room3.JPG',
       ],
       description: 'Experience enhanced luxury in our Super Deluxe room featuring a king size bed and elegant cushion chair. The double glazing UPVC window ensures tranquility while the sophisticated decor creates an atmosphere of refined comfort.',
       detailedDescription: 'Our Super Deluxe room represents the perfect upgrade for discerning travelers seeking additional space and luxury. The centerpiece is a plush king size bed adorned with high-quality linens and multiple pillows for ultimate comfort. The room features an elegant cushion chair positioned perfectly for reading or enjoying the view through the double glazing UPVC window. The sophisticated interior design incorporates rich fabrics, tasteful artwork, and premium furnishings that reflect the French colonial heritage of Pondicherry while providing all modern conveniences.',
@@ -127,11 +141,11 @@ const RoomDetail = () => {
       size: '600 sq ft',
       occupancy: 2,
       bedType: 'King Size Bed',
-      heroImage: '/images/rooms/suite/suite-room-1.jpg',
+      heroImage: '/images/newrooms/suite/room1.JPG',
       images: [
-        '/images/rooms/suite/suite-room-1.jpg',
-        '/images/rooms/suite/suite-room-2.jpg',
-        '/images/rooms/suite/suite-room-3.jpg',
+        '/images/newrooms/suite/room1.JPG',
+        '/images/newrooms/suite/room2.JPG',
+        '/images/newrooms/suite/room3.JPG',
       ],
       description: 'Indulge in ultimate luxury with our Executive Suite featuring a king size bed, luxurious cushion sofa, and private balcony. The suite includes both shower and bath tub facilities for a truly premium experience.',
       detailedDescription: 'Our Executive Suite Room represents the pinnacle of luxury accommodation at St James Court Beach Resort. This expansive suite features a separate living area with a luxurious cushion sofa, perfect for relaxation or entertaining. The bedroom area boasts a king size bed with the finest linens and multiple seating options. The crown jewel is the private balcony offering stunning views of the ocean or gardens, providing an intimate space to enjoy morning coffee or evening cocktails. The bathroom is a sanctuary of luxury featuring both a modern shower and a deep soaking bath tub, allowing guests to choose their preferred way to unwind.',
@@ -166,9 +180,9 @@ const RoomDetail = () => {
 
   if (!room) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-resort-cream">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-slate-900 mb-4">Room Not Found</h1>
+          <h1 className="text-2xl font-bold text-blue-900 mb-4">Room Not Found</h1>
           <Link href="/rooms" className="text-blue-600 hover:text-blue-700">
             Back to Rooms
           </Link>
@@ -187,9 +201,14 @@ const RoomDetail = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${room.heroImage})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-950/70 via-blue-900/50 to-black/30"></div>
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="relative z-10 max-w-7xl mx-auto px-4"
+        >
           <Link
             href="/rooms"
             className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors text-sm"
@@ -199,12 +218,12 @@ const RoomDetail = () => {
           </Link>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-end">
             <div>
-              <div className="inline-block bg-white/15 backdrop-blur-sm px-3 py-1 rounded-full text-sm mb-4">
+              <motion.div variants={fadeInUp} custom={0} className="inline-block bg-white/15 backdrop-blur-sm px-3 py-1 rounded-full text-sm mb-4">
                 {room.bedType} &middot; {room.size}
-              </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold mb-3 sm:mb-4 lg:mb-5">{room.name}</h1>
-              <p className="text-base sm:text-lg lg:text-xl leading-relaxed text-white/90 mb-6 max-w-xl">{room.description}</p>
-              <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-6 text-sm sm:text-base text-white/80">
+              </motion.div>
+              <motion.h1 variants={fadeInUp} custom={1} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold mb-3 sm:mb-4 lg:mb-5">{room.name}</motion.h1>
+              <motion.p variants={fadeInUp} custom={2} className="text-base sm:text-lg lg:text-xl leading-relaxed text-white/90 mb-6 max-w-xl">{room.description}</motion.p>
+              <motion.div variants={fadeInUp} custom={3} className="flex items-center space-x-3 sm:space-x-4 lg:space-x-6 text-sm sm:text-base text-white/80">
                 <div className="flex items-center">
                   <Users className="h-5 w-5 mr-2" />
                   Up to {room.occupancy} guests
@@ -218,32 +237,44 @@ const RoomDetail = () => {
                     <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
                   ))}
                 </div>
-              </div>
+              </motion.div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 sm:p-6 lg:p-8">
+            <motion.div
+              variants={fadeInUp}
+              custom={2}
+              className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 sm:p-6 lg:p-8"
+            >
               <div className="text-center mb-6">
                 <div className="text-sm text-white/70 mb-1">Starting from</div>
                 <div className="text-2xl sm:text-3xl lg:text-4xl font-bold">₹{(dbPrice ?? room.price).toLocaleString()}</div>
                 <div className="text-white/70 text-sm mt-1">per night + GST</div>
               </div>
-              <Link
-                href="/booking"
-                className="w-full bg-white text-blue-600 px-6 py-3.5 rounded-xl font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center"
-              >
-                <Calendar className="h-5 w-5 mr-2" />
-                Book This Room
-              </Link>
-            </div>
+              <motion.div whileHover={{ scale: 1.05, y: -2 }}>
+                <Link
+                  href="/booking"
+                  className="w-full bg-white text-blue-600 px-6 py-3.5 rounded-full font-semibold shadow-lg hover:shadow-ocean transition-all duration-200 flex items-center justify-center cursor-pointer"
+                >
+                  <Calendar className="h-5 w-5 mr-2" />
+                  Book This Room
+                </Link>
+              </motion.div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* Image Gallery */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-resort-cream">
         <div className="max-w-7xl mx-auto px-4">
-          <AnimatedSection>
-            {/* Main Image */}
-            <div className="relative w-full h-56 sm:h-72 lg:h-[520px] rounded-xl overflow-hidden shadow-lg mb-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="relative w-full h-56 sm:h-72 lg:h-[520px] rounded-2xl overflow-hidden shadow-resort mb-4">
               <Image
                 src={room.images[selectedImage]}
                 alt={`${room.name} - Image ${selectedImage + 1}`}
@@ -257,16 +288,15 @@ const RoomDetail = () => {
               </div>
             </div>
 
-            {/* Thumbnail Strip */}
             <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${room.images.length}, 1fr)` }}>
               {room.images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative h-20 sm:h-24 rounded-lg overflow-hidden transition-all duration-200 ${
+                  className={`relative h-20 sm:h-24 rounded-2xl overflow-hidden transition-all duration-200 cursor-pointer ${
                     selectedImage === index
-                      ? 'ring-3 ring-blue-500 shadow-lg scale-[1.02]'
-                      : 'opacity-70 hover:opacity-100 hover:shadow-md'
+                      ? 'ring-3 ring-blue-500 shadow-glass scale-[1.02]'
+                      : 'opacity-70 hover:opacity-100 hover:shadow-resort'
                   }`}
                 >
                   <Image
@@ -279,47 +309,59 @@ const RoomDetail = () => {
                 </button>
               ))}
             </div>
-          </AnimatedSection>
+          </motion.div>
         </div>
       </section>
 
+      <WaveDivider fill="#f8f6f3" />
+
       {/* Room Details */}
-      <section className="py-12 bg-slate-50">
+      <section className="py-12 bg-resort-pearl">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
             <div className="lg:col-span-2">
-              <AnimatedSection>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 mb-4 sm:mb-5 lg:mb-6">Room Description</h2>
-                <p className="text-base sm:text-lg text-slate-700 leading-relaxed mb-8">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={staggerContainer}
+              >
+                <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-900 mb-4 sm:mb-5 lg:mb-6">Room Description</motion.h2>
+                <motion.p variants={fadeInUp} custom={1} className="text-base sm:text-lg text-slate-700 leading-relaxed mb-8">
                   {room.detailedDescription}
-                </p>
+                </motion.p>
 
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-900 mb-4 sm:mb-5 lg:mb-6">Room Features</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <motion.h3 variants={fadeInUp} custom={2} className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-900 mb-4 sm:mb-5 lg:mb-6">Room Features</motion.h3>
+                <motion.div variants={fadeInUp} custom={3} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                   {room.features.map((feature, index) => (
                     <div key={index} className="flex items-center">
                       <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0" />
                       <span className="text-slate-700">{feature}</span>
                     </div>
                   ))}
-                </div>
+                </motion.div>
 
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-900 mb-4 sm:mb-5 lg:mb-6">Why Choose This Room</h3>
-                <div className="space-y-3">
+                <motion.h3 variants={fadeInUp} custom={4} className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-900 mb-4 sm:mb-5 lg:mb-6">Why Choose This Room</motion.h3>
+                <motion.div variants={fadeInUp} custom={5} className="space-y-3">
                   {room.highlights.map((highlight, index) => (
                     <div key={index} className="flex items-start">
-                      <Star className="h-5 w-5 text-yellow-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <Star className="h-5 w-5 text-resort-gold mr-3 mt-0.5 flex-shrink-0" />
                       <span className="text-slate-700">{highlight}</span>
                     </div>
                   ))}
-                </div>
-              </AnimatedSection>
+                </motion.div>
+              </motion.div>
             </div>
 
             <div className="lg:col-span-1">
-              <AnimatedSection delay={0.2}>
-                <div className="bg-white rounded-xl shadow-lg p-4 sm:p-5 lg:p-6 sticky top-32">
-                  <h3 className="text-xl font-bold text-slate-900 mb-6">Room Amenities</h3>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+              >
+                <div className="glass-card rounded-2xl shadow-resort p-4 sm:p-5 lg:p-6 sticky top-32">
+                  <h3 className="text-xl font-bold text-blue-900 mb-6">Room Amenities</h3>
                   <div className="space-y-4 mb-8">
                     {room.amenities.map((amenity, index) => (
                       <div key={index} className="flex items-center">
@@ -331,8 +373,8 @@ const RoomDetail = () => {
                     ))}
                   </div>
 
-                  <div className="border-t pt-6">
-                    <h4 className="font-semibold text-slate-900 mb-4">Pricing</h4>
+                  <div className="border-t border-sand-200 pt-6">
+                    <h4 className="font-semibold text-blue-900 mb-4">Pricing</h4>
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between">
                         <span className="text-slate-600">Today&apos;s rate:</span>
@@ -341,43 +383,51 @@ const RoomDetail = () => {
                       <div className="text-xs text-slate-500">*Prices exclude 12% GST. Rates may vary by date.</div>
                     </div>
 
-                    <Link
-                      href="/booking"
-                      className="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
-                    >
-                      <Calendar className="h-5 w-5 mr-2" />
-                      Book Now
-                    </Link>
+                    <motion.div whileHover={{ scale: 1.05, y: -2 }}>
+                      <Link
+                        href="/booking"
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-ocean transition-all duration-200 flex items-center justify-center cursor-pointer"
+                      >
+                        <Calendar className="h-5 w-5 mr-2" />
+                        Book Now
+                      </Link>
+                    </motion.div>
                   </div>
                 </div>
-              </AnimatedSection>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* Additional Information */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-resort-cream">
         <div className="max-w-7xl mx-auto px-4">
-          <AnimatedSection>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-              <div className="text-center p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-blue-50 to-teal-50 rounded-xl">
-                <Clock className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-blue-600 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Check-in/Check-out</h3>
-                <p className="text-slate-600 text-sm">Check-in: 3:00 PM<br />Check-out: 11:00 AM</p>
-              </div>
-              <div className="text-center p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
-                <Car className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-green-600 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Free Parking</h3>
-                <p className="text-slate-600 text-sm">Complimentary parking available for all guests</p>
-              </div>
-              <div className="text-center p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
-                <Utensils className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-orange-600 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Dining</h3>
-                <p className="text-slate-600 text-sm">24/7 room service and multiple dining options</p>
-              </div>
-            </div>
-          </AnimatedSection>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+          >
+            <motion.div variants={fadeInUp} custom={0} whileHover={{ y: -6 }} className="text-center p-4 sm:p-5 lg:p-6 glass-card bg-blue-50/40 rounded-2xl">
+              <Clock className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-lg font-bold text-blue-900 mb-2">Check-in/Check-out</h3>
+              <p className="text-slate-600 text-sm">Check-in: 3:00 PM<br />Check-out: 11:00 AM</p>
+            </motion.div>
+            <motion.div variants={fadeInUp} custom={1} whileHover={{ y: -6 }} className="text-center p-4 sm:p-5 lg:p-6 glass-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
+              <Car className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-green-600 mx-auto mb-4" />
+              <h3 className="text-lg font-bold text-blue-900 mb-2">Free Parking</h3>
+              <p className="text-slate-600 text-sm">Complimentary parking available for all guests</p>
+            </motion.div>
+            <motion.div variants={fadeInUp} custom={2} whileHover={{ y: -6 }} className="text-center p-4 sm:p-5 lg:p-6 glass-card bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl">
+              <Utensils className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-orange-600 mx-auto mb-4" />
+              <h3 className="text-lg font-bold text-blue-900 mb-2">Dining</h3>
+              <p className="text-slate-600 text-sm">24/7 room service and multiple dining options</p>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
     </div>
