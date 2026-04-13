@@ -13,14 +13,111 @@
   body {
     font-family: 'Jost', sans-serif;
     line-height: 1.6;
-    padding-top: 0; /* Remove global padding */
+    padding-top: 0;
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
+    background-color: #FFFBF5;
+    color: #1e293b;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
     line-height: 1.2;
+  }
+
+  ::selection {
+    background-color: rgba(16, 61, 128, 0.15);
+    color: #071c3e;
+  }
+}
+
+@layer components {
+  /* Glass Card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(16, 61, 128, 0.08);
+  }
+
+  .glass-card-dark {
+    background: rgba(16, 61, 128, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(16, 61, 128, 0.1);
+    box-shadow: 0 8px 32px rgba(16, 61, 128, 0.06);
+  }
+
+  /* Golden Accent Line */
+  .gold-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #C9A96E, transparent);
+  }
+
+  .gold-line-left {
+    height: 2px;
+    background: linear-gradient(90deg, #C9A96E, transparent);
+  }
+
+  /* Ocean Wave Section Divider */
+  .wave-divider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .wave-divider svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 60px;
+  }
+
+  @media (min-width: 768px) {
+    .wave-divider svg {
+      height: 80px;
+    }
+  }
+
+  /* Resort Button Styles */
+  .btn-resort-primary {
+    @apply bg-blue-600 text-white px-6 py-3 rounded-full font-jost font-semibold
+           hover:bg-blue-700 transition-all duration-300
+           shadow-lg hover:shadow-xl hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md;
+  }
+
+  .btn-resort-gold {
+    @apply bg-resort-gold text-white px-6 py-3 rounded-full font-jost font-semibold
+           hover:bg-sand-700 transition-all duration-300
+           shadow-gold hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  .btn-resort-outline {
+    @apply border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-full font-jost font-semibold
+           hover:bg-blue-600 hover:text-white transition-all duration-300;
+  }
+
+  /* Section Heading Style */
+  .section-heading {
+    @apply text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-blue-900 mb-4;
+  }
+
+  .section-subheading {
+    @apply text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto;
+  }
+
+  /* Gold Separator */
+  .gold-separator {
+    @apply flex items-center justify-center gap-3 mb-6;
+  }
+
+  .gold-separator::before,
+  .gold-separator::after {
+    content: '';
+    @apply h-px w-12 sm:w-20 bg-resort-gold/50;
   }
 }
 
@@ -47,90 +144,92 @@
     overflow: hidden;
   }
 
-  .animate-fade-in {
-    animation: fadeIn 1s ease-in-out;
+  /* Text gradient */
+  .text-gradient-ocean {
+    background: linear-gradient(135deg, #103D80, #0EA5E9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .animate-slide-up {
-    animation: slideUp 0.8s ease-out;
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #C9A96E, #8B6F3A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .animate-slide-in-left {
-    animation: slideInLeft 0.8s ease-out;
+  /* Shimmer effect for images/cards */
+  .shimmer-overlay {
+    position: relative;
+    overflow: hidden;
   }
 
-  .animate-slide-in-right {
-    animation: slideInRight 0.8s ease-out;
+  .shimmer-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s ease-in-out infinite;
+    pointer-events: none;
   }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Custom scrollbar */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Custom scrollbar - ocean themed */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #FFF8F0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #103D80, #14b8a6);
+  background: linear-gradient(to bottom, #103D80, #C9A96E);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #0d326a, #0d9488);
+  background: linear-gradient(to bottom, #0d326a, #8B6F3A);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
 }

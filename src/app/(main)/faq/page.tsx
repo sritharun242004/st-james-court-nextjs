@@ -2,6 +2,21 @@
 
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Search, HelpCircle, Phone, Mail } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import WaveDivider from '@/components/ui/wave-divider';
+import GoldSeparator from '@/components/ui/gold-separator';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
 
 const FAQ = () => {
   const [openItem, setOpenItem] = useState<number | null>(null);
@@ -125,18 +140,25 @@ const FAQ = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-28 pb-8 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 bg-gradient-to-r from-blue-600 to-teal-500 text-white">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Frequently Asked Questions</h1>
-          <p className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+      <section className="pt-28 pb-8 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="max-w-7xl mx-auto px-4 text-center"
+        >
+          <motion.h1 variants={fadeInUp} custom={0} className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Frequently Asked Questions</motion.h1>
+          <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
             Find answers to common questions about your stay at St James Court Beach Resort.
-            Can't find what you're looking for? Our team is here to help!
-          </p>
-        </div>
+            Can&apos;t find what you&apos;re looking for? Our team is here to help!
+          </motion.p>
+        </motion.div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* Search & Filter */}
-      <section className="py-8 bg-white border-b">
+      <section className="py-8 bg-resort-cream border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             <div className="flex-1 max-w-md">
@@ -147,7 +169,7 @@ const FAQ = () => {
                   placeholder="Search FAQs..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-sand-200 rounded-xl focus:ring-2 focus:ring-blue-500/30 focus:border-transparent bg-white/80"
                 />
               </div>
             </div>
@@ -157,10 +179,10 @@ const FAQ = () => {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
+                  className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer ${
                     selectedCategory === category.id
-                      ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg'
+                      : 'glass-card text-slate-700 hover:bg-white/80'
                   }`}
                 >
                   {category.name}
@@ -172,16 +194,27 @@ const FAQ = () => {
       </section>
 
       {/* FAQ List */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-pearl">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="space-y-4">
-            {filteredFAQs.map((faq) => (
-              <div key={faq.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="space-y-4"
+          >
+            {filteredFAQs.map((faq, index) => (
+              <motion.div
+                key={faq.id}
+                variants={fadeInUp}
+                custom={index}
+                className="glass-card rounded-2xl shadow-resort overflow-hidden"
+              >
                 <button
                   onClick={() => toggleItem(faq.id)}
-                  className="w-full px-3 py-3 sm:px-6 sm:py-5 lg:py-6 text-left flex items-center justify-between hover:bg-slate-50 transition-colors duration-200"
+                  className="w-full px-3 py-3 sm:px-6 sm:py-5 lg:py-6 text-left flex items-center justify-between hover:bg-blue-50/30 transition-colors duration-200 cursor-pointer"
                 >
-                  <h3 className="text-sm sm:text-lg font-semibold text-slate-900 pr-4">
+                  <h3 className="text-sm sm:text-lg font-semibold text-blue-900 pr-4">
                     {faq.question}
                   </h3>
                   {openItem === faq.id ? (
@@ -191,18 +224,28 @@ const FAQ = () => {
                   )}
                 </button>
 
-                {openItem === faq.id && (
-                  <div className="px-3 pb-3 sm:px-6 sm:pb-6">
-                    <div className="border-t border-slate-100 pt-4">
-                      <p className="text-slate-600 leading-relaxed">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
+                <AnimatePresence>
+                  {openItem === faq.id && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-3 pb-3 sm:px-6 sm:pb-6">
+                        <div className="border-t border-sand-200 pt-4">
+                          <p className="text-slate-600 leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {filteredFAQs.length === 0 && (
             <div className="text-center py-12">
@@ -216,22 +259,37 @@ const FAQ = () => {
         </div>
       </section>
 
-      {/* Quick Help Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Need More Help?</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600">
-              Our friendly team is available 24/7 to assist you with any questions
-            </p>
-          </div>
+      <WaveDivider fill="#FFFBF5" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            <div className="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-blue-50 to-teal-50 rounded-xl">
-              <div className="bg-gradient-to-r from-blue-600 to-teal-500 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+      {/* Quick Help Section */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-cream">
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">Need More Help?</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-base sm:text-lg lg:text-xl text-slate-600 mt-4">
+              Our friendly team is available 24/7 to assist you with any questions
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+          >
+            <motion.div variants={fadeInUp} custom={0} whileHover={{ y: -6 }} className="text-center p-5 sm:p-6 lg:p-8 glass-card bg-blue-50/40 rounded-2xl">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-700 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Phone className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3">Call Us</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-3">Call Us</h3>
               <p className="text-slate-600 mb-4">
                 Speak directly with our guest services team
               </p>
@@ -239,81 +297,91 @@ const FAQ = () => {
                 <div>General: +91 413 123 4567</div>
                 <div>Reservations: +91 413 123 4568</div>
               </div>
-              <button className="mt-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:shadow-lg transition-all duration-200">
+              <motion.button whileHover={{ scale: 1.05, y: -2 }} className="mt-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-sm sm:text-base font-semibold shadow-lg hover:shadow-ocean transition-all duration-200 cursor-pointer">
                 Call Now
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
 
-            <div className="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
-              <div className="bg-gradient-to-r from-green-600 to-emerald-500 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <motion.div variants={fadeInUp} custom={1} whileHover={{ y: -6 }} className="text-center p-5 sm:p-6 lg:p-8 glass-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
+              <div className="bg-gradient-to-r from-green-600 to-emerald-500 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Mail className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3">Email Us</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-3">Email Us</h3>
               <p className="text-slate-600 mb-4">
-                Send us your questions and we'll respond promptly
+                Send us your questions and we&apos;ll respond promptly
               </p>
               <div className="text-sm text-slate-700 mb-4">
                 Reservation@stjamescourtbeachresort.com
               </div>
-              <button className="bg-gradient-to-r from-green-600 to-emerald-500 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:shadow-lg transition-all duration-200">
+              <motion.button whileHover={{ scale: 1.05, y: -2 }} className="bg-gradient-to-r from-green-600 to-emerald-500 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-sm sm:text-base font-semibold shadow-lg hover:shadow-ocean transition-all duration-200 cursor-pointer">
                 Send Email
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
 
-            <div className="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
-              <div className="bg-gradient-to-r from-purple-600 to-pink-500 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <motion.div variants={fadeInUp} custom={2} whileHover={{ y: -6 }} className="text-center p-5 sm:p-6 lg:p-8 glass-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
+              <div className="bg-gradient-to-r from-purple-600 to-pink-500 w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <HelpCircle className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3">Live Chat</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-3">Live Chat</h3>
               <p className="text-slate-600 mb-4">
                 Get instant answers through our live chat support
               </p>
               <div className="text-sm text-slate-700 mb-4">
                 Available 24/7
               </div>
-              <button className="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:shadow-lg transition-all duration-200">
+              <motion.button whileHover={{ scale: 1.05, y: -2 }} className="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-full text-sm sm:text-base font-semibold shadow-lg hover:shadow-ocean transition-all duration-200 cursor-pointer">
                 Start Chat
-              </button>
-            </div>
-          </div>
+              </motion.button>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
+      <WaveDivider fill="#f8f6f3" />
+
       {/* Common Topics */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-pearl">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Popular Topics</h2>
-            <p className="text-sm sm:text-lg lg:text-xl text-slate-600">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">Popular Topics</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-xl text-slate-600 mt-4">
               Quick access to our most frequently asked questions
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-              <h3 className="font-bold text-slate-900 mb-2">Booking & Reservations</h3>
-              <p className="text-slate-600 text-sm mb-3">Questions about making reservations, cancellations, and booking policies</p>
-              <span className="text-blue-600 font-semibold text-sm">5 articles</span>
-            </div>
-
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-              <h3 className="font-bold text-slate-900 mb-2">Resort Amenities</h3>
-              <p className="text-slate-600 text-sm mb-3">Information about spa, pools, dining, and other resort facilities</p>
-              <span className="text-blue-600 font-semibold text-sm">8 articles</span>
-            </div>
-
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-              <h3 className="font-bold text-slate-900 mb-2">Activities & Tours</h3>
-              <p className="text-slate-600 text-sm mb-3">Details about water sports, cultural tours, and local experiences</p>
-              <span className="text-blue-600 font-semibold text-sm">6 articles</span>
-            </div>
-
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-              <h3 className="font-bold text-slate-900 mb-2">Resort Policies</h3>
-              <p className="text-slate-600 text-sm mb-3">Information about check-in/out, smoking, pets, and other policies</p>
-              <span className="text-blue-600 font-semibold text-sm">4 articles</span>
-            </div>
-          </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+          >
+            {[
+              { title: 'Booking & Reservations', desc: 'Questions about making reservations, cancellations, and booking policies', count: '5 articles' },
+              { title: 'Resort Amenities', desc: 'Information about spa, pools, dining, and other resort facilities', count: '8 articles' },
+              { title: 'Activities & Tours', desc: 'Details about water sports, cultural tours, and local experiences', count: '6 articles' },
+              { title: 'Resort Policies', desc: 'Information about check-in/out, smoking, pets, and other policies', count: '4 articles' },
+            ].map((topic, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                custom={index}
+                whileHover={{ y: -6 }}
+                className="glass-card p-4 sm:p-6 rounded-2xl shadow-resort hover:shadow-glass-lg transition-shadow duration-300 cursor-pointer"
+              >
+                <h3 className="font-bold text-blue-900 mb-2">{topic.title}</h3>
+                <p className="text-slate-600 text-sm mb-3">{topic.desc}</p>
+                <span className="text-blue-600 font-semibold text-sm">{topic.count}</span>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
     </div>

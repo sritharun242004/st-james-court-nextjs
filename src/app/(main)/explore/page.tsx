@@ -2,6 +2,21 @@
 
 import React, { useState } from 'react';
 import { MapPin, Clock, Star, Camera, Navigation, Utensils, TreePine, Building, ExternalLink } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import WaveDivider from '@/components/ui/wave-divider';
+import GoldSeparator from '@/components/ui/gold-separator';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
 
 const Explore = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -17,7 +32,6 @@ const Explore = () => {
   ];
 
   const attractions = [
-    // Walking Distance (0-2 km)
     {
       id: 1,
       category: 'temple',
@@ -44,7 +58,6 @@ const Explore = () => {
       price: 'Free',
       mapUrl: 'https://www.google.com/maps/search/?api=1&query=Kalapet+Shri+Bala+Murugan+Temple%2C+Pondicherry',
     },
-    // Short Drive (2-10 km)
     {
       id: 16,
       category: 'activities',
@@ -123,7 +136,6 @@ const Explore = () => {
       price: '~₹200',
       mapUrl: 'https://www.google.com/maps/search/?api=1&query=Ousteri+Lake%2C+Pondicherry',
     },
-    // Medium Drive (10-20 km)
     {
       id: 7,
       category: 'beach',
@@ -241,7 +253,6 @@ const Explore = () => {
       price: 'Free',
       mapUrl: 'https://www.google.com/maps/search/?api=1&query=Sacred+Heart+Basilica+Pondicherry',
     },
-    // Day Trip (17-20 km)
     {
       id: 14,
       category: 'heritage',
@@ -311,7 +322,6 @@ const Explore = () => {
     },
   ];
 
-  // Group attractions by distance zone for the "all" view
   const distanceZones = [
     { label: 'Walking Distance', subtitle: '0-2 km from resort', ids: [1, 2] },
     { label: 'Short Drive', subtitle: '2-10 km', ids: [16, 3, 4, 5, 17, 6] },
@@ -319,7 +329,13 @@ const Explore = () => {
   ];
 
   const renderAttractionCard = (attraction: typeof attractions[0]) => (
-    <div key={attraction.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+    <motion.div
+      key={attraction.id}
+      variants={fadeInUp}
+      custom={0}
+      whileHover={{ y: -6 }}
+      className="glass-card rounded-2xl shadow-resort overflow-hidden hover:shadow-glass-lg transition-shadow duration-300"
+    >
       <img
         src={attraction.image}
         alt={attraction.name}
@@ -327,7 +343,7 @@ const Explore = () => {
       />
       <div className="p-3 sm:p-5 lg:p-6">
         <div className="flex items-center justify-between mb-3">
-          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
+          <span className="bg-blue-50/80 text-blue-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
             {attraction.distance}
           </span>
           {attraction.rating && (
@@ -338,7 +354,7 @@ const Explore = () => {
           )}
         </div>
 
-        <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">{attraction.name}</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-2">{attraction.name}</h3>
         <p className="text-slate-600 text-sm mb-4">{attraction.description}</p>
 
         <div className="flex items-center text-slate-500 text-sm mb-4">
@@ -351,7 +367,7 @@ const Explore = () => {
         <div className="grid grid-cols-2 gap-2 mb-4">
           {attraction.highlights.slice(0, 4).map((highlight, index) => (
             <div key={index} className="flex items-center text-xs text-slate-600">
-              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
+              <div className="w-1.5 h-1.5 bg-resort-gold rounded-full mr-2"></div>
               {highlight}
             </div>
           ))}
@@ -362,7 +378,7 @@ const Explore = () => {
             href={attraction.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:shadow-lg transition-all duration-200"
+            className="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg hover:shadow-ocean transition-all duration-200 cursor-pointer"
           >
             <Navigation className="h-4 w-4" />
             Get Directions
@@ -371,14 +387,14 @@ const Explore = () => {
             href={attraction.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 px-2.5 py-1.5 sm:px-4 sm:py-2 border border-blue-600 text-blue-600 rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all duration-200"
+            className="flex items-center gap-1 px-2.5 py-1.5 sm:px-4 sm:py-2 border border-blue-600 text-blue-600 rounded-full text-xs sm:text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all duration-200 cursor-pointer"
           >
             <ExternalLink className="h-4 w-4" />
             Maps
           </a>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
@@ -386,51 +402,65 @@ const Explore = () => {
       {/* Hero Section */}
       <section className="pt-28 pb-8 sm:pt-44 sm:pb-16 lg:pt-52 lg:pb-20 relative text-white">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/1799730/pexels-photo-1799730.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-950/70 via-blue-900/50 to-resort-cream"></div>
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Explore Pondicherry</h1>
-          <p className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="relative z-10 max-w-7xl mx-auto px-4 text-center"
+        >
+          <motion.h1 variants={fadeInUp} custom={0} className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">Explore Pondicherry</motion.h1>
+          <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-2xl max-w-4xl mx-auto leading-relaxed">
             Discover the rich cultural heritage, stunning beaches, and unique Franco-Tamil culture —
             all just minutes from St James Court Beach Resort
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* Category Filter */}
-      <section className="py-8 bg-white border-b">
+      <section className="py-8 bg-resort-cream border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-wrap gap-4 justify-center">
             {categories.map((category) => (
-              <button
+              <motion.button
                 key={category.id}
+                whileHover={{ scale: 1.05, y: -2 }}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex items-center px-2.5 py-1.5 sm:px-5 sm:py-3 text-xs sm:text-base rounded-full transition-all duration-300 ${
+                className={`flex items-center px-2.5 py-1.5 sm:px-5 sm:py-3 text-xs sm:text-base rounded-full transition-all duration-300 cursor-pointer ${
                   selectedCategory === category.id
-                    ? 'bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-lg'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:shadow-ocean'
+                    : 'glass-card text-slate-700 hover:bg-white/80'
                 }`}
               >
                 {category.icon}
                 <span className="ml-2">{category.name}</span>
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
       </section>
 
       {/* Attractions Grid */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-pearl">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Must-Visit Attractions</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">Must-Visit Attractions</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-base sm:text-lg lg:text-xl text-slate-600 mt-4">
               Discover the best of Pondicherry&apos;s culture, history, and natural beauty
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {selectedCategory === 'all' ? (
-            // Grouped by distance when showing all
             <div className="space-y-10 sm:space-y-12 lg:space-y-16">
               {distanceZones.map((zone) => {
                 const zoneAttractions = attractions.filter(a => zone.ids.includes(a.id));
@@ -438,38 +468,70 @@ const Explore = () => {
                 return (
                   <div key={zone.label}>
                     <div className="mb-8">
-                      <h3 className="text-2xl font-bold text-slate-900">{zone.label}</h3>
+                      <h3 className="text-2xl font-bold text-blue-900">{zone.label}</h3>
                       <p className="text-slate-500">{zone.subtitle}</p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                    <motion.div
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, margin: "-50px" }}
+                      variants={staggerContainer}
+                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+                    >
                       {zoneAttractions.map(renderAttractionCard)}
-                    </div>
+                    </motion.div>
                   </div>
                 );
               })}
             </div>
           ) : (
-            // Flat grid when filtered by category
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={staggerContainer}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+            >
               {filteredAttractions.map(renderAttractionCard)}
-            </div>
+            </motion.div>
           )}
         </div>
       </section>
 
-      {/* Suggested Itineraries */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Suggested Day Itineraries</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600">
-              Curated one-day plans to make the most of your stay
-            </p>
-          </div>
+      <WaveDivider fill="#FFFBF5" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+      {/* Suggested Itineraries */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-cream">
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">Suggested Day Itineraries</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-base sm:text-lg lg:text-xl text-slate-600 mt-4">
+              Curated one-day plans to make the most of your stay
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+          >
             {itineraries.map((itinerary, index) => (
-              <div key={index} className="bg-gradient-to-br from-slate-50 to-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-slate-100">
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                custom={index}
+                whileHover={{ y: -6 }}
+                className="glass-card bg-gradient-to-br from-resort-pearl to-white rounded-2xl overflow-hidden shadow-resort hover:shadow-glass-lg transition-shadow duration-300 border border-sand-200"
+              >
                 <div className="relative h-40 sm:h-44 lg:h-48">
                   <img src={itinerary.image} alt={itinerary.name} className="w-full h-full object-cover" />
                   <div className={`absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent`}></div>
@@ -482,7 +544,7 @@ const Explore = () => {
                   <div className="space-y-4">
                     {itinerary.stops.map((stop, stopIndex) => (
                       <div key={stopIndex} className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-7 h-7 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold mt-0.5">
+                        <div className="flex-shrink-0 w-7 h-7 bg-blue-50/80 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold mt-0.5">
                           {stopIndex + 1}
                         </div>
                         <p className="text-sm text-slate-700">{stop}</p>
@@ -490,23 +552,38 @@ const Explore = () => {
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Day Trip Packages */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Day Trip Packages</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600">
-              Explore beyond Pondicherry with our curated day trip experiences
-            </p>
-          </div>
+      <WaveDivider fill="#f8f6f3" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+      {/* Day Trip Packages */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-pearl">
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">Day Trip Packages</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-base sm:text-lg lg:text-xl text-slate-600 mt-4">
+              Explore beyond Pondicherry with our curated day trip experiences
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+          >
             {[
               {
                 name: 'Mahabalipuram Heritage Tour',
@@ -554,14 +631,20 @@ const Explore = () => {
                 mapUrl: 'https://www.google.com/maps/search/?api=1&query=Nataraja+Temple+Chidambaram',
               },
             ].map((trip, index) => (
-              <div key={index} className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                custom={index}
+                whileHover={{ y: -6 }}
+                className="glass-card bg-blue-50/40 rounded-2xl overflow-hidden shadow-resort hover:shadow-glass-lg transition-shadow duration-300"
+              >
                 <img
                   src={trip.image}
                   alt={trip.name}
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-4 sm:p-5 lg:p-6">
-                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">{trip.name}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-blue-900 mb-2">{trip.name}</h3>
                   <div className="flex items-center text-slate-600 text-sm mb-4">
                     <MapPin className="h-4 w-4 mr-1" />
                     {trip.distance}
@@ -577,7 +660,7 @@ const Explore = () => {
                   <div className="space-y-2 mb-4">
                     {trip.highlights.map((highlight, highlightIndex) => (
                       <div key={highlightIndex} className="flex items-start text-sm text-slate-600">
-                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                        <div className="w-1.5 h-1.5 bg-resort-gold rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
                         {highlight}
                       </div>
                     ))}
@@ -589,106 +672,87 @@ const Explore = () => {
                       href={trip.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:shadow-lg transition-all duration-200"
+                      className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-ocean transition-all duration-200 cursor-pointer"
                     >
                       <Navigation className="h-4 w-4" />
                       View Route
                     </a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="mt-8 bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg">
-            <h3 className="text-lg font-bold text-slate-900 mb-2">Transport Info</h3>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mt-8 glass-card rounded-2xl p-4 sm:p-5 lg:p-6 shadow-resort"
+          >
+            <h3 className="text-lg font-bold text-blue-900 mb-2">Transport Info</h3>
             <p className="text-sm text-slate-600">
               AC Innova/Xylo: ₹12-18/km (400-500 km tours) + Driver bata + Toll + Entries + Lunch.
               Contact resort desk for booking assistance.
             </p>
-          </div>
+          </motion.div>
         </div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* Cultural Experiences */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-cream">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Cultural Experiences</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">Cultural Experiences</motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-base sm:text-lg lg:text-xl text-slate-600 mt-4">
               Immerse yourself in the unique Franco-Tamil culture of Pondicherry
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-            <div className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
-                <div className="flex-shrink-0 bg-gradient-to-r from-orange-500 to-red-500 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4">
-                  <Utensils className="h-7 w-7 md:h-8 md:w-8 text-white" />
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+          >
+            {[
+              { icon: <Utensils className="h-7 w-7 md:h-8 md:w-8 text-white" />, gradient: 'from-orange-500 to-red-500', title: 'Auroville Cafes', desc: "Wood-fired pizzas, vegan bowls, and artisan coffee in Auroville's cozy cafes", cat: 'dining', btnText: 'Explore Cafes' },
+              { icon: <Camera className="h-7 w-7 md:h-8 md:w-8 text-white" />, gradient: 'from-green-500 to-teal-500', title: 'Beach Hopping', desc: 'From Paradise Beach boat rides to Serenity Beach sunsets', cat: 'beach', btnText: 'View Beaches' },
+              { icon: <Building className="h-7 w-7 md:h-8 md:w-8 text-white" />, gradient: 'from-purple-500 to-pink-500', title: 'Temple Trail', desc: 'From nearby Sai Baba Temple to the iconic Manakula Vinayagar', cat: 'temple', btnText: 'View Temples' },
+              { icon: <TreePine className="h-7 w-7 md:h-8 md:w-8 text-white" />, gradient: 'from-blue-500 to-indigo-500', title: 'Nature Escapes', desc: 'Birdwatching at Ousteri Lake and strolls through Botanical Gardens', cat: 'nature', btnText: 'Explore Nature' },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                custom={index}
+                whileHover={{ y: -6 }}
+                className="glass-card rounded-2xl p-4 sm:p-5 lg:p-6 shadow-resort hover:shadow-glass-lg transition-shadow duration-300"
+              >
+                <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
+                  <div className={`flex-shrink-0 bg-gradient-to-r ${item.gradient} w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4`}>
+                    {item.icon}
+                  </div>
+                  <h3 className="text-lg font-bold text-blue-900 md:mb-2 md:text-center">{item.title}</h3>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 md:mb-2 md:text-center">Auroville Cafes</h3>
-              </div>
-              <p className="text-slate-600 text-sm mb-4 md:text-center">
-                Wood-fired pizzas, vegan bowls, and artisan coffee in Auroville&apos;s cozy cafes
-              </p>
-              <div className="md:text-center">
-                <button onClick={() => setSelectedCategory('dining')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                  Explore Cafes
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
-                <div className="flex-shrink-0 bg-gradient-to-r from-green-500 to-teal-500 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4">
-                  <Camera className="h-7 w-7 md:h-8 md:w-8 text-white" />
+                <p className="text-slate-600 text-sm mb-4 md:text-center">{item.desc}</p>
+                <div className="md:text-center">
+                  <button onClick={() => setSelectedCategory(item.cat)} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors cursor-pointer">
+                    {item.btnText}
+                  </button>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 md:mb-2 md:text-center">Beach Hopping</h3>
-              </div>
-              <p className="text-slate-600 text-sm mb-4 md:text-center">
-                From Paradise Beach boat rides to Serenity Beach sunsets
-              </p>
-              <div className="md:text-center">
-                <button onClick={() => setSelectedCategory('beach')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                  View Beaches
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
-                <div className="flex-shrink-0 bg-gradient-to-r from-purple-500 to-pink-500 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4">
-                  <Building className="h-7 w-7 md:h-8 md:w-8 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 md:mb-2 md:text-center">Temple Trail</h3>
-              </div>
-              <p className="text-slate-600 text-sm mb-4 md:text-center">
-                From nearby Sai Baba Temple to the iconic Manakula Vinayagar
-              </p>
-              <div className="md:text-center">
-                <button onClick={() => setSelectedCategory('temple')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                  View Temples
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center gap-4 mb-2 md:flex-col md:items-center md:gap-0">
-                <div className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-indigo-500 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center md:mx-auto md:mb-4">
-                  <TreePine className="h-7 w-7 md:h-8 md:w-8 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 md:mb-2 md:text-center">Nature Escapes</h3>
-              </div>
-              <p className="text-slate-600 text-sm mb-4 md:text-center">
-                Birdwatching at Ousteri Lake and strolls through Botanical Gardens
-              </p>
-              <div className="md:text-center">
-                <button onClick={() => setSelectedCategory('nature')} className="text-blue-600 font-semibold hover:text-blue-700 transition-colors">
-                  Explore Nature
-                </button>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
     </div>

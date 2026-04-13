@@ -3,7 +3,22 @@
 import React from 'react';
 import Link from 'next/link';
 import { Utensils, Clock, Users, Star, MapPin } from 'lucide-react';
+import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/AnimatedSection';
+import WaveDivider from '@/components/ui/wave-divider';
+import GoldSeparator from '@/components/ui/gold-separator';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
 
 const restaurants = [
   {
@@ -74,48 +89,67 @@ const Dining = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: 'url(/images/dining/dining-hero.jpg)' }}
         >
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-950/70 via-blue-900/50 to-resort-cream"></div>
         </div>
-        <AnimatedSection className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="relative z-10 max-w-7xl mx-auto px-4 text-center"
+        >
+          <motion.h1 variants={fadeInUp} custom={0} className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-playfair font-bold mb-4 sm:mb-6 lg:mb-8">
             Dining
-          </h1>
-          <p className="text-sm sm:text-lg lg:text-2xl font-jost max-w-4xl mx-auto leading-relaxed">
+          </motion.h1>
+          <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-2xl font-jost max-w-4xl mx-auto leading-relaxed">
             Savour exquisite flavours at our three signature restaurants, each
             offering a distinct culinary experience by the sea
-          </p>
-        </AnimatedSection>
+          </motion.p>
+        </motion.div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* Intro Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-resort-cream">
         <div className="max-w-7xl mx-auto px-4">
-          <AnimatedSection className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-teal-500 mb-6">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <motion.div variants={fadeInUp} custom={0} className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 mb-6">
               <Utensils className="h-8 w-8 text-white" />
-            </div>
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-4">
+            </motion.div>
+            <motion.h2 variants={fadeInUp} custom={1} className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-blue-900 mb-4">
               Culinary Experiences
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl font-jost text-slate-600 leading-relaxed">
+            </motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={2} className="text-base sm:text-lg lg:text-xl font-jost text-slate-600 leading-relaxed mt-4">
               From hearty family meals to breezy beachfront dining and vibrant
               cocktail evenings, St James Court offers a dining experience for
               every mood and occasion.
-            </p>
-          </AnimatedSection>
+            </motion.p>
+          </motion.div>
         </div>
       </section>
 
+      <WaveDivider fill="#f8f6f3" />
+
       {/* Restaurants — Alternating Layout */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-slate-50">
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-pearl">
         <div className="max-w-7xl mx-auto px-4 space-y-12 sm:space-y-16 lg:space-y-24">
           {restaurants.map((restaurant, index) => {
             const isEven = index % 2 === 0;
 
             return (
-              <AnimatedSection
+              <motion.div
                 key={restaurant.id}
-                direction={isEven ? 'left' : 'right'}
+                initial={{ opacity: 0, x: isEven ? -40 : 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center"
               >
                 {/* Image — appears first on even rows, second on odd rows */}
@@ -124,17 +158,17 @@ const Dining = () => {
                     isEven ? 'lg:order-1' : 'lg:order-2'
                   }`}
                 >
-                  <div className="relative overflow-hidden rounded-2xl shadow-xl group">
+                  <div className="relative overflow-hidden rounded-2xl shadow-resort group">
                     <img
                       src={restaurant.image}
                       alt={restaurant.name}
-                      className="w-full h-44 sm:h-80 lg:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-44 sm:h-80 lg:h-[400px] object-cover group-transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                   </div>
                   {/* Decorative accent */}
                   <div
-                    className={`hidden sm:block absolute -z-10 w-full h-full rounded-2xl bg-gradient-to-br from-blue-200 to-teal-200 top-4 ${
+                    className={`hidden sm:block absolute -z-10 w-full h-full rounded-2xl bg-blue-200/50 top-4 ${
                       isEven ? 'left-4' : '-left-4'
                     }`}
                   ></div>
@@ -144,10 +178,10 @@ const Dining = () => {
                 <div
                   className={`${isEven ? 'lg:order-2' : 'lg:order-1'}`}
                 >
-                  <span className="inline-block bg-gradient-to-r from-blue-600 to-teal-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold font-jost mb-4">
+                  <span className="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-1.5 rounded-full text-sm font-semibold font-jost mb-4">
                     {restaurant.type}
                   </span>
-                  <h3 className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-2">
+                  <h3 className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-blue-900 mb-2">
                     {restaurant.name}
                   </h3>
                   <p className="text-base sm:text-lg font-jost text-blue-600 font-medium mb-6">
@@ -175,7 +209,7 @@ const Dining = () => {
 
                   {/* Highlights */}
                   <div className="mb-2">
-                    <h4 className="text-sm font-semibold text-slate-900 font-jost uppercase tracking-wider mb-3">
+                    <h4 className="text-sm font-semibold text-blue-900 font-jost uppercase tracking-wider mb-3">
                       Highlights
                     </h4>
                     <div className="grid grid-cols-2 gap-3">
@@ -191,31 +225,48 @@ const Dining = () => {
                     </div>
                   </div>
                 </div>
-              </AnimatedSection>
+              </motion.div>
             );
           })}
         </div>
       </section>
 
+      <WaveDivider fill="#FFFBF5" />
+
       {/* Extra Dining Images Grid */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-resort-cream">
         <div className="max-w-7xl mx-auto px-4">
-          <AnimatedSection className="text-center mb-8 sm:mb-10 lg:mb-12">
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-slate-900 mb-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-10 lg:mb-12"
+          >
+            <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-playfair font-bold text-blue-900 mb-4">
               A Glimpse of Our Dining Spaces
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl font-jost text-slate-600 max-w-3xl mx-auto">
+            </motion.h2>
+            <GoldSeparator />
+            <motion.p variants={fadeInUp} custom={1} className="text-base sm:text-lg lg:text-xl font-jost text-slate-600 max-w-3xl mx-auto mt-4">
               From elegant interiors to open-air setups by the shore, every meal
               at St James Court is a feast for the senses
-            </p>
-          </AnimatedSection>
+            </motion.p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+          >
             {extraImages.map((img, index) => (
-              <AnimatedSection
+              <motion.div
                 key={index}
-                delay={index * 0.15}
-                className="relative group overflow-hidden rounded-xl shadow-lg"
+                variants={fadeInUp}
+                custom={index}
+                whileHover={{ y: -6 }}
+                className="relative group overflow-hidden rounded-2xl shadow-resort"
               >
                 <img
                   src={img.src}
@@ -227,9 +278,9 @@ const Dining = () => {
                     {img.alt}
                   </p>
                 </div>
-              </AnimatedSection>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -239,32 +290,42 @@ const Dining = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: 'url(/images/dining/dining-hero.jpg)' }}
         >
-          <div className="absolute inset-0 bg-blue-900/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/85 to-blue-950/90"></div>
         </div>
-        <AnimatedSection className="relative z-10 max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="relative z-10 max-w-4xl mx-auto text-center px-4"
+        >
+          <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-6">
             Ready to Dine with Us?
-          </h2>
-          <p className="text-base sm:text-lg lg:text-xl font-jost text-white/90 mb-4 sm:mb-6 lg:mb-8">
+          </motion.h2>
+          <motion.p variants={fadeInUp} custom={1} className="text-base sm:text-lg lg:text-xl font-jost text-white/90 mb-4 sm:mb-6 lg:mb-8">
             Book your stay at St James Court Beach Resort and enjoy
             complimentary breakfast at Sea Queen with every reservation
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/booking"
-              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-full text-sm sm:text-lg font-semibold font-jost hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center justify-center"
-            >
-              <Utensils className="mr-2 h-5 w-5" />
-              Book Your Stay
-            </Link>
-            <Link
-              href="/contact"
-              className="border-2 border-white text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-full text-sm sm:text-lg font-semibold font-jost hover:bg-white hover:text-slate-900 transition-all duration-300 inline-flex items-center justify-center"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </AnimatedSection>
+          </motion.p>
+          <motion.div variants={fadeInUp} custom={2} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.div whileHover={{ scale: 1.05, y: -2 }}>
+              <Link
+                href="/booking"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-full text-sm sm:text-lg font-semibold font-jost shadow-lg hover:shadow-ocean transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+              >
+                <Utensils className="mr-2 h-5 w-5" />
+                Book Your Stay
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05, y: -2 }}>
+              <Link
+                href="/contact"
+                className="border-2 border-white text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-full text-sm sm:text-lg font-semibold font-jost hover:bg-white hover:text-blue-900 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+              >
+                Contact Us
+              </Link>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </section>
     </div>
   );

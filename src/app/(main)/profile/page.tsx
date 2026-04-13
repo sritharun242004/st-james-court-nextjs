@@ -2,8 +2,23 @@
 
 import React from 'react';
 import { User, Phone, Calendar, MapPin, Mail, Edit2, Save, BedDouble, AlertCircle, CreditCard } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import WaveDivider from '@/components/ui/wave-divider';
+import GoldSeparator from '@/components/ui/gold-separator';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
 
 interface BookingItem {
   id: number;
@@ -47,7 +62,6 @@ const ProfileContent = () => {
       return;
     }
 
-    // Fetch bookings
     fetch('/api/user/bookings', {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -56,7 +70,6 @@ const ProfileContent = () => {
       .catch(() => {})
       .finally(() => setBookingsLoading(false));
 
-    // Fetch profile (for privilege card)
     fetch('/api/user/profile', {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -101,10 +114,15 @@ const ProfileContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 py-6 px-3 sm:py-12 sm:px-4">
+    <div className="min-h-screen bg-resort-cream py-6 px-3 sm:py-12 sm:px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-teal-500 px-4 py-6 sm:px-8 sm:py-12 text-white">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="glass-card rounded-2xl shadow-resort overflow-hidden"
+        >
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-6 sm:px-8 sm:py-12 text-white">
             <div className="flex items-center gap-6">
               <div className="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                 <User className="h-8 w-8 sm:h-12 sm:w-12" />
@@ -118,32 +136,33 @@ const ProfileContent = () => {
 
           <div className="p-4 sm:p-6 md:p-8">
             {success && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-600">
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-2xl text-green-600">
                 Profile updated successfully!
               </div>
             )}
 
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 flex items-center gap-2">
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-600 flex items-center gap-2">
                 <AlertCircle className="h-5 w-5 flex-shrink-0" />
                 {error}
               </div>
             )}
 
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900">Profile Information</h2>
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-blue-900">Profile Information</h2>
               {!isEditing ? (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full shadow-lg hover:shadow-ocean transition-colors cursor-pointer"
                 >
                   <Edit2 className="h-4 w-4" />
                   Edit Profile
-                </button>
+                </motion.button>
               ) : (
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+                  className="px-4 py-2 border border-sand-200 text-slate-700 rounded-full hover:bg-blue-50/50 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -152,78 +171,32 @@ const ProfileContent = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Full Name
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
-                    <input
-                      type="text"
-                      name="full_name"
-                      value={formData.full_name}
-                      onChange={handleChange}
-                      disabled={!isEditing}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-slate-50 disabled:text-slate-600"
-                    />
+                {[
+                  { label: 'Full Name', icon: <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />, name: 'full_name', type: 'text' },
+                  { label: 'Email Address', icon: <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />, name: 'email', type: 'email', disabled: true, value: user?.email || '' },
+                  { label: 'Phone Number', icon: <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />, name: 'phone', type: 'tel' },
+                  { label: 'Age', icon: <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />, name: 'age', type: 'number', min: '18', max: '120' },
+                ].map((field) => (
+                  <div key={field.name}>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">{field.label}</label>
+                    <div className="relative">
+                      {field.icon}
+                      <input
+                        type={field.type}
+                        name={field.name}
+                        value={field.disabled ? (field.value || '') : (formData[field.name as keyof typeof formData] || '')}
+                        onChange={field.disabled ? undefined : handleChange}
+                        disabled={field.disabled || !isEditing}
+                        min={field.min}
+                        max={field.max}
+                        className="w-full pl-10 pr-4 py-3 border border-sand-200 rounded-xl focus:ring-2 focus:ring-blue-500/30 focus:border-transparent disabled:bg-resort-pearl disabled:text-slate-600 bg-white/80"
+                      />
+                    </div>
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
-                    <input
-                      type="email"
-                      value={user?.email || ''}
-                      disabled
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg bg-slate-50 text-slate-600"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Phone Number
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      disabled={!isEditing}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-slate-50 disabled:text-slate-600"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Age
-                  </label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
-                    <input
-                      type="number"
-                      name="age"
-                      value={formData.age}
-                      onChange={handleChange}
-                      disabled={!isEditing}
-                      min="18"
-                      max="120"
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-slate-50 disabled:text-slate-600"
-                    />
-                  </div>
-                </div>
+                ))}
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Nationality
-                  </label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Nationality</label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
                     <input
@@ -232,34 +205,41 @@ const ProfileContent = () => {
                       value={formData.nationality}
                       onChange={handleChange}
                       disabled={!isEditing}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-slate-50 disabled:text-slate-600"
+                      className="w-full pl-10 pr-4 py-3 border border-sand-200 rounded-xl focus:ring-2 focus:ring-blue-500/30 focus:border-transparent disabled:bg-resort-pearl disabled:text-slate-600 bg-white/80"
                     />
                   </div>
                 </div>
               </div>
 
               {isEditing && (
-                <button
+                <motion.button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-teal-500 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-full font-semibold shadow-lg hover:shadow-ocean transition-all duration-300 cursor-pointer"
                 >
                   <Save className="h-5 w-5" />
                   Save Changes
-                </button>
+                </motion.button>
               )}
             </form>
           </div>
-        </div>
+        </motion.div>
 
         {/* Privilege Membership */}
-        <div className="mt-8 bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="mt-8 glass-card rounded-2xl shadow-resort p-4 sm:p-6 md:p-8"
+        >
           <div className="flex items-center gap-3 mb-6">
-            <CreditCard className="h-6 w-6 text-blue-600" />
-            <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900">Privilege Membership</h2>
+            <CreditCard className="h-6 w-6 text-resort-gold" />
+            <h2 className="text-xl sm:text-2xl font-playfair font-bold text-blue-900">Privilege Membership</h2>
           </div>
 
           {privilegeCard ? (
-            <div className="bg-gradient-to-r from-blue-600 to-teal-500 rounded-xl p-4 sm:p-6 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                   <p className="text-blue-100 text-sm mb-1">Card Number</p>
@@ -283,19 +263,25 @@ const ProfileContent = () => {
               </p>
             </div>
           ) : (
-            <div className="text-center py-8 bg-slate-50 rounded-xl">
+            <div className="text-center py-8 bg-resort-pearl rounded-2xl">
               <CreditCard className="h-10 w-10 text-slate-300 mx-auto mb-3" />
               <p className="text-slate-500">No privilege membership</p>
               <p className="text-slate-400 text-sm mt-1">Contact us to get a privilege card for exclusive discounts</p>
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Booking History */}
-        <div className="mt-8 bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="mt-8 glass-card rounded-2xl shadow-resort p-4 sm:p-6 md:p-8"
+        >
           <div className="flex items-center gap-3 mb-6">
             <BedDouble className="h-6 w-6 text-blue-600" />
-            <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900">My Bookings</h2>
+            <h2 className="text-xl sm:text-2xl font-playfair font-bold text-blue-900">My Bookings</h2>
           </div>
 
           {bookingsLoading ? (
@@ -307,21 +293,34 @@ const ProfileContent = () => {
               <BedDouble className="h-12 w-12 text-slate-300 mx-auto mb-4" />
               <p className="text-slate-500 text-lg">No bookings yet</p>
               <p className="text-slate-400 text-sm mt-1">Your reservations will appear here</p>
-              <a
+              <motion.a
                 href="/booking"
-                className="inline-block mt-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all"
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="inline-block mt-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:shadow-ocean transition-all cursor-pointer"
               >
                 Book Now
-              </a>
+              </motion.a>
             </div>
           ) : (
-            <div className="space-y-4">
-              {bookings.map((booking) => (
-                <div key={booking.id} className="border border-slate-200 rounded-xl p-4 sm:p-6 hover:shadow-md transition-shadow">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="space-y-4"
+            >
+              {bookings.map((booking, index) => (
+                <motion.div
+                  key={booking.id}
+                  variants={fadeInUp}
+                  custom={index}
+                  whileHover={{ y: -4 }}
+                  className="border border-sand-200 rounded-2xl p-4 sm:p-6 hover:shadow-glass transition-shadow bg-white/80"
+                >
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-slate-900 text-lg">{booking.categoryName}</h3>
+                        <h3 className="font-semibold text-blue-900 text-lg">{booking.categoryName}</h3>
                         <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(booking.paymentStatus)}`}>
                           {booking.paymentStatus}
                         </span>
@@ -345,11 +344,11 @@ const ProfileContent = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

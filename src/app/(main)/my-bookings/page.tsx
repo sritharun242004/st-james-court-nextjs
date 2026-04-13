@@ -3,8 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BedDouble, Calendar, Users, MapPin, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import WaveDivider from '@/components/ui/wave-divider';
+import GoldSeparator from '@/components/ui/gold-separator';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
 
 interface BookingItem {
   id: number;
@@ -49,7 +64,7 @@ const stayStatusBadge: Record<StayStatus, { label: string; className: string }> 
 };
 
 const stayBarColor: Record<StayStatus, string> = {
-  'upcoming':    'bg-gradient-to-r from-blue-600 to-teal-500',
+  'upcoming':    'bg-gradient-to-r from-blue-600 to-blue-700',
   'in-progress': 'bg-gradient-to-r from-teal-500 to-green-400',
   'completed':   'bg-slate-200',
 };
@@ -103,15 +118,22 @@ const MyBookingsContent = () => {
       {/* Hero */}
       <section className="pt-32 pb-10 sm:pt-52 sm:pb-16 relative text-white">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}>
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-950/70 via-blue-900/50 to-resort-cream"></div>
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-playfair font-bold mb-2 sm:mb-4">My Reservations</h1>
-          <p className="text-sm sm:text-xl max-w-2xl mx-auto opacity-90">View and manage your bookings at St James Court Beach Resort</p>
-        </div>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="relative z-10 max-w-7xl mx-auto px-4 text-center"
+        >
+          <motion.h1 variants={fadeInUp} custom={0} className="text-3xl sm:text-5xl md:text-6xl font-playfair font-bold mb-2 sm:mb-4">My Reservations</motion.h1>
+          <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-xl max-w-2xl mx-auto opacity-90">View and manage your bookings at St James Court Beach Resort</motion.p>
+        </motion.div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 py-6 sm:py-12">
+      <WaveDivider fill="#FFFBF5" />
+
+      <div className="max-w-5xl mx-auto px-4 py-6 sm:py-12 bg-resort-cream">
         {/* Filter tabs */}
         <div className="flex flex-wrap gap-2 mb-8">
           {[
@@ -120,17 +142,18 @@ const MyBookingsContent = () => {
             { key: 'in-progress' as const, label: 'Staying Now', count: inProgressCount },
             { key: 'past'        as const, label: 'Completed',   count: pastCount       },
           ].map(tab => (
-            <button
+            <motion.button
               key={tab.key}
+              whileHover={{ scale: 1.05, y: -2 }}
               onClick={() => setFilter(tab.key)}
-              className={`px-3 py-2 sm:px-5 sm:py-2.5 rounded-full font-medium transition-all text-sm ${
+              className={`px-3 py-2 sm:px-5 sm:py-2.5 rounded-full font-medium transition-all text-sm cursor-pointer ${
                 filter === tab.key
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:shadow-ocean'
+                  : 'glass-card text-slate-600 hover:bg-white/80 border border-sand-200'
               }`}
             >
               {tab.label} ({tab.count})
-            </button>
+            </motion.button>
           ))}
         </div>
 
@@ -139,7 +162,12 @@ const MyBookingsContent = () => {
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-12 sm:py-20 bg-white rounded-2xl shadow-lg">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center py-12 sm:py-20 glass-card rounded-2xl shadow-resort"
+          >
             <BedDouble className="h-16 w-16 text-slate-300 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-slate-700 mb-2">
               {filter === 'all' ? 'No reservations yet' : `No ${filter} reservations`}
@@ -147,35 +175,44 @@ const MyBookingsContent = () => {
             <p className="text-slate-400 mb-6">
               {filter === 'all' ? 'Book your perfect beachfront getaway today!' : 'Check another filter or make a new reservation.'}
             </p>
-            <Link
-              href="/booking"
-              className="inline-flex items-center bg-gradient-to-r from-blue-600 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
-            >
-              Book Now <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </div>
+            <motion.div whileHover={{ scale: 1.05, y: -2 }}>
+              <Link
+                href="/booking"
+                className="inline-flex items-center bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-ocean transition-all cursor-pointer"
+              >
+                Book Now <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </motion.div>
+          </motion.div>
         ) : (
-          <div className="space-y-6">
-            {filtered.map((booking) => {
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="space-y-6"
+          >
+            {filtered.map((booking, index) => {
               const nights = getNights(booking.checkIn, booking.checkOut);
               const stayStatus = getStayStatus(booking.checkIn, booking.checkOut, today);
               const { label: stayLabel, className: stayClass } = stayStatusBadge[stayStatus];
 
               return (
-                <div key={booking.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <motion.div
+                  key={booking.id}
+                  variants={fadeInUp}
+                  custom={index}
+                  whileHover={{ y: -4 }}
+                  className="glass-card rounded-2xl shadow-resort overflow-hidden hover:shadow-glass-lg transition-shadow"
+                >
                   <div className={`h-1.5 ${stayBarColor[stayStatus]}`} />
                   <div className="p-4 sm:p-6 md:p-8">
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                      {/* Left */}
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <h3 className="text-xl font-bold text-slate-900">{booking.categoryName}</h3>
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${stayClass}`}>
-                            {stayLabel}
-                          </span>
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${getPaymentStyle(booking.paymentStatus)}`}>
-                            {booking.paymentStatus}
-                          </span>
+                          <h3 className="text-xl font-bold text-blue-900">{booking.categoryName}</h3>
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${stayClass}`}>{stayLabel}</span>
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${getPaymentStyle(booking.paymentStatus)}`}>{booking.paymentStatus}</span>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm text-slate-600">
@@ -197,26 +234,19 @@ const MyBookingsContent = () => {
                         </div>
                       </div>
 
-                      {/* Right */}
                       <div className="text-right flex-shrink-0">
-                        <div className="text-xl sm:text-2xl font-bold text-blue-600">
-                          ₹{booking.finalAmount.toLocaleString()}
-                        </div>
+                        <div className="text-xl sm:text-2xl font-bold text-blue-600">₹{booking.finalAmount.toLocaleString()}</div>
                         {booking.discountAmount > 0 && (
-                          <div className="text-sm text-green-600 font-medium">
-                            Saved ₹{booking.discountAmount.toLocaleString()}
-                          </div>
+                          <div className="text-sm text-green-600 font-medium">Saved ₹{booking.discountAmount.toLocaleString()}</div>
                         )}
-                        <div className="text-xs text-slate-400 mt-1">
-                          Booking #{booking.id}
-                        </div>
+                        <div className="text-xs text-slate-400 mt-1">Booking #{booking.id}</div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
