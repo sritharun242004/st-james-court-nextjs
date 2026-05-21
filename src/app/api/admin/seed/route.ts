@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { hashPassword } from '@/lib/auth';
 
-export const runtime = 'nodejs';
 
 export async function POST() {
   try {

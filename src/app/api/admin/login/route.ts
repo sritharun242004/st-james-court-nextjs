@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { verifyPassword, signToken } from '@/lib/auth';
 
-export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,9 +39,8 @@ export async function POST(request: NextRequest) {
       token,
       admin: { id: admin.id, username: admin.username },
     });
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Login error:', error);
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ error: 'Internal server error', detail: message }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
