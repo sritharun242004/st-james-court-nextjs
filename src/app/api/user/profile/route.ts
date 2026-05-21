@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 
+export const runtime = 'nodejs';
+
 async function authenticateUser(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
   if (!authHeader?.startsWith('Bearer ')) {

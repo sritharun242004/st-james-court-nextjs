@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { hashPassword, signToken } from '@/lib/auth';
 
+export const runtime = 'nodejs';
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password, full_name, phone, age, nationality } = await request.json();
