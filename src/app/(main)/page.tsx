@@ -146,15 +146,20 @@ const Home = () => {
           <source src="/hero-compressed.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 pt-28 sm:pt-32 lg:pt-36">
           <motion.h1
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-playfair font-bold text-white tracking-wide"
+            className="flex flex-col items-center text-white"
             initial={mounted ? { opacity: 0, y: 40 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{ textShadow: '0 4px 30px rgba(0,0,0,0.5)' }}
           >
-            St James Court
+            <span className="font-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl leading-[1.2]">
+              St James Court
+            </span>
+            <span className="font-cinzel uppercase text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-[0.3em] mt-4 sm:mt-6">
+              Beach Resort
+            </span>
           </motion.h1>
           <motion.div
             className="w-24 h-0.5 bg-resort-gold mx-auto my-4 sm:my-6"
@@ -180,7 +185,7 @@ const Home = () => {
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/booking"
-                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3.5 sm:px-10 sm:py-4 text-sm sm:text-lg rounded-full font-semibold shadow-lg hover:shadow-ocean transition-all duration-300 inline-flex items-center justify-center"
+                className="w-56 sm:w-60 px-8 py-3.5 sm:py-4 text-sm sm:text-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold shadow-lg hover:shadow-ocean transition-all duration-300 inline-flex items-center justify-center"
               >
                 Book Now
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -189,7 +194,7 @@ const Home = () => {
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/rooms"
-                className="border-2 border-white/70 text-white px-8 py-3.5 sm:px-10 sm:py-4 text-sm sm:text-lg rounded-full font-semibold hover:bg-white/20 transition-all duration-300 inline-flex items-center justify-center backdrop-blur-sm"
+                className="w-56 sm:w-60 px-8 py-3.5 sm:py-4 text-sm sm:text-lg border-2 border-white/70 text-white rounded-full font-semibold hover:bg-white/20 transition-all duration-300 inline-flex items-center justify-center backdrop-blur-sm"
               >
                 View Rooms
               </Link>

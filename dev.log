@@ -1,0 +1,237 @@
+
+> sjc-nextjs@0.1.0 dev
+> next dev -p 4001
+
+  ▲ Next.js 14.2.18
+  - Local:        http://localhost:4001
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 3.1s
+ ○ Compiling /api/rooms ...
+ ✓ Compiled /api/rooms in 1104ms (57 modules)
+ GET /api/rooms 200 in 1247ms
+ ✓ Compiled /api/rooms/[slug] in 89ms (59 modules)
+ GET /api/rooms/family-room 200 in 2239ms
+ GET /api/rooms/DELUXE 200 in 255ms
+ GET /api/rooms/does-not-exist 404 in 253ms
+ ○ Compiling /rooms ...
+ ✓ Compiled /rooms in 4.4s (1192 modules)
+ GET /rooms 200 in 4905ms
+ ✓ Compiled in 583ms (572 modules)
+ ○ Compiling /rooms/[roomId] ...
+ ✓ Compiled /rooms/[roomId] in 7.2s (1198 modules)
+ GET /rooms/family-room 200 in 8331ms
+ GET /rooms/executive-suite 200 in 79ms
+ ✓ Compiled in 429ms (1212 modules)
+ ✓ Compiled /api/availability in 142ms (633 modules)
+ ✓ Compiled in 828ms (1214 modules)
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-25 200 in 2187ms
+ ○ Compiling /admin/rooms ...
+ ✓ Compiled /admin/rooms in 1863ms (1247 modules)
+ GET /admin/rooms 200 in 2117ms
+ ○ Compiling /booking ...
+ ✓ Compiled /booking in 3.4s (1908 modules)
+ GET /booking 200 in 3746ms
+ ✓ Compiled in 577ms (1906 modules)
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-25 200 in 1635ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1168ms (1896 modules)
+ GET / 200 in 1599ms
+ ○ Compiling /icon.png ...
+ ✓ Compiled /icon.png in 1245ms (1005 modules)
+ GET /icon.png?97eae48aa9930600 200 in 1553ms
+ ✓ Compiled in 1379ms (1504 modules)
+ ✓ Compiled in 678ms (1504 modules)
+ ✓ Compiled in 854ms (946 modules)
+ ✓ Compiled in 813ms (1504 modules)
+ ✓ Compiled in 638ms (1504 modules)
+ ○ Compiling /booking ...
+ ✓ Compiled /booking in 1046ms (897 modules)
+ ○ Compiling /api/availability ...
+ ✓ Compiled /api/availability in 777ms (995 modules)
+ ✓ Compiled (1000 modules)
+ GET /api/rooms 200 in 1243ms
+ GET /api/user/profile 200 in 2277ms
+ GET /api/rooms 200 in 59ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 2474ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 2478ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 2508ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 1242ms
+ GET /api/user/profile 200 in 545ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 2942ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 815ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 864ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 895ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 857ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 780ms
+ ✓ Compiled /api/admin/rooms/upload in 381ms (1003 modules)
+ POST /api/admin/rooms/upload 200 in 4900ms
+ ✓ Compiled /api/images/[id] in 222ms (999 modules)
+ ✓ Compiled /api/admin/rooms in 198ms (1002 modules)
+Failed to set fetch cache https://api.c-4.us-east-1.aws.neon.tech/sql Error: Failed to set Next.js data cache, items over 2MB can not be cached (4201729 bytes)
+    at IncrementalCache.set (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\lib\incremental-cache\index.js:388:23)
+    at C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:53390
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async dr.execute (webpack-internal:///(rsc)/./node_modules/@neondatabase/serverless/index.mjs:1310:4)
+    at async GET (webpack-internal:///(rsc)/./src/app/api/images/[id]/route.ts:22:22)
+    at async C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:55831
+    at async eO.execute (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:46527)
+    at async eO.handle (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:57165)
+    at async doRender (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\base-server.js:1353:42)
+    at async cacheEntry.responseCache.get.routeKind (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\base-server.js:1563:40)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\base-server.js:1483:28)
+    at async DevServer.renderPageComponent (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\base-server.js:1911:24)
+    at async DevServer.renderToResponseImpl (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\base-server.js:1949:32)
+    at async DevServer.pipeImpl (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\base-server.js:921:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\next-server.js:272:17)
+    at async DevServer.handleRequestImpl (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\base-server.js:817:17)
+    at async C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\dev\next-dev-server.js:339:20
+    at async Span.traceAsyncFn (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\trace\trace.js:154:20)
+    at async DevServer.handleRequest (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\dev\next-dev-server.js:336:24)
+    at async invokeRender (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\lib\router-server.js:173:21)
+    at async handleRequest (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\lib\router-server.js:350:24)
+    at async requestHandlerImpl (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\lib\router-server.js:374:13)
+    at async Server.requestListener (C:\Users\mohanraj\Desktop\st-james-court-nextjs-james-approved\node_modules\next\dist\server\lib\start-server.js:141:13)
+ GET /api/images/1 200 in 2707ms
+ POST /api/admin/rooms 200 in 3403ms
+ GET /api/admin/rooms 200 in 271ms
+ ✓ Compiled /api/admin/rooms/inventory in 357ms (1004 modules)
+ GET /api/admin/rooms/inventory?categoryId=1&startDate=2026-06-22&endDate=2026-07-22 200 in 682ms
+ GET /booking 200 in 345ms
+ ✓ Compiled /api/availability in 411ms (1032 modules)
+ ✓ Compiled (1036 modules)
+ GET /api/rooms 200 in 1124ms
+ GET /icon.png?97eae48aa9930600 200 in 1252ms
+ ✓ Compiled /api/user/profile in 389ms (1038 modules)
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 2346ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 2357ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 2368ms
+ GET /api/rooms 200 in 118ms
+ GET /api/user/profile 200 in 1524ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 1588ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 2806ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 831ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 837ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 750ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 739ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 772ms
+ GET /api/admin/rooms/inventory?categoryId=14&startDate=2026-06-22&endDate=2026-07-22 200 in 799ms
+ GET /api/admin/rooms 200 in 815ms
+ ○ Compiling /rooms ...
+ ✓ Compiled /rooms in 635ms (1025 modules)
+ ✓ Compiled /api/rooms in 190ms (1027 modules)
+ GET /api/rooms 200 in 300ms
+ GET /api/rooms 200 in 73ms
+ ✓ Compiled in 871ms (1886 modules)
+ GET /rooms 200 in 280ms
+ ✓ Compiled /icon.png in 244ms (981 modules)
+ GET /api/rooms 200 in 540ms
+ GET /icon.png?97eae48aa9930600 200 in 630ms
+ GET /api/rooms 200 in 60ms
+ GET /rooms 200 in 222ms
+ GET /icon.png?97eae48aa9930600 200 in 38ms
+ GET /api/rooms 200 in 47ms
+ GET /api/rooms 200 in 52ms
+ GET /api/rooms 200 in 29ms
+ ✓ Compiled in 874ms (1855 modules)
+ ✓ Compiled /api/rooms in 126ms (953 modules)
+ ✓ Compiled in 871ms (1886 modules)
+ GET /api/rooms?_=1782137156338 200 in 2731ms
+ GET /api/rooms 200 in 139ms
+ GET /api/rooms 200 in 113ms
+ ○ Compiling /contact ...
+ ✓ Compiled /contact in 800ms (1880 modules)
+ GET /api/rooms 200 in 103ms
+ ✓ Compiled /api/availability in 484ms (1028 modules)
+ ✓ Compiled (1030 modules)
+ GET /api/user/profile 200 in 1943ms
+ GET /api/rooms 200 in 100ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 2155ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 2209ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 2214ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 2126ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 2617ms
+ GET /api/user/profile 200 in 590ms
+ GET /api/availability?category=DELUX&start=2026-06-22&end=2026-06-23 200 in 748ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 809ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 815ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 838ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 758ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 751ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 758ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 745ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 737ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 736ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 761ms
+ ✓ Compiled /api/admin/rooms/[id] in 358ms (1034 modules)
+ DELETE /api/admin/rooms/14 200 in 2545ms
+ ✓ Compiled /api/admin/rooms in 262ms (1036 modules)
+ GET /api/admin/rooms 200 in 1981ms
+ GET /api/admin/rooms 200 in 268ms
+ ✓ Compiled /api/admin/rooms/inventory in 219ms (1038 modules)
+ GET /api/admin/rooms/inventory?categoryId=1&startDate=2026-06-22&endDate=2026-07-22 200 in 902ms
+ GET /api/admin/rooms 200 in 2706ms
+ GET /booking 200 in 336ms
+ ✓ Compiled /icon.png in 495ms (1066 modules)
+ GET /icon.png?97eae48aa9930600 200 in 965ms
+ GET /api/rooms 200 in 900ms
+ GET /api/user/profile 200 in 1066ms
+ GET /api/rooms 200 in 49ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 2032ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 2054ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 2069ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 2085ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 1280ms
+ GET /api/availability?category=DELUX&start=2026-06-22&end=2026-06-23 400 in 339ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 811ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 804ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 809ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 823ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 769ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 792ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 808ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 809ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 822ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 800ms
+ GET /booking 200 in 312ms
+ GET /icon.png?97eae48aa9930600 200 in 39ms
+ GET /api/rooms 200 in 72ms
+ GET /api/user/profile 200 in 545ms
+ GET /api/rooms 200 in 76ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 821ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 835ms
+ GET /api/availability?category=DELUX&start=2026-06-22&end=2026-06-23 400 in 283ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 1292ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 1316ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 1331ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 850ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 854ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 797ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 758ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 786ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 777ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 798ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 802ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 788ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 835ms
+ GET /api/admin/rooms 200 in 769ms
+ GET /api/admin/rooms 200 in 335ms
+ GET /api/admin/rooms 200 in 317ms
+ GET /api/admin/rooms/inventory?categoryId=1&startDate=2026-06-22&endDate=2026-07-22 200 in 828ms
+ GET /booking 200 in 146ms
+ GET /icon.png?97eae48aa9930600 200 in 56ms
+ GET /api/rooms 200 in 84ms
+ GET /api/user/profile 200 in 1013ms
+ GET /api/rooms 200 in 58ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 1257ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 1277ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 1283ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 1304ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 1348ms
+ GET /api/availability?category=DELUX&start=2026-06-22&end=2026-06-23 400 in 305ms
+ GET /api/availability?category=CLUB&start=2026-06-22&end=2026-06-23 200 in 793ms
+ GET /api/availability?category=DELUXE&start=2026-06-22&end=2026-06-23 200 in 861ms
+ GET /api/availability?category=SUPER_DELUXE&start=2026-06-22&end=2026-06-23 200 in 876ms
+ GET /api/availability?category=SUITE&start=2026-06-22&end=2026-06-23 200 in 874ms
+ GET /api/availability?category=FAMILY&start=2026-06-22&end=2026-06-23 200 in 851ms

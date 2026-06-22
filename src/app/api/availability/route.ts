@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch inventory
     const inventory = await sql`
-      SELECT date::text as date, base_available, base_price, extra_bed_price
+      SELECT date::text as date, base_available, blocked, base_price, extra_bed_price
       FROM room_inventory
       WHERE category_id = ${cat.id}
         AND date >= ${start}::date
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
 
     const days = inventory.map(inv => {
       const booked = bookedByDate.get(inv.date) || 0;
-      const available = Math.max(0, inv.base_available - booked);
+      const available = Math.max(0, inv.base_available - (inv.blocked || 0) - booked);
       const basePrice = parseFloat(inv.base_price);
 
       let discountPercent: number | null = null;

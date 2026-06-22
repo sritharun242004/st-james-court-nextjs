@@ -126,6 +126,16 @@ ALTER TABLE user_account ADD COLUMN IF NOT EXISTS nationality VARCHAR(60);
 -- Add extra_beds column to booking (idempotent)
 ALTER TABLE booking ADD COLUMN IF NOT EXISTS extra_beds INTEGER DEFAULT 0;
 
+-- Add default rack-rate price to room categories (idempotent)
+ALTER TABLE room_category ADD COLUMN IF NOT EXISTS base_price NUMERIC(10,2);
+-- Backfill base_price from today's inventory where missing
+UPDATE room_category rc
+SET base_price = ri.base_price
+FROM room_inventory ri
+WHERE ri.category_id = rc.id
+  AND ri.date = CURRENT_DATE
+  AND rc.base_price IS NULL;
+
 -- Set extra_bed_price to 1500 for all inventory rows
 UPDATE room_inventory SET extra_bed_price = 1500 WHERE extra_bed_price = 0;
 

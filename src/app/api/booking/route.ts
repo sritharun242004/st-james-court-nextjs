@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
     // --- Phase 2: Parallel fetch inventory + discounts + booked rooms ---
     const [inventory, discountRows, bookedRows] = await Promise.all([
       sql`
-        SELECT date::text as date, base_available, base_price, extra_bed_price
+        SELECT date::text as date, base_available, blocked, base_price, extra_bed_price
         FROM room_inventory
         WHERE category_id = ${category.id}
           AND date >= ${body.checkIn}::date
@@ -157,10 +157,11 @@ export async function POST(request: NextRequest) {
       `,
     ]);
 
-    const inventoryByDate = new Map<string, { baseAvailable: number; basePrice: number; extraBedPrice: number }>();
+    const inventoryByDate = new Map<string, { baseAvailable: number; blocked: number; basePrice: number; extraBedPrice: number }>();
     for (const row of inventory) {
       inventoryByDate.set(row.date, {
         baseAvailable: row.base_available,
+        blocked: row.blocked || 0,
         basePrice: parseFloat(row.base_price),
         extraBedPrice: parseFloat(row.extra_bed_price),
       });
@@ -196,7 +197,7 @@ export async function POST(request: NextRequest) {
       }
 
       const booked = bookedByDate.get(dateStr) || 0;
-      const available = inv.baseAvailable - booked;
+      const available = inv.baseAvailable - inv.blocked - booked;
       if (available < rooms) {
         return NextResponse.json(
           { error: `Insufficient rooms for ${dateStr} (requested: ${rooms}, available: ${available})` },

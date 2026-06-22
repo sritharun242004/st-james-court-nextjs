@@ -27,7 +27,7 @@ const restaurants = [
     subtitle: 'Family Restaurant',
     image: '/images/dining/dining-1.jpg',
     type: 'Indoor Multi-Cuisine',
-    hours: '7:00 AM - 11:00 PM',
+    hours: 'Open 24/7',
     capacity: '100+ guests',
     description:
       'The signature family restaurant at St James Court, Sea Queen serves a wide range of multi-cuisine dishes including South Indian, North Indian, Chinese, and Continental. Perfect for family gatherings, celebrations, and everyday dining in a comfortable air-conditioned indoor setting.',

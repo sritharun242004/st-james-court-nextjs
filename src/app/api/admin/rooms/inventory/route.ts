@@ -20,14 +20,17 @@ export async function GET(request: NextRequest) {
         ri.id,
         ri.date::text as date,
         ri.base_available,
+        ri.blocked,
         ri.base_price,
         ri.extra_bed_price,
         COALESCE(bn.booked, 0)::int as booked
       FROM room_inventory ri
       LEFT JOIN (
-        SELECT category_id, date, SUM(rooms)::int as booked
-        FROM booking_night
-        GROUP BY category_id, date
+        SELECT bn.category_id, bn.date, SUM(bn.rooms)::int as booked
+        FROM booking_night bn
+        JOIN booking b ON b.id = bn.booking_id
+        WHERE b.payment_status IN ('CONFIRMED', 'PAID')
+        GROUP BY bn.category_id, bn.date
       ) bn ON bn.category_id = ri.category_id AND bn.date = ri.date
       WHERE ri.category_id = ${parseInt(categoryId)}
         AND ri.date >= ${startDate}::date
@@ -49,17 +52,48 @@ export async function PUT(request: NextRequest) {
     await authenticateAdmin(request);
     const sql = getDb();
 
-    const { categoryId, startDate, endDate, baseAvailable, basePrice, extraBedPrice } = await request.json();
+    const { categoryId, startDate, endDate, baseAvailable, basePrice, extraBedPrice, blocked, mode } = await request.json();
 
-    if (!categoryId || !startDate || !endDate || baseAvailable == null || basePrice == null) {
-      return NextResponse.json({ error: 'categoryId, startDate, endDate, baseAvailable, and basePrice are required' }, { status: 400 });
+    if (!categoryId || !startDate || !endDate) {
+      return NextResponse.json({ error: 'categoryId, startDate, and endDate are required' }, { status: 400 });
     }
 
-    // Generate date range
     const start = new Date(startDate + 'T00:00:00Z');
     const end = new Date(endDate + 'T00:00:00Z');
     if (start > end) {
       return NextResponse.json({ error: 'startDate must be <= endDate' }, { status: 400 });
+    }
+
+    // --- Block / unblock mode: only adjusts the internal hold, leaving price
+    //     and base availability untouched. Used for offline/bulk holds. ---
+    if (mode === 'block' || mode === 'unblock') {
+      const count = parseInt(blocked);
+      if (isNaN(count) || count < 0) {
+        return NextResponse.json({ error: 'A valid number of rooms to block is required' }, { status: 400 });
+      }
+      if (mode === 'block') {
+        // Hold `count` rooms, never exceeding the base availability for the date.
+        await sql`
+          UPDATE room_inventory
+          SET blocked = LEAST(base_available, ${count}), updated_at = NOW()
+          WHERE category_id = ${categoryId}
+            AND date >= ${startDate}::date AND date <= ${endDate}::date
+        `;
+        return NextResponse.json({ data: { message: `Blocked ${count} room(s) for the selected dates` } });
+      } else {
+        await sql`
+          UPDATE room_inventory
+          SET blocked = 0, updated_at = NOW()
+          WHERE category_id = ${categoryId}
+            AND date >= ${startDate}::date AND date <= ${endDate}::date
+        `;
+        return NextResponse.json({ data: { message: 'Internal holds released for the selected dates' } });
+      }
+    }
+
+    // --- Standard bulk inventory update (price + availability). ---
+    if (baseAvailable == null || basePrice == null) {
+      return NextResponse.json({ error: 'baseAvailable and basePrice are required' }, { status: 400 });
     }
 
     const dates: string[] = [];
@@ -72,18 +106,37 @@ export async function PUT(request: NextRequest) {
       d.setUTCDate(d.getUTCDate() + 1);
     }
 
+    // Optional absolute blocked count to set alongside the bulk update.
+    const blockedVal = blocked != null && blocked !== '' && !isNaN(parseInt(blocked)) ? parseInt(blocked) : null;
+
     let upserted = 0;
     for (const dateStr of dates) {
-      await sql`
-        INSERT INTO room_inventory (category_id, date, base_available, base_price, extra_bed_price)
-        VALUES (${categoryId}, ${dateStr}::date, ${baseAvailable}, ${basePrice}, ${extraBedPrice || 0})
-        ON CONFLICT (category_id, date)
-        DO UPDATE SET
-          base_available = ${baseAvailable},
-          base_price = ${basePrice},
-          extra_bed_price = ${extraBedPrice || 0},
-          updated_at = NOW()
-      `;
+      if (blockedVal != null) {
+        // Caller supplied an explicit blocked count — set it.
+        await sql`
+          INSERT INTO room_inventory (category_id, date, base_available, base_price, extra_bed_price, blocked)
+          VALUES (${categoryId}, ${dateStr}::date, ${baseAvailable}, ${basePrice}, ${extraBedPrice || 0}, ${blockedVal})
+          ON CONFLICT (category_id, date)
+          DO UPDATE SET
+            base_available = ${baseAvailable},
+            base_price = ${basePrice},
+            extra_bed_price = ${extraBedPrice || 0},
+            blocked = ${blockedVal},
+            updated_at = NOW()
+        `;
+      } else {
+        // Preserve any existing internal hold on update.
+        await sql`
+          INSERT INTO room_inventory (category_id, date, base_available, base_price, extra_bed_price, blocked)
+          VALUES (${categoryId}, ${dateStr}::date, ${baseAvailable}, ${basePrice}, ${extraBedPrice || 0}, 0)
+          ON CONFLICT (category_id, date)
+          DO UPDATE SET
+            base_available = ${baseAvailable},
+            base_price = ${basePrice},
+            extra_bed_price = ${extraBedPrice || 0},
+            updated_at = NOW()
+        `;
+      }
       upserted++;
     }
 

@@ -73,6 +73,8 @@ module.exports = {
       fontFamily: {
         'playfair': ['Playfair Display', 'serif'],
         'jost': ['Jost', 'sans-serif'],
+        'cinzel': ['Cinzel', 'serif'],
+        'script': ['Great Vibes', 'cursive'],
       },
       animation: {
         'fade-in': 'fadeIn 1s ease-in-out',

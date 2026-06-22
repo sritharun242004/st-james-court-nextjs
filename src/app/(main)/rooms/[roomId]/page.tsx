@@ -22,161 +22,77 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
 };
 
-const slugToCategoryCode: Record<string, string> = {
-  'deluxe-room': 'DELUXE',
-  'super-deluxe': 'SUPER_DELUXE',
-  'executive-suite': 'SUITE',
+// Maps a stored amenity name to a representative icon (best-effort by keyword).
+const amenityIcon = (name: string) => {
+  const n = name.toLowerCase();
+  if (n.includes('wifi') || n.includes('internet')) return <Wifi className="h-5 w-5" />;
+  if (n.includes('coffee') || n.includes('tea') || n.includes('bar')) return <Coffee className="h-5 w-5" />;
+  if (n.includes('bath') || n.includes('shower')) return <Bath className="h-5 w-5" />;
+  if (n.includes('park')) return <Car className="h-5 w-5" />;
+  if (n.includes('dining') || n.includes('room service') || n.includes('food') || n.includes('breakfast')) return <Utensils className="h-5 w-5" />;
+  return <Check className="h-5 w-5" />;
 };
+
+interface RoomView {
+  name: string;
+  price: number;
+  size: string;
+  occupancy: number;
+  bedType: string;
+  heroImage: string;
+  images: string[];
+  description: string;
+  detailedDescription: string;
+  features: string[];
+  amenities: { name: string; icon: React.ReactNode }[];
+  highlights: string[];
+}
+
+const PLACEHOLDER_IMAGE = '/images/newrooms/deluxe/room1.JPG';
 
 const RoomDetail = () => {
   const params = useParams();
   const roomId = params.roomId as string;
-  const [dbPrice, setDbPrice] = useState<number | null>(null);
+
+  const [room, setRoom] = useState<RoomView | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
-    const code = slugToCategoryCode[roomId];
-    if (!code) return;
-    fetch('/api/rooms')
-      .then(res => res.json())
+    let active = true;
+    fetch(`/api/rooms/${encodeURIComponent(roomId)}`, { cache: 'no-store' })
+      .then(res => (res.ok ? res.json() : Promise.reject(new Error('not found'))))
       .then(json => {
-        if (json.data) {
-          const match = json.data.find((r: { code: string }) => r.code === code);
-          if (match?.today_price) setDbPrice(Number(match.today_price));
-        }
+        if (!active || !json.data) return;
+        const d = json.data;
+        const images: string[] = Array.isArray(d.images) && d.images.length > 0 ? d.images : [PLACEHOLDER_IMAGE];
+        setRoom({
+          name: d.name,
+          price: d.today_price ? Number(d.today_price) : 0,
+          size: d.size_label || '',
+          occupancy: d.max_occupancy_per_room || d.capacity || 2,
+          bedType: d.bed_type || '',
+          heroImage: images[0],
+          images,
+          description: d.short_description || '',
+          detailedDescription: d.long_description || d.short_description || '',
+          features: Array.isArray(d.features) ? d.features : [],
+          amenities: (Array.isArray(d.amenities) ? d.amenities : []).map((name: string) => ({ name, icon: amenityIcon(name) })),
+          highlights: Array.isArray(d.highlights) ? d.highlights : [],
+        });
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
   }, [roomId]);
 
-  const roomsData = {
-    'deluxe-room': {
-      id: 'deluxe-room',
-      name: 'Deluxe Room',
-      price: 4500,
-      weekendPrice: 5500,
-      originalPrice: 6500,
-      size: '350 sq ft',
-      occupancy: 2,
-      bedType: 'Twin Beds',
-      heroImage: '/images/newrooms/deluxe/room1.JPG',
-      images: [
-        '/images/newrooms/deluxe/room1.JPG',
-        '/images/newrooms/deluxe/room2.JPG',
-        '/images/newrooms/deluxe/unnamed.jpg',
-      ],
-      description: 'Our Deluxe Room offers a perfect blend of comfort and elegance with twin beds and a stunning Fenesta French window. Designed with colonial charm and modern amenities, this room provides a peaceful retreat after a day of exploring Pondicherry.',
-      detailedDescription: 'Step into our beautifully appointed Deluxe Room, where French colonial architecture meets contemporary comfort. The room features twin beds with premium linens, ensuring a restful night\'s sleep. The highlight of the room is the elegant Fenesta French window that opens to reveal breathtaking views and fills the space with natural light. The room is thoughtfully designed with warm wood furnishings, local artwork, and modern amenities to create a welcoming atmosphere that reflects the unique character of Pondicherry.',
-      features: [
-        'Twin Beds with Premium Linens',
-        'Fenesta French Window',
-        'Air Conditioning',
-        '24hrs Hot & Cold Water',
-        'Complimentary WiFi',
-        'Mini Refrigerator',
-        'Tea/Coffee Making Facilities',
-        'Daily Housekeeping'
-      ],
-      amenities: [
-        { icon: <Wifi className="h-5 w-5" />, name: 'Free WiFi' },
-        { icon: <Coffee className="h-5 w-5" />, name: 'Tea/Coffee Maker' },
-        { icon: <Bath className="h-5 w-5" />, name: 'Private Bathroom' },
-        { icon: <Car className="h-5 w-5" />, name: 'Parking' },
-        { icon: <Utensils className="h-5 w-5" />, name: 'Room Service' }
-      ],
-      highlights: [
-        'Perfect for couples or friends',
-        'French colonial architecture',
-        'Natural light throughout the day',
-        'Quiet and peaceful environment',
-        'Easy access to beach and French Quarter'
-      ]
-    },
-    'super-deluxe': {
-      id: 'super-deluxe',
-      name: 'Super Deluxe',
-      price: 5500,
-      weekendPrice: 7000,
-      originalPrice: 8000,
-      size: '450 sq ft',
-      occupancy: 2,
-      bedType: 'King Size Bed',
-      heroImage: '/images/newrooms/super-deluxe/room1.jpg',
-      images: [
-        '/images/newrooms/super-deluxe/room1.jpg',
-        '/images/newrooms/super-deluxe/room2.JPG',
-        '/images/newrooms/super-deluxe/room3.JPG',
-      ],
-      description: 'Experience enhanced luxury in our Super Deluxe room featuring a king size bed and elegant cushion chair. The double glazing UPVC window ensures tranquility while the sophisticated decor creates an atmosphere of refined comfort.',
-      detailedDescription: 'Our Super Deluxe room represents the perfect upgrade for discerning travelers seeking additional space and luxury. The centerpiece is a plush king size bed adorned with high-quality linens and multiple pillows for ultimate comfort. The room features an elegant cushion chair positioned perfectly for reading or enjoying the view through the double glazing UPVC window. The sophisticated interior design incorporates rich fabrics, tasteful artwork, and premium furnishings that reflect the French colonial heritage of Pondicherry while providing all modern conveniences.',
-      features: [
-        'King Size Bed with Luxury Linens',
-        'Elegant Cushion Chair',
-        'Curtains with Scallops',
-        'Double Glazing UPVC Window',
-        'Enhanced Air Conditioning',
-        'Premium Bathroom Amenities',
-        'Spacious Work Desk',
-        'Complimentary Breakfast'
-      ],
-      amenities: [
-        { icon: <Wifi className="h-5 w-5" />, name: 'High-Speed WiFi' },
-        { icon: <Coffee className="h-5 w-5" />, name: 'Premium Coffee/Tea' },
-        { icon: <Bath className="h-5 w-5" />, name: 'Luxury Bathroom' },
-        { icon: <Car className="h-5 w-5" />, name: 'Valet Parking' },
-        { icon: <Utensils className="h-5 w-5" />, name: '24/7 Room Service' }
-      ],
-      highlights: [
-        'Spacious and luxurious',
-        'Perfect for romantic getaways',
-        'Enhanced privacy with double glazing',
-        'Premium furnishings and decor',
-        'Complimentary breakfast included'
-      ]
-    },
-    'executive-suite': {
-      id: 'executive-suite',
-      name: 'Executive Suite Room',
-      price: 6500,
-      weekendPrice: 7450,
-      originalPrice: 8450,
-      size: '600 sq ft',
-      occupancy: 2,
-      bedType: 'King Size Bed',
-      heroImage: '/images/newrooms/suite/room1.JPG',
-      images: [
-        '/images/newrooms/suite/room1.JPG',
-        '/images/newrooms/suite/room2.JPG',
-        '/images/newrooms/suite/room3.JPG',
-      ],
-      description: 'Indulge in ultimate luxury with our Executive Suite featuring a king size bed, luxurious cushion sofa, and private balcony. The suite includes both shower and bath tub facilities for a truly premium experience.',
-      detailedDescription: 'Our Executive Suite Room represents the pinnacle of luxury accommodation at St James Court Beach Resort. This expansive suite features a separate living area with a luxurious cushion sofa, perfect for relaxation or entertaining. The bedroom area boasts a king size bed with the finest linens and multiple seating options. The crown jewel is the private balcony offering stunning views of the ocean or gardens, providing an intimate space to enjoy morning coffee or evening cocktails. The bathroom is a sanctuary of luxury featuring both a modern shower and a deep soaking bath tub, allowing guests to choose their preferred way to unwind.',
-      features: [
-        'King Size Bed with Premium Linens',
-        'Separate Living Area',
-        'Luxurious Cushion Sofa',
-        'Private Balcony with Views',
-        'Shower and Bath Tub',
-        'Mini Bar',
-        'Executive Work Station',
-        'Complimentary Breakfast & Evening Snacks'
-      ],
-      amenities: [
-        { icon: <Wifi className="h-5 w-5" />, name: 'Premium WiFi' },
-        { icon: <Coffee className="h-5 w-5" />, name: 'Mini Bar & Coffee' },
-        { icon: <Bath className="h-5 w-5" />, name: 'Luxury Bath & Shower' },
-        { icon: <Car className="h-5 w-5" />, name: 'Priority Parking' },
-        { icon: <Utensils className="h-5 w-5" />, name: 'Priority Room Service' }
-      ],
-      highlights: [
-        'Most spacious accommodation',
-        'Private balcony with stunning views',
-        'Separate living and sleeping areas',
-        'Luxury bathroom with tub',
-        'Perfect for special occasions'
-      ]
-    }
-  };
-
-  const room = roomsData[roomId as keyof typeof roomsData];
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-resort-cream">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
 
   if (!room) {
     return (
@@ -190,8 +106,6 @@ const RoomDetail = () => {
       </div>
     );
   }
-
-  const [selectedImage, setSelectedImage] = useState(0);
 
   return (
     <div>
@@ -246,7 +160,7 @@ const RoomDetail = () => {
             >
               <div className="text-center mb-6">
                 <div className="text-sm text-white/70 mb-1">Starting from</div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold">₹{(dbPrice ?? room.price).toLocaleString()}</div>
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold">₹{room.price.toLocaleString()}</div>
                 <div className="text-white/70 text-sm mt-1">per night + GST</div>
               </div>
               <motion.div whileHover={{ scale: 1.05, y: -2 }}>
@@ -282,6 +196,7 @@ const RoomDetail = () => {
                 className="object-cover"
                 sizes="100vw"
                 priority
+                unoptimized
               />
               <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm">
                 {selectedImage + 1} / {room.images.length}
@@ -305,6 +220,7 @@ const RoomDetail = () => {
                     fill
                     className="object-cover"
                     sizes="25vw"
+                    unoptimized
                   />
                 </button>
               ))}
@@ -378,7 +294,7 @@ const RoomDetail = () => {
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between">
                         <span className="text-slate-600">Today&apos;s rate:</span>
-                        <span className="font-semibold text-blue-600">₹{(dbPrice ?? room.price).toLocaleString()}</span>
+                        <span className="font-semibold text-blue-600">₹{room.price.toLocaleString()}</span>
                       </div>
                       <div className="text-xs text-slate-500">*Prices exclude 12% GST. Rates may vary by date.</div>
                     </div>

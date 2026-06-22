@@ -81,6 +81,9 @@ const Booking = () => {
   ];
 
   const [roomTypes, setRoomTypes] = useState(defaultRoomTypes);
+  // Stable list of category codes — only changes when room types are added/removed,
+  // not when their prices update, so the availability effect doesn't loop.
+  const categoryCodes = roomTypes.map(r => r.id).join(',');
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
   const [availabilityData, setAvailabilityData] = useState<Record<string, { available: number; avgPrice: number; avgMemberPrice: number | null; extraBedPrice: number; maxExtraBeds: number }>>({});
 
@@ -123,20 +126,43 @@ const Booking = () => {
       .catch(() => {});
   }, [user, getToken]);
 
+  // Load the live room-type catalogue (names + prices) so admin changes
+  // (new types, renamed types, price edits) reflect on the booking page.
+  React.useEffect(() => {
+    fetch('/api/rooms', { cache: 'no-store' })
+      .then(res => res.json())
+      .then(json => {
+        if (Array.isArray(json.data) && json.data.length > 0) {
+          setRoomTypes(
+            json.data.map((r: { code: string; name: string; today_price: number | null }) => ({
+              id: r.code,
+              name: r.name,
+              price: r.today_price ?? defaultRoomTypes.find(d => d.id === r.code)?.price ?? 0,
+            }))
+          );
+        }
+      })
+      .catch(() => {
+        // Keep default room types on error
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   React.useEffect(() => {
     if (!checkIn || !checkOut || checkOut <= checkIn) return;
 
     const fetchAvailability = async () => {
       setAvailabilityLoading(true);
       try {
-        const categories = ['DELUXE', 'SUPER_DELUXE', 'SUITE', 'FAMILY', 'CLUB'];
+        const categories = categoryCodes ? categoryCodes.split(',') : [];
         const results: Record<string, { available: number; avgPrice: number; avgMemberPrice: number | null; extraBedPrice: number; maxExtraBeds: number }> = {};
 
         const privilegeParam = userHasPrivilege ? '&hasPrivilege=true' : '';
         await Promise.all(
           categories.map(async (cat) => {
             const res = await fetch(
-              `/api/availability?category=${cat}&start=${formatDate(checkIn)}&end=${formatDate(checkOut)}${privilegeParam}`
+              `/api/availability?category=${cat}&start=${formatDate(checkIn)}&end=${formatDate(checkOut)}${privilegeParam}`,
+              { cache: 'no-store' }
             );
             if (res.ok) {
               const data = await res.json();
@@ -171,7 +197,8 @@ const Booking = () => {
     };
 
     fetchAvailability();
-  }, [checkIn, checkOut, userHasPrivilege]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkIn, checkOut, userHasPrivilege, categoryCodes]);
 
   const formatDate = (date: Date): string => {
     const y = date.getFullYear();

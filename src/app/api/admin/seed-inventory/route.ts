@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { authenticateAdmin } from '@/lib/adminAuth';
+import { ensureRoomCategorySchema, backfillKnownRoomContent } from '@/lib/roomSchema';
 
 // ---------------------------------------------------------------------------
 // POST /api/admin/seed-inventory
@@ -15,23 +16,26 @@ export async function POST(request: NextRequest) {
   try {
     await authenticateAdmin(request);
     const sql = getDb();
+    await ensureRoomCategorySchema(sql);
 
     // -----------------------------------------------------------------------
-    // 1. Upsert all 5 room categories with correct counts & occupancy
+    // 1. Upsert all 5 room categories with correct counts, occupancy & the
+    //    default (weekday) rack rate shown on the booking page.
     // -----------------------------------------------------------------------
     await sql`
-      INSERT INTO room_category (code, name, capacity, max_occupancy_per_room, max_extra_beds_per_room)
+      INSERT INTO room_category (code, name, capacity, max_occupancy_per_room, max_extra_beds_per_room, base_price)
       VALUES
-        ('DELUXE',      'Deluxe Room',                    18, 3, 1),
-        ('SUPER_DELUXE','Super Deluxe & Heritage Room',   18, 3, 1),
-        ('SUITE',       'Executive Suite',                 4, 4, 2),
-        ('FAMILY',      'Family Room',                     1, 6, 2),
-        ('CLUB',        'Club Room',                       1, 2, 0)
+        ('DELUXE',      'Deluxe Room',                    18, 3, 1, 4500.00),
+        ('SUPER_DELUXE','Super Deluxe & Heritage Room',   18, 3, 1, 5500.00),
+        ('SUITE',       'Executive Suite',                 4, 4, 2, 6500.00),
+        ('FAMILY',      'Family Room',                     1, 6, 2, 9000.00),
+        ('CLUB',        'Club Room',                       1, 2, 0, 1500.00)
       ON CONFLICT (code) DO UPDATE SET
         name                    = EXCLUDED.name,
         capacity                = EXCLUDED.capacity,
         max_occupancy_per_room  = EXCLUDED.max_occupancy_per_room,
         max_extra_beds_per_room = EXCLUDED.max_extra_beds_per_room,
+        base_price              = EXCLUDED.base_price,
         updated_at              = now()
     `;
 
@@ -96,6 +100,10 @@ export async function POST(request: NextRequest) {
         extra_bed_price = EXCLUDED.extra_bed_price,
         updated_at      = now()
     `;
+
+    // Ensure the default categories carry their published content (images,
+    // descriptions, features) without clobbering any admin edits.
+    await backfillKnownRoomContent(sql);
 
     return NextResponse.json({
       success: true,

@@ -114,7 +114,7 @@ const Header = () => {
           }`}
           layout
         >
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center relative">
             <motion.div
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
@@ -125,9 +125,8 @@ const Header = () => {
                   <img
                     src="/logo.jpeg"
                     alt="St James Court Beach Resort Logo"
-                    className="h-8 w-8 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain rounded-xl shadow-glass -ml-1 sm:-ml-2"
+                    className="h-10 w-10 sm:h-14 sm:w-14 lg:h-16 lg:w-16 object-contain rounded-xl bg-white shadow-lg ring-1 ring-white/60 -ml-1 sm:-ml-2"
                   />
-                  <div className="absolute -inset-0.5 rounded-xl border border-resort-gold/30 pointer-events-none" />
                 </div>
                 <div>
                   <h1 className={`font-playfair font-bold text-sm sm:text-lg lg:text-xl transition-colors duration-300 ml-1 ${
@@ -144,8 +143,8 @@ const Header = () => {
               </Link>
             </motion.div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-0.5">
+            {/* Desktop Navigation - centered */}
+            <div className="hidden lg:flex items-center space-x-0.5 absolute left-1/2 -translate-x-1/2">
               {navigation.map((item, index) => (
                 <motion.div
                   key={item.name}
@@ -185,7 +184,10 @@ const Header = () => {
                   </Link>
                 </motion.div>
               ))}
+            </div>
 
+            {/* Desktop Action Buttons - right */}
+            <div className="hidden lg:flex items-center gap-3">
               <motion.div
                 initial={mounted ? { scale: 0, opacity: 0 } : false}
                 animate={{ scale: 1, opacity: 1 }}
@@ -195,17 +197,17 @@ const Header = () => {
               >
                 <Link
                   href="/booking"
-                  className="ml-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-full font-jost font-semibold shadow-lg hover:shadow-ocean hover:from-blue-700 hover:to-blue-800 transition-all duration-300 cursor-pointer"
+                  className="inline-flex items-center justify-center min-w-[130px] bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-full font-jost font-semibold shadow-lg hover:shadow-ocean hover:from-blue-700 hover:to-blue-800 transition-all duration-300 cursor-pointer"
                 >
                   Book Now
                 </Link>
               </motion.div>
 
               {user ? (
-                <div className="ml-3 user-menu-container">
+                <div className="user-menu-container">
                   <motion.button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 cursor-pointer ${
+                    className={`flex items-center justify-center gap-2 min-w-[130px] px-6 py-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                       isScrolled
                         ? 'bg-sand-100 hover:bg-sand-200 border border-sand-200'
                         : 'bg-white/15 hover:bg-white/25 border border-white/20'
@@ -214,7 +216,7 @@ const Header = () => {
                     whileTap={{ scale: 0.97 }}
                   >
                     <User className={`h-4 w-4 ${isScrolled ? 'text-blue-900' : 'text-white'}`} />
-                    <span className={`font-medium text-sm ${isScrolled ? 'text-blue-900' : 'text-white'}`}>
+                    <span className={`font-semibold text-sm ${isScrolled ? 'text-blue-900' : 'text-white'}`}>
                       {user.full_name.split(' ')[0]}
                     </span>
                   </motion.button>
@@ -224,11 +226,10 @@ const Header = () => {
                   initial={mounted ? { scale: 0, opacity: 0 } : false}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.9 }}
-                  className="ml-3"
                 >
                   <Link
                     href="/login"
-                    className={`px-5 py-2.5 rounded-full font-jost font-semibold transition-all duration-300 cursor-pointer ${
+                    className={`inline-flex items-center justify-center min-w-[130px] px-6 py-2.5 rounded-full font-jost font-semibold transition-all duration-300 cursor-pointer ${
                       isScrolled
                         ? 'bg-sand-100 text-blue-900 hover:bg-sand-200 border border-sand-200'
                         : 'bg-white/15 text-white hover:bg-white/25 border border-white/20'

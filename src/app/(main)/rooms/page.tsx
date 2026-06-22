@@ -21,65 +21,32 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
 };
 
-// Static data that DB doesn't store (images, descriptions, features)
-const roomStaticData: Record<string, {
-  id: string;
-  category: string;
-  size: string;
-  image: string;
-  gallery: string[];
-  description: string;
-  features: string[];
-}> = {
-  DELUXE: {
-    id: 'deluxe-room',
-    category: 'deluxe',
-    size: 'Standard',
-    image: '/images/newrooms/deluxe/room1.JPG',
-    gallery: [
-      '/images/newrooms/deluxe/room1.JPG',
-      '/images/newrooms/deluxe/room2.JPG',
-      '/images/newrooms/deluxe/unnamed.jpg',
-    ],
-    description: 'Comfortable room with twin beds and Fenesta French window, perfect for a relaxing stay.',
-    features: ['Twin Beds', 'Fenesta French Window', 'Air Conditioning', '24hrs Hot & Cold Water'],
-  },
-  SUPER_DELUXE: {
-    id: 'super-deluxe',
-    category: 'deluxe',
-    size: 'Spacious',
-    image: '/images/newrooms/super-deluxe/room1.jpg',
-    gallery: [
-      '/images/newrooms/super-deluxe/room1.jpg',
-      '/images/newrooms/super-deluxe/room2.JPG',
-      '/images/newrooms/super-deluxe/room3.JPG',
-    ],
-    description: 'Upgraded room with king size bed and elegant furnishings for enhanced comfort.',
-    features: ['King Size Bed', 'Cushion Chair', 'Curtains with Scallops', 'Double Glazing UPVC Window'],
-  },
-  SUITE: {
-    id: 'executive-suite',
-    category: 'suite',
-    size: 'Luxury Suite',
-    image: '/images/newrooms/suite/room1.JPG',
-    gallery: [
-      '/images/newrooms/suite/room1.JPG',
-      '/images/newrooms/suite/room2.JPG',
-      '/images/newrooms/suite/room3.JPG',
-    ],
-    description: 'Premium suite with king size bed, luxurious cushion sofa and private balcony for the ultimate experience.',
-    features: ['King Size Bed', 'Luxurious Cushion Sofa', 'Private Balcony', 'Shower and Bath Tub'],
-  },
-};
+// A room as returned by /api/rooms (fully DB-driven; no hardcoded content).
+interface DbRoom {
+  code: string;
+  name: string;
+  slug: string | null;
+  category_group: string | null;
+  capacity: number | null;
+  today_price: number | null;
+  size_label: string | null;
+  short_description: string | null;
+  features: string[] | null;
+  images: string[] | null;
+}
+
+// Shown when a room has no photos uploaded yet.
+const PLACEHOLDER_IMAGE = '/images/newrooms/deluxe/room1.JPG';
 
 const Rooms = () => {
   const [roomFilter, setRoomFilter] = useState('all');
   const [selectedRestaurant, setSelectedRestaurant] = useState('sea-queen');
   const [amenityCategory, setAmenityCategory] = useState('beach');
-  const [dbRooms, setDbRooms] = useState<Array<{ code: string; name: string; capacity: number; today_price: number | null }>>([]);
+  const [dbRooms, setDbRooms] = useState<DbRoom[]>([]);
 
   useEffect(() => {
-    fetch('/api/rooms')
+    // no-store: always reflect the latest admin changes (add/edit/delete).
+    fetch('/api/rooms', { cache: 'no-store' })
       .then(res => res.json())
       .then(json => { if (json.data) setDbRooms(json.data); })
       .catch(() => {});
@@ -91,35 +58,22 @@ const Rooms = () => {
     setCardSlides(prev => ({ ...prev, [roomId]: idx }));
   }, []);
 
-  // Merge DB data with static data
-  const rooms = dbRooms.length > 0
-    ? dbRooms.map(db => {
-        const staticInfo = roomStaticData[db.code] || roomStaticData.DELUXE;
-        return {
-          id: staticInfo.id,
-          name: db.name,
-          category: staticInfo.category,
-          price: db.today_price ? Number(db.today_price) : 0,
-          size: staticInfo.size,
-          occupancy: db.capacity || 2,
-          image: staticInfo.image,
-          gallery: staticInfo.gallery,
-          description: staticInfo.description,
-          features: staticInfo.features,
-        };
-      })
-    : Object.entries(roomStaticData).map(([code, s]) => ({
-        id: s.id,
-        name: code === 'DELUXE' ? 'Deluxe Room' : code === 'SUPER_DELUXE' ? 'Super Deluxe' : 'Executive Suite Room',
-        category: s.category,
-        price: code === 'DELUXE' ? 4500 : code === 'SUPER_DELUXE' ? 5500 : 6500,
-        size: s.size,
-        occupancy: 2,
-        image: s.image,
-        gallery: s.gallery,
-        description: s.description,
-        features: s.features,
-      }));
+  // Everything comes from the DB / admin. New room types appear automatically.
+  const rooms = dbRooms.map(db => {
+    const gallery = db.images && db.images.length > 0 ? db.images : [PLACEHOLDER_IMAGE];
+    return {
+      id: db.slug || db.code.toLowerCase(),
+      name: db.name,
+      category: db.category_group || 'other',
+      price: db.today_price ? Number(db.today_price) : 0,
+      size: db.size_label || '',
+      occupancy: db.capacity || 2,
+      image: gallery[0],
+      gallery,
+      description: db.short_description || '',
+      features: db.features || [],
+    };
+  });
 
   // Restaurant data
   const restaurants = [
@@ -131,7 +85,7 @@ const Rooms = () => {
       hours: '7:00 AM - 11:00 PM',
       image: '/images/dining/dining-1.jpg',
       description: 'Our signature family restaurant serving a wide range of multi-cuisine dishes in a comfortable indoor setting, perfect for family gatherings and celebrations.',
-      specialties: ['South Indian Thali', 'North Indian Curries', 'Chinese Specials', 'Continental Dishes'],
+      specialties: ['South Indian', 'North Indian Curries', 'Chinese Specials', 'Continental Dishes'],
       priceRange: '₹₹₹',
       rating: 4.8
     },
@@ -141,7 +95,7 @@ const Rooms = () => {
       type: 'Beachfront Open Air',
       cuisine: 'Coastal & Seafood',
       hours: '7:00 AM - 10:30 PM',
-      image: '/images/dining/dining-3.jpg',
+      image: '/images/dining/dining-4.jpg',
       description: 'Dine under the open sky with the sound of waves as your backdrop. Fresh seafood and coastal delicacies served right on the waterfront.',
       specialties: ['Fresh Grilled Seafood', 'Prawns Masala', 'Beach BBQ Platter', 'Coastal Fish Fry'],
       priceRange: '₹₹₹',
@@ -169,11 +123,8 @@ const Rooms = () => {
       icon: <Waves className="h-5 w-5 sm:h-8 sm:w-8" />,
       items: [
         { name: "Private Beach Access", description: "Exclusive beachfront with pristine sandy shores" },
-        { name: "Water Sports Center", description: "Kayaking, jet skiing, and parasailing" },
         { name: "Swimming Pools", description: "Multiple pools including infinity and kids' pools" },
-        { name: "Beach Volleyball", description: "Professional court with equipment provided" },
-        { name: "Fishing Trips", description: "Organized deep-sea and coastal fishing excursions" },
-        { name: "Sunset Cruises", description: "Romantic boat trips along the coast" }
+        { name: "Beach Volleyball", description: "Professional court with equipment provided" }
       ]
     },
     {
@@ -202,12 +153,6 @@ const Rooms = () => {
         { name: "Cultural Shows", description: "Traditional Indian dance and music performances" }
       ]
     }
-  ];
-
-  const roomCategories = [
-    { id: 'all', name: 'All Rooms' },
-    { id: 'deluxe', name: 'Deluxe' },
-    { id: 'suite', name: 'Suites' }
   ];
 
   const filteredRooms = roomFilter === 'all' ? rooms : rooms.filter(room => room.category === roomFilter);
@@ -287,6 +232,7 @@ const Rooms = () => {
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           priority={index === 0 && i === 0}
+                          unoptimized
                         />
                       </div>
                     ))}
@@ -629,23 +575,9 @@ const Rooms = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-8 max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp} custom={0} whileHover={{ y: -6 }} className="relative group overflow-hidden rounded-2xl">
-              <img
-                src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=800"
-                alt="Spa Treatment"
-                className="w-full h-36 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                <div className="p-4 sm:p-5 lg:p-6 text-white">
-                  <h3 className="text-base sm:text-xl lg:text-2xl font-bold mb-2">Ayurvedic Spa</h3>
-                  <p>Rejuvenating treatments with ocean views</p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div variants={fadeInUp} custom={1} whileHover={{ y: -6 }} className="relative group overflow-hidden rounded-2xl">
               <img
                 src="https://images.pexels.com/photos/863988/pexels-photo-863988.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Water Sports"
@@ -659,7 +591,7 @@ const Rooms = () => {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeInUp} custom={2} whileHover={{ y: -6 }} className="relative group overflow-hidden rounded-2xl">
+            <motion.div variants={fadeInUp} custom={1} whileHover={{ y: -6 }} className="relative group overflow-hidden rounded-2xl">
               <img
                 src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Fine Dining"
