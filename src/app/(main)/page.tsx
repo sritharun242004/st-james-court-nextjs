@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import AnimatedSection from '@/components/AnimatedSection';
 import WaveDivider from '@/components/ui/wave-divider';
 import GoldSeparator from '@/components/ui/gold-separator';
+import InclusionsSection from '@/components/InclusionsSection';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -122,12 +123,12 @@ const Home = () => {
   ];
 
   const faqs = [
-    { q: "What are your check-in and check-out times?", a: "Check-in is at 3:00 PM and check-out is at 11:00 AM. Early check-in and late check-out may be available upon request." },
-    { q: "Do you provide airport transportation?", a: "Yes, we offer complimentary airport pickup and drop-off service from Puducherry Airport. Please inform us 24 hours in advance." },
-    { q: "What dining options are available?", a: "We have 3 dining venues — Sea Queen (family restaurant), Sea Breeze (beachfront open air), and The Ocean (bar & restaurant) — plus 24/7 room service." },
-    { q: "Is WiFi available throughout the resort?", a: "Yes, complimentary high-speed WiFi is available throughout the resort, including all rooms and common areas." },
-    { q: "Are pets allowed at the resort?", a: "Currently, we do not allow pets at the resort, with the exception of certified service animals." },
-    { q: "What activities are available for children?", a: "We offer a kids' club with supervised activities, children's pool, playground, and special children's menu at our restaurants." },
+    { q: "What are your check-in and check-out times?", a: "Check-in is at 1:00 PM and check-out is at 11:00 AM. Early check-in and late check-out may be available upon request." },
+    { q: "Do you provide airport transportation?", a: "Our front office team is available 24/7 and can assist with local travel arrangements. Please contact us for details." },
+    { q: "What dining options are available?", a: "We have 3 dining venues — Sea Queen (family restaurant), Sea Breeze (beachfront open air), and The Ocean (bar & restaurant with liquor at MRP)." },
+    { q: "Is WiFi available throughout the resort?", a: "Yes, complimentary high-speed WiFi is available in all common areas of the resort." },
+    { q: "Are pets allowed at the resort?", a: "Yes! Pets are welcome with prior notice. A pet surcharge applies per stay. Please inform us at the time of booking." },
+    { q: "What events can be hosted at the resort?", a: "We host all types of events — weddings, birthday parties, corporate meetings, team outings, product launches, and more. Contact our events team for packages." },
   ];
 
   return (
@@ -399,6 +400,12 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Wave Divider */}
+      <WaveDivider fill="#f0f4fa" />
+
+      {/* Inclusions Section */}
+      <InclusionsSection />
 
       {/* Wave Divider */}
       <WaveDivider fill="#FFFBF5" />

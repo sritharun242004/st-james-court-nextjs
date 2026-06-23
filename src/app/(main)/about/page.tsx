@@ -34,12 +34,14 @@ const staggerContainer = {
 const amenities = [
   'Private Beach Access', 'Swimming Pool', 'Sea Queen Restaurant', 'Sea Breeze Restaurant',
   'The Ocean Bar', 'Conference Hall (House of Lords)', 'Board Room (Royal Castle)', 'Lawn for Events',
-  '24/7 Room Service', 'Free WiFi', 'Air Conditioning', 'LCD Television',
+  'Free WiFi', 'Air Conditioning', 'LCD Television',
   'Intercom Facility', 'Running Hot & Cold Water', 'Attached Bathrooms', 'Wardrobe',
-  'Mini Fridge', 'Tea/Coffee Maker', 'Iron & Ironing Board', 'Doctor on Call',
+  'Tea/Coffee Maker', 'Iron & Ironing Board', 'Doctor on Call',
   'Laundry Service', 'Car Parking', 'Power Backup', 'CCTV Surveillance',
-  'Fire Safety', 'Travel Desk', 'Currency Exchange', 'Luggage Storage',
+  'Fire Safety', 'Travel Desk', 'Luggage Storage',
   'Wheelchair Access', "Children's Play Area",
+  'All Events & Corporate Meetings', '24/7 Front Office & Security',
+  'Liquor Available at MRP', 'Pets Welcome (charges apply)',
 ];
 
 const stats = [

@@ -44,19 +44,19 @@ const FAQ = () => {
       id: 2,
       category: 'booking',
       question: 'What is your cancellation policy?',
-      answer: 'Our standard cancellation policy allows free cancellation up to 48 hours before your arrival date. For bookings during peak season or special events, a 72-hour cancellation policy applies. Cancellations made within the specified timeframe will incur a one-night charge. Special packages may have different cancellation terms. For events, it\'s better to cancel within 24 hours'
+      answer: 'Our cancellation policy requires a minimum of 96 hours (4 days) notice before your scheduled check-in date. Cancellations made within 96 hours of check-in will incur a full one-night charge with no refund. Cancellations made more than 96 hours in advance will receive a 50% refund of the total booking amount. Special event packages may have separate terms — please confirm at the time of booking.'
     },
     {
       id: 3,
       category: 'checkin',
       question: 'What are your check-in and check-out times?',
-      answer: 'Check-in time is 3:00 PM and check-out time is 11:00 AM. Early check-in and late check-out may be available upon request and subject to availability. We offer complimentary luggage storage if you arrive before check-in time or need to leave after check-out.'
+      answer: 'Check-in time is 1:00 PM and check-out time is 11:00 AM. Early check-in and late check-out may be available upon request and subject to availability. We offer complimentary luggage storage if you arrive before check-in time or need to leave after check-out.'
     },
     {
       id: 4,
       category: 'amenities',
-      question: 'Do you provide airport transportation?',
-      answer: 'Yes, we offer complimentary airport pickup and drop-off service from Puducherry Airport. For Chennai Airport, we provide transportation at a nominal charge. Please inform us of your flight details at least 24 hours in advance to arrange the service.'
+      question: 'What are the room rates?',
+      answer: 'Weekday rates (Mon–Thu): Deluxe Room ₹4,500+tax, Super Deluxe ₹5,500+tax, Executive Suite ₹6,500+tax, Extra Person ₹1,000+tax. Weekend rates (Fri–Sun & Holidays): Deluxe Room ₹5,500+tax, Super Deluxe ₹6,500+tax, Executive Suite ₹7,500+tax, Extra Person ₹1,500+tax. Note: Deluxe Room does not include a refrigerator.'
     },
     {
       id: 5,
@@ -73,20 +73,20 @@ const FAQ = () => {
     {
       id: 7,
       category: 'activities',
-      question: 'What water sports activities are available?',
-      answer: 'We offer a variety of water sports including kayaking, jet skiing, parasailing, banana boat rides, and fishing trips. Our water sports center is open from 9:00 AM to 5:00 PM, and all activities include safety equipment and basic instruction. Some activities may be weather-dependent.'
+      question: 'What outdoor and recreational activities are available?',
+      answer: 'We offer a wide range of activities including beach access until 7:30 PM, swimming pool usage until 7:30 PM, outdoor games (Cricket, Volleyball & Football), indoor games (Carrom & Chess), lawn area access, and children\'s play area. Our front office team is available 24/7 to assist with activity bookings and any special arrangements.'
     },
     {
       id: 8,
       category: 'policies',
       question: 'What is your policy regarding children?',
-      answer: 'Children are welcome at our resort! Kids under 5 stay free when sharing a room with parents. We offer a kids\' club with supervised activities for ages 4-12, a children\'s pool, playground, and special children\'s menu at our restaurants. Baby cots and high chairs are available upon request.'
+      answer: 'Children are very welcome at our resort! Kids under 5 stay free when sharing a room with parents. We have a dedicated children\'s play area available to all guests. Baby cots and high chairs are available upon request. Our front office team is happy to assist with any special arrangements for families.'
     },
     {
       id: 9,
       category: 'booking',
-      question: 'Do you offer special packages for weddings and events?',
-      answer: 'Yes, we specialize in destination weddings and special events. Our wedding packages include ceremony setup, floral decorations, photography, catering, and accommodation for the couple. We have dedicated event planners who will work with you to create your perfect celebration. Please contact our events team for detailed information.'
+      question: 'Do you host events, parties, and corporate meetings?',
+      answer: 'Absolutely! We specialise in all types of events — weddings, birthday parties, anniversary celebrations, corporate meetings, team outings, product launches, and more. Our dedicated event spaces (House of Lords Conference Hall and Royal Castle Board Room) can be configured for any occasion. Our event planning team will work with you to create a fully customised experience. Contact us for detailed packages and pricing.'
     },
     {
       id: 10,
@@ -122,7 +122,19 @@ const FAQ = () => {
       id: 15,
       category: 'policies',
       question: 'What is your pet policy?',
-      answer: 'We understand that pets are part of the family, but currently, we do not allow pets at the resort, with the exception of certified service animals. We apologize for any inconvenience and can help you find nearby pet boarding facilities if needed.'
+      answer: 'Pets are welcome at St James Court Beach Resort with prior notice! A pet surcharge applies per stay to cover additional cleaning and care provisions. Please inform us at the time of booking so we can make suitable arrangements. Pets must be kept on a leash in common areas and are not permitted in the restaurant or pool zones. Certified service animals are always welcome at no additional charge.'
+    },
+    {
+      id: 16,
+      category: 'dining',
+      question: 'Is liquor available at the resort?',
+      answer: 'Yes, liquor is available at The Ocean Bar & Restaurant at MRP (Maximum Retail Price). Please note that outside food and liquor brought from outside the resort are strictly not allowed on the premises.'
+    },
+    {
+      id: 17,
+      category: 'amenities',
+      question: 'What front office and security services are available?',
+      answer: 'Our front office and security team operates 24 hours a day, 7 days a week. Services include guest assistance, luggage handling, concierge support, power backup, and round-the-clock security with CCTV surveillance throughout the property.'
     }
   ];
 

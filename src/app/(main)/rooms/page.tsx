@@ -122,22 +122,22 @@ const Rooms = () => {
       title: "Beach & Water Activities",
       icon: <Waves className="h-5 w-5 sm:h-8 sm:w-8" />,
       items: [
-        { name: "Private Beach Access", description: "Exclusive beachfront with pristine sandy shores" },
-        { name: "Swimming Pools", description: "Multiple pools including infinity and kids' pools" },
+        { name: "Private Beach Access", description: "Exclusive beachfront with pristine sandy shores until 7:30 PM" },
+        { name: "Swimming Pool", description: "Refreshing pool for all guests until 7:30 PM" },
         { name: "Beach Volleyball", description: "Professional court with equipment provided" }
       ]
     },
     {
       id: 'wellness',
-      title: "Wellness & Recreation",
+      title: "Recreation & Games",
       icon: <Heart className="h-5 w-5 sm:h-8 sm:w-8" />,
       items: [
-        { name: "Ayurvedic Spa", description: "Traditional treatments with ocean views" },
-        { name: "Yoga Pavilion", description: "Daily sunrise and sunset yoga sessions" },
-        { name: "Fitness Center", description: "State-of-the-art gym with personal trainers" },
-        { name: "Meditation Garden", description: "Peaceful space for mindfulness practices" },
-        { name: "Tennis Court", description: "Professional court with equipment rental" },
-        { name: "Cycling Tours", description: "Guided bike tours through French Quarter" }
+        { name: "Outdoor Games", description: "Cricket, Volleyball & Football on our open grounds" },
+        { name: "Indoor Games", description: "Carrom & Chess available for all guests" },
+        { name: "Lawn Area", description: "Spacious lawn for relaxation and casual activities" },
+        { name: "Children's Play Area", description: "Safe and fun play zone for young guests" },
+        { name: "24/7 Front Office", description: "Round-the-clock assistance and concierge services" },
+        { name: "Security & Power Backup", description: "24-hour security with CCTV and full power backup" }
       ]
     },
     {
@@ -147,10 +147,10 @@ const Rooms = () => {
       items: [
         { name: "Sea Queen", description: "Family restaurant with multi-cuisine indoor dining" },
         { name: "Sea Breeze", description: "Beachfront open-air dining with ocean views" },
-        { name: "The Ocean", description: "Bar & restaurant with cocktails and contemporary cuisine" },
-        { name: "Coffee Shop", description: "Artisanal coffee and fresh pastries" },
-        { name: "Room Service", description: "24-hour gourmet dining in your room" },
-        { name: "Cultural Shows", description: "Traditional Indian dance and music performances" }
+        { name: "The Ocean", description: "Bar & restaurant with liquor at MRP and contemporary cuisine" },
+        { name: "Buffet Breakfast", description: "Lavish buffet breakfast included with every stay" },
+        { name: "Events & Corporate", description: "Weddings, parties, corporate meetings & all events hosted" },
+        { name: "Pets Welcome", description: "Pets allowed with prior notice — additional charges apply" }
       ]
     }
   ];

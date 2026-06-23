@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/AnimatedSection';
 import WaveDivider from '@/components/ui/wave-divider';
 import GoldSeparator from '@/components/ui/gold-separator';
+import InclusionsSection from '@/components/InclusionsSection';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -231,6 +232,11 @@ const RoomDetail = () => {
 
       <WaveDivider fill="#f8f6f3" />
 
+      {/* Inclusions */}
+      <InclusionsSection />
+
+      <WaveDivider fill="#f8f6f3" />
+
       {/* Room Details */}
       <section className="py-12 bg-resort-pearl">
         <div className="max-w-7xl mx-auto px-4">
@@ -331,7 +337,7 @@ const RoomDetail = () => {
             <motion.div variants={fadeInUp} custom={0} whileHover={{ y: -6 }} className="text-center p-4 sm:p-5 lg:p-6 glass-card bg-blue-50/40 rounded-2xl">
               <Clock className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-lg font-bold text-blue-900 mb-2">Check-in/Check-out</h3>
-              <p className="text-slate-600 text-sm">Check-in: 3:00 PM<br />Check-out: 11:00 AM</p>
+              <p className="text-slate-600 text-sm">Check-in: 1:00 PM<br />Check-out: 11:00 AM</p>
             </motion.div>
             <motion.div variants={fadeInUp} custom={1} whileHover={{ y: -6 }} className="text-center p-4 sm:p-5 lg:p-6 glass-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
               <Car className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-green-600 mx-auto mb-4" />

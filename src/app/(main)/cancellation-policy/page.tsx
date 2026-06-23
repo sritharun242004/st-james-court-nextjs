@@ -38,11 +38,11 @@ export default function CancellationPolicy() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="bg-slate-50 rounded-lg p-5">
                   <h3 className="text-lg font-semibold text-slate-800 mb-2">Check-in Time</h3>
-                  <p className="text-2xl font-bold text-blue-600">12:00 Noon</p>
+                  <p className="text-2xl font-bold text-blue-600">01:00 PM</p>
                 </div>
                 <div className="bg-slate-50 rounded-lg p-5">
                   <h3 className="text-lg font-semibold text-slate-800 mb-2">Check-out Time</h3>
-                  <p className="text-2xl font-bold text-blue-600">12:00 Noon</p>
+                  <p className="text-2xl font-bold text-blue-600">11:00 AM</p>
                 </div>
               </div>
               <p className="text-slate-600 mt-6 leading-relaxed">
@@ -62,18 +62,18 @@ export default function CancellationPolicy() {
                 <div className="flex items-start gap-4 p-4 bg-red-50 rounded-lg border border-red-100">
                   <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <h3 className="font-semibold text-slate-900">Within 72 hours of check-in date</h3>
+                    <h3 className="font-semibold text-slate-900">Within 96 hours of check-in date</h3>
                     <p className="text-slate-600 mt-1">
-                      No refund will be provided for cancellations made within 72 hours of the scheduled check-in date.
+                      No refund will be provided for cancellations made within 96 hours (4 days) of the scheduled check-in date.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-amber-50 rounded-lg border border-amber-100">
                   <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <h3 className="font-semibold text-slate-900">7 days or more before check-in</h3>
+                    <h3 className="font-semibold text-slate-900">More than 96 hours before check-in</h3>
                     <p className="text-slate-600 mt-1">
-                      A 50% refund of the total booking amount will be processed for cancellations made 7 days or more before the scheduled check-in date.
+                      A 50% refund of the total booking amount will be processed for cancellations made more than 96 hours before the scheduled check-in date.
                     </p>
                   </div>
                 </div>
@@ -104,6 +104,62 @@ export default function CancellationPolicy() {
             </div>
           </AnimatedSection>
 
+          {/* Room Rates */}
+          <AnimatedSection delay={0.18}>
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-playfair font-bold text-slate-900 mb-4 sm:mb-6">
+                Room Rates
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Weekdays */}
+                <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                  <h3 className="text-lg font-bold text-blue-900 mb-4">Weekdays (Mon – Thu)</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-700">Deluxe Room</span>
+                      <span className="font-semibold text-blue-700">₹4,500 + tax</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-700">Super Deluxe</span>
+                      <span className="font-semibold text-blue-700">₹5,500 + tax</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-700">Executive Suite</span>
+                      <span className="font-semibold text-blue-700">₹6,500 + tax</span>
+                    </div>
+                    <div className="flex justify-between items-center border-t border-blue-200 pt-3">
+                      <span className="text-slate-700">Extra Person</span>
+                      <span className="font-semibold text-blue-700">₹1,000 + tax</span>
+                    </div>
+                  </div>
+                </div>
+                {/* Weekends */}
+                <div className="bg-amber-50 rounded-xl p-5 border border-amber-100">
+                  <h3 className="text-lg font-bold text-amber-900 mb-4">Weekends (Fri – Sun &amp; Holidays)</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-700">Deluxe Room</span>
+                      <span className="font-semibold text-amber-700">₹5,500 + tax</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-700">Super Deluxe</span>
+                      <span className="font-semibold text-amber-700">₹6,500 + tax</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-700">Executive Suite</span>
+                      <span className="font-semibold text-amber-700">₹7,500 + tax</span>
+                    </div>
+                    <div className="flex justify-between items-center border-t border-amber-200 pt-3">
+                      <span className="text-slate-700">Extra Person</span>
+                      <span className="font-semibold text-amber-700">₹1,500 + tax</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p className="text-slate-500 text-sm mt-4">* Deluxe Room does not include a refrigerator. All rates are subject to applicable taxes.</p>
+            </div>
+          </AnimatedSection>
+
           {/* Modifications */}
           <AnimatedSection delay={0.2}>
             <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
@@ -111,7 +167,7 @@ export default function CancellationPolicy() {
                 Booking Modifications
               </h2>
               <p className="text-slate-600 leading-relaxed">
-                Booking date changes are subject to availability. Please contact the resort at least 48 hours
+                Booking date changes are subject to availability. Please contact the resort at least 96 hours
                 before your scheduled check-in date to request any modifications. Changes to room type or
                 number of guests may result in revised pricing.
               </p>
