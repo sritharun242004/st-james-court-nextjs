@@ -28,6 +28,10 @@ interface BookingData {
   bed_type?: string | null;
   size_label?: string | null;
   max_extra_beds_per_room?: number | null;
+  room_numbers?: string | null;
+  checked_in_at?: string | null;
+  checked_out_at?: string | null;
+  is_walk_in?: boolean;
   nights?: Array<{ date: string; rooms: number; base_price: string }>;
 }
 
@@ -43,6 +47,7 @@ interface EditFormData {
   base_amount: number;
   discount_amount: number;
   final_amount: number;
+  room_numbers: string;
 }
 
 const statusColors: Record<string, string> = {
@@ -52,6 +57,13 @@ const statusColors: Record<string, string> = {
   CANCELLED: 'bg-red-100 text-red-800',
   REFUNDED: 'bg-blue-100 text-blue-800',
 };
+
+// Derived stay status (separate from payment status).
+function stayStatus(b: { checked_in_at?: string | null; checked_out_at?: string | null }) {
+  if (b.checked_out_at) return { label: 'Checked Out', cls: 'bg-slate-200 text-slate-700' };
+  if (b.checked_in_at) return { label: 'Checked In', cls: 'bg-emerald-100 text-emerald-800' };
+  return { label: 'Reserved', cls: 'bg-slate-100 text-slate-500' };
+}
 
 const AdminBookings = () => {
   const { getToken } = useAuth();
@@ -134,6 +146,7 @@ const AdminBookings = () => {
       base_amount: base,
       discount_amount: discount,
       final_amount: base - discount,
+      room_numbers: b.room_numbers || '',
     });
 
     // Fetch full details (email, privilege card, nights) in background
@@ -196,6 +209,7 @@ const AdminBookings = () => {
         base_amount: String(editForm.base_amount),
         discount_amount: String(editForm.discount_amount),
         final_amount: String(editForm.final_amount),
+        room_numbers: editForm.room_numbers || null,
       } : b));
 
       setViewBooking(null);
@@ -414,9 +428,19 @@ const AdminBookings = () => {
                       ₹{Number(booking.final_amount).toLocaleString()}
                     </td>
                     <td className="py-3 px-3 text-center">
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${statusColors[booking.payment_status] || 'bg-slate-100 text-slate-800'}`}>
-                        {booking.payment_status}
-                      </span>
+                      <div className="flex flex-col items-center gap-1">
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${statusColors[booking.payment_status] || 'bg-slate-100 text-slate-800'}`}>
+                          {booking.payment_status}
+                        </span>
+                        {(booking.checked_in_at || booking.checked_out_at) && (
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${stayStatus(booking).cls}`}>
+                            {stayStatus(booking).label}
+                          </span>
+                        )}
+                        {booking.room_numbers && (
+                          <span className="text-[10px] text-slate-500 whitespace-nowrap">Rm {booking.room_numbers}</span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-3" onClick={(e) => e.stopPropagation()}>
                       <div className="flex justify-end items-center gap-2">
@@ -564,6 +588,36 @@ const AdminBookings = () => {
                       onChange={(e) => updateEditForm({ extra_beds: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
+                  </div>
+                </div>
+              </div>
+
+              {/* Stay status + room numbers */}
+              <div className="bg-emerald-50 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-semibold text-slate-900">Stay &amp; Room</h4>
+                  <div className="flex items-center gap-2">
+                    {viewBooking.is_walk_in && <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-xs font-bold">WALK-IN</span>}
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${stayStatus(viewBooking).cls}`}>{stayStatus(viewBooking).label}</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-500 mb-1">Room Number(s)</label>
+                    <input
+                      type="text"
+                      value={editForm.room_numbers}
+                      onChange={(e) => updateEditForm({ room_numbers: e.target.value })}
+                      placeholder="e.g. 101, 102"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-500">Checked In / Out</label>
+                    <p className="text-slate-900 text-sm mt-1">
+                      {viewBooking.checked_in_at ? `In: ${formatDate(viewBooking.checked_in_at)}` : 'Not checked in'}
+                      {viewBooking.checked_out_at ? ` · Out: ${formatDate(viewBooking.checked_out_at)}` : ''}
+                    </p>
                   </div>
                 </div>
               </div>

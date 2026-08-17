@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { authenticateAdmin, adminErrorResponse } from '@/lib/adminAuth';
+import { ensureBookingSchema } from '@/lib/bookingSchema';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     await authenticateAdmin(request);
     const sql = getDb();
+    await ensureBookingSchema(sql);
 
     const id = parseInt(params.id);
     if (isNaN(id)) {
@@ -20,6 +22,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                b.check_in::text as check_in, b.check_out::text as check_out, b.rooms, b.adults, b.children, b.extra_beds,
                b.base_amount, b.discount_amount, b.final_amount,
                b.payment_status, b.payment_ref, b.special_requests, b.created_at::text as created_at,
+               b.room_numbers, b.checked_in_at::text as checked_in_at, b.checked_out_at::text as checked_out_at, b.is_walk_in,
                pm.card_number as privilege_card
         FROM booking b
         JOIN user_account u ON b.user_id = u.id
@@ -51,6 +54,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   try {
     await authenticateAdmin(request);
     const sql = getDb();
+    await ensureBookingSchema(sql);
 
     const id = parseInt(params.id);
     if (isNaN(id)) {
@@ -58,7 +62,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 
     const body = await request.json();
-    const { payment_status, payment_ref, check_in, check_out, rooms, adults, children, extra_beds, special_requests, base_amount, discount_amount, final_amount } = body;
+    const { payment_status, payment_ref, check_in, check_out, rooms, adults, children, extra_beds, special_requests, base_amount, discount_amount, final_amount, room_numbers } = body;
 
     const validStatuses = ['PENDING', 'CONFIRMED', 'PAID', 'CANCELLED', 'REFUNDED'];
     if (payment_status && !validStatuses.includes(payment_status)) {
@@ -78,6 +82,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         UPDATE booking
         SET payment_status = COALESCE(${payment_status || null}, payment_status),
             payment_ref = COALESCE(${payment_ref || null}, payment_ref),
+            room_numbers = CASE WHEN ${'room_numbers' in body}::boolean THEN ${room_numbers || null} ELSE room_numbers END,
             check_in = COALESCE(${check_in || null}::date, check_in),
             check_out = COALESCE(${check_out || null}::date, check_out),
             rooms = COALESCE(${rooms ?? null}::int, rooms),
@@ -97,6 +102,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         UPDATE booking
         SET payment_status = COALESCE(${payment_status || null}, payment_status),
             payment_ref = COALESCE(${payment_ref || null}, payment_ref),
+            room_numbers = CASE WHEN ${'room_numbers' in body}::boolean THEN ${room_numbers || null} ELSE room_numbers END,
             check_in = COALESCE(${check_in || null}::date, check_in),
             check_out = COALESCE(${check_out || null}::date, check_out),
             rooms = COALESCE(${rooms ?? null}::int, rooms),

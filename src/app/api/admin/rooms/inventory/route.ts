@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
           SELECT bn.category_id, bn.date, SUM(bn.rooms)::int AS booked
           FROM booking_night bn
           JOIN booking b ON b.id = bn.booking_id
-          WHERE b.payment_status IN ('CONFIRMED', 'PAID')
+          WHERE (b.payment_status IN ('CONFIRMED', 'PAID') OR b.checked_in_at IS NOT NULL)
           GROUP BY bn.category_id, bn.date
         ) bn ON bn.category_id = ri.category_id AND bn.date = ri.date
         GROUP BY rc.id, rc.code, rc.name
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
         SELECT bn.category_id, bn.date, SUM(bn.rooms)::int as booked
         FROM booking_night bn
         JOIN booking b ON b.id = bn.booking_id
-        WHERE b.payment_status IN ('CONFIRMED', 'PAID')
+        WHERE (b.payment_status IN ('CONFIRMED', 'PAID') OR b.checked_in_at IS NOT NULL)
         GROUP BY bn.category_id, bn.date
       ) bn ON bn.category_id = ri.category_id AND bn.date = ri.date
       WHERE ri.category_id = ${parseInt(categoryId)}

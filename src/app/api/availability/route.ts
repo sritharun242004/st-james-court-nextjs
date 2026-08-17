@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
       WHERE bn.category_id = ${cat.id}
         AND bn.date >= ${start}::date
         AND bn.date <= ${lastNightStr}::date
-        AND b.payment_status IN ('CONFIRMED', 'PAID')
+        AND (b.payment_status IN ('CONFIRMED', 'PAID') OR b.checked_in_at IS NOT NULL)
       GROUP BY bn.date
     `;
     const bookedByDate = new Map<string, number>();

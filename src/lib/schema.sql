@@ -89,12 +89,18 @@ CREATE TABLE IF NOT EXISTS booking (
   rooms INTEGER NOT NULL DEFAULT 1,
   adults INTEGER DEFAULT 1,
   children INTEGER DEFAULT 0,
+  extra_beds INTEGER NOT NULL DEFAULT 0,
   special_requests TEXT,
   base_amount NUMERIC(12,2) NOT NULL,
   discount_amount NUMERIC(12,2) NOT NULL,
   final_amount NUMERIC(12,2) NOT NULL,
   payment_status VARCHAR(10) NOT NULL DEFAULT 'PENDING',
   payment_ref VARCHAR(120),
+  -- Front-desk / check-in tracking
+  room_numbers TEXT,
+  checked_in_at TIMESTAMPTZ,
+  checked_out_at TIMESTAMPTZ,
+  is_walk_in BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

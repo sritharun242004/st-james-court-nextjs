@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
         WHERE bn.category_id = ${category.id}
           AND bn.date >= ${body.checkIn}::date
           AND bn.date <= ${lastNight}::date
-          AND b.payment_status IN ('CONFIRMED', 'PAID')
+          AND (b.payment_status IN ('CONFIRMED', 'PAID') OR b.checked_in_at IS NOT NULL)
         GROUP BY bn.date
       `,
     ]);
