@@ -73,20 +73,21 @@ const emptyCategoryForm: CategoryForm = {
   active: true,
 };
 
-interface InventoryRow {
-  id: number;
-  date: string;
-  base_available: number;
-  blocked: number;
-  base_price: string;
-  extra_bed_price: string;
+interface InventorySummaryRow {
+  category_id: number;
+  code: string;
+  name: string;
+  total: number;
   booked: number;
+  blocked: number;
+  available: number;
+  days: number;
 }
 
 const RoomManagement = () => {
   const { getToken } = useAuth();
   const [categories, setCategories] = React.useState<RoomCategory[]>([]);
-  const [inventory, setInventory] = React.useState<InventoryRow[]>([]);
+  const [inventory, setInventory] = React.useState<InventorySummaryRow[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [inventoryLoading, setInventoryLoading] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -152,14 +153,9 @@ const RoomManagement = () => {
   }, [getToken, selectedCategory]);
 
   const fetchInventory = React.useCallback(async () => {
-    if (!selectedCategory) return;
     setInventoryLoading(true);
     try {
-      const params = new URLSearchParams({
-        categoryId: String(selectedCategory),
-        startDate,
-        endDate,
-      });
+      const params = new URLSearchParams({ summary: '1', startDate, endDate });
       const res = await fetch(`/api/admin/rooms/inventory?${params}`, {
         cache: 'no-store',
         headers: { Authorization: `Bearer ${getToken()}` },
@@ -172,7 +168,7 @@ const RoomManagement = () => {
     } finally {
       setInventoryLoading(false);
     }
-  }, [getToken, selectedCategory, startDate, endDate]);
+  }, [getToken, startDate, endDate]);
 
   React.useEffect(() => { fetchCategories(); }, [fetchCategories]);
   React.useEffect(() => { fetchInventory(); }, [fetchInventory]);
@@ -570,45 +566,41 @@ const RoomManagement = () => {
           <p className="text-slate-500 text-sm py-4">No inventory data for this date range. Use the bulk update form below to set up inventory.</p>
         ) : (
           <div className="overflow-x-auto">
+            <p className="text-xs text-slate-500 mb-3">
+              Across {startDate} → {endDate}: <span className="font-medium">Booked</span> = most rooms booked on any single day,
+              {' '}<span className="font-medium">Available</span> = fewest rooms free on any single day (worst case).
+            </p>
             <table className="w-full">
               <thead>
                 <tr className="border-b border-slate-200">
-                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Date</th>
+                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Room Type</th>
                   <th className="text-left py-3 px-4 font-semibold text-slate-700">Total</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Price (₹)</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Extra Bed (₹)</th>
                   <th className="text-left py-3 px-4 font-semibold text-slate-700">Booked</th>
                   <th className="text-left py-3 px-4 font-semibold text-slate-700">Blocked</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Net Available</th>
+                  <th className="text-left py-3 px-4 font-semibold text-slate-700">Available</th>
                 </tr>
               </thead>
               <tbody>
-                {inventory.map((row) => {
-                  const net = row.base_available - (row.blocked || 0) - row.booked;
-                  return (
-                    <tr key={row.id} className="border-b border-slate-100 hover:bg-slate-50">
-                      <td className="py-3 px-4 font-mono text-sm">{row.date}</td>
-                      <td className="py-3 px-4">{row.base_available}</td>
-                      <td className="py-3 px-4">₹{parseFloat(row.base_price).toLocaleString()}</td>
-                      <td className="py-3 px-4">₹{parseFloat(row.extra_bed_price).toLocaleString()}</td>
-                      <td className="py-3 px-4">
-                        <span className={row.booked > 0 ? 'text-orange-600 font-semibold' : ''}>
-                          {row.booked}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className={row.blocked > 0 ? 'text-purple-600 font-semibold' : ''}>
-                          {row.blocked || 0}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className={`font-semibold ${net <= 0 ? 'text-red-600' : net <= 3 ? 'text-orange-600' : 'text-green-600'}`}>
-                          {net}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {inventory.map((row) => (
+                  <tr key={row.category_id} className="border-b border-slate-100 hover:bg-slate-50">
+                    <td className="py-3 px-4 font-medium text-slate-900">
+                      {row.name}
+                      {row.days === 0 && <span className="ml-2 text-xs text-slate-400">(no inventory set)</span>}
+                    </td>
+                    <td className="py-3 px-4">{row.total}</td>
+                    <td className="py-3 px-4">
+                      <span className={row.booked > 0 ? 'text-orange-600 font-semibold' : ''}>{row.booked}</span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className={row.blocked > 0 ? 'text-purple-600 font-semibold' : ''}>{row.blocked}</span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className={`font-semibold ${row.available <= 0 ? 'text-red-600' : row.available <= 3 ? 'text-orange-600' : 'text-green-600'}`}>
+                        {row.available}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

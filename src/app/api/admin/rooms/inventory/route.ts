@@ -10,9 +10,41 @@ export async function GET(request: NextRequest) {
     const categoryId = request.nextUrl.searchParams.get('categoryId');
     const startDate = request.nextUrl.searchParams.get('startDate');
     const endDate = request.nextUrl.searchParams.get('endDate');
+    const summary = request.nextUrl.searchParams.get('summary');
 
-    if (!categoryId || !startDate || !endDate) {
-      return NextResponse.json({ error: 'categoryId, startDate, and endDate are required' }, { status: 400 });
+    if (!startDate || !endDate) {
+      return NextResponse.json({ error: 'startDate and endDate are required' }, { status: 400 });
+    }
+
+    // Summary mode: one row per room type with worst-case booked/blocked/available
+    // across the selected date range, for an at-a-glance capacity check.
+    if (summary === '1') {
+      const summaryRows = await sql`
+        SELECT
+          rc.id AS category_id, rc.code, rc.name,
+          COALESCE(MAX(ri.base_available), 0)::int AS total,
+          COALESCE(MAX(COALESCE(bn.booked, 0)), 0)::int AS booked,
+          COALESCE(MAX(ri.blocked), 0)::int AS blocked,
+          COALESCE(MIN(ri.base_available - ri.blocked - COALESCE(bn.booked, 0)), 0)::int AS available,
+          COUNT(ri.id)::int AS days
+        FROM room_category rc
+        LEFT JOIN room_inventory ri
+          ON ri.category_id = rc.id AND ri.date >= ${startDate}::date AND ri.date <= ${endDate}::date
+        LEFT JOIN (
+          SELECT bn.category_id, bn.date, SUM(bn.rooms)::int AS booked
+          FROM booking_night bn
+          JOIN booking b ON b.id = bn.booking_id
+          WHERE b.payment_status IN ('CONFIRMED', 'PAID')
+          GROUP BY bn.category_id, bn.date
+        ) bn ON bn.category_id = ri.category_id AND bn.date = ri.date
+        GROUP BY rc.id, rc.code, rc.name
+        ORDER BY rc.id
+      `;
+      return NextResponse.json({ data: summaryRows });
+    }
+
+    if (!categoryId) {
+      return NextResponse.json({ error: 'categoryId is required' }, { status: 400 });
     }
 
     const rows = await sql`
