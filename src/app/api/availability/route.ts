@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
+import { ensureInventoryWindow } from '@/lib/inventory';
 
 export async function GET(request: NextRequest) {
   try {
@@ -28,9 +29,12 @@ export async function GET(request: NextRequest) {
 
     const sql = getDb();
 
+    // Keep the rolling inventory window topped up so future dates never lapse.
+    await ensureInventoryWindow(sql);
+
     // Verify category
     const categories = await sql`
-      SELECT id, code, name, max_extra_beds_per_room FROM room_category WHERE code = ${category}
+      SELECT id, code, name, max_extra_beds_per_room, base_price FROM room_category WHERE code = ${category}
     `;
     if (categories.length === 0) {
       return NextResponse.json({ error: `Unknown category: ${category}` }, { status: 400 });
@@ -83,8 +87,40 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const days = inventory.map(inv => {
-      const booked = bookedByDate.get(inv.date) || 0;
+    // Index inventory by date so we can emit an entry for EVERY requested night,
+    // not just the nights that happen to have a row. A missing row => unavailable
+    // (available: 0) rather than being silently dropped, so the client can tell
+    // the difference between "bookable" and "no inventory for this date".
+    const inventoryByDate = new Map<string, typeof inventory[number]>();
+    for (const inv of inventory) inventoryByDate.set(inv.date, inv);
+
+    // Enumerate each night from start through the last night (check-out excluded).
+    const nightDates: string[] = [];
+    for (let d = new Date(startDate); d < endDate; d.setUTCDate(d.getUTCDate() + 1)) {
+      nightDates.push(d.toISOString().split('T')[0]);
+    }
+
+    const fallbackPrice = cat.base_price != null ? parseFloat(cat.base_price) : 0;
+
+    const days = nightDates.map(date => {
+      const inv = inventoryByDate.get(date);
+
+      if (!inv) {
+        // No inventory row for this date -> not bookable.
+        return {
+          categoryCode: cat.code,
+          date,
+          available: 0,
+          basePrice: fallbackPrice,
+          extraBedPrice: 0,
+          maxExtraBeds: cat.max_extra_beds_per_room,
+          discountPercent: null as number | null,
+          memberPrice: null as number | null,
+          noInventory: true,
+        };
+      }
+
+      const booked = bookedByDate.get(date) || 0;
       const available = Math.max(0, inv.base_available - (inv.blocked || 0) - booked);
       const basePrice = parseFloat(inv.base_price);
 
@@ -92,7 +128,7 @@ export async function GET(request: NextRequest) {
       let memberPrice: number | null = null;
 
       if (hasPrivilege) {
-        const pct = discountByDate.get(inv.date);
+        const pct = discountByDate.get(date);
         if (pct && pct > 0) {
           discountPercent = pct;
           memberPrice = Math.round((basePrice * (100 - pct)) / 100 * 100) / 100;
@@ -101,13 +137,14 @@ export async function GET(request: NextRequest) {
 
       return {
         categoryCode: cat.code,
-        date: inv.date,
+        date,
         available,
         basePrice,
         extraBedPrice: parseFloat(inv.extra_bed_price),
         maxExtraBeds: cat.max_extra_beds_per_room,
         discountPercent,
         memberPrice,
+        noInventory: false,
       };
     });
 

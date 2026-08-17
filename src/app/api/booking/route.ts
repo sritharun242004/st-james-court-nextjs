@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { sendBookingNotification, sendUserBookingConfirmation } from '@/lib/email';
+import { ensureInventoryWindow } from '@/lib/inventory';
 
 // Helper: extract yyyy-MM-dd from a DB date value (avoids timezone shifts)
 function toDateStr(dbDate: unknown): string {
@@ -60,6 +61,9 @@ export async function POST(request: NextRequest) {
     }
 
     const sql = getDb();
+
+    // Keep the rolling inventory window topped up before validating availability.
+    await ensureInventoryWindow(sql);
 
     // --- Phase 1: Parallel lookups (category + user + privilege card) ---
     const [categories, users, ...privilegeResult] = await Promise.all([

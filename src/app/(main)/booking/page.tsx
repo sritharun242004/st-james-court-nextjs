@@ -253,7 +253,16 @@ const Booking = () => {
       }
       if (adults < 1) errors.adults = 'At least 1 adult is required';
       if (rooms < 1) errors.rooms = 'At least 1 room is required';
-      if (!selectedRoom) errors.room = 'Please select a room type';
+      if (!selectedRoom) {
+        errors.room = 'Please select a room type';
+      } else if (!availabilityLoading) {
+        // Block proceeding if the selected room isn't actually bookable for the
+        // chosen dates (no inventory, or fewer rooms than requested).
+        const avail = availabilityData[selectedRoom];
+        if (!avail || avail.available < rooms) {
+          errors.room = 'This room is not available for the selected dates. Please choose different dates or another room.';
+        }
+      }
     }
 
     if (stepNumber === 3) {
@@ -566,7 +575,11 @@ const Booking = () => {
                   <div className="space-y-4">
                     {roomTypes.map((room) => {
                       const avail = availabilityData[room.id];
-                      const soldOut = avail && avail.available < rooms;
+                      const datesChosen = !!(checkIn && checkOut && checkOut > checkIn);
+                      // Once dates are chosen and availability has loaded, a room with
+                      // no data (no inventory for those dates) or too few rooms is not
+                      // bookable — don't let it be silently selected at a default price.
+                      const soldOut = datesChosen && !availabilityLoading && (!avail || avail.available < rooms);
                       return (
                         <div
                           key={room.id}
@@ -586,7 +599,9 @@ const Booking = () => {
                                 <p className="text-sm text-green-600 mt-1">{avail.available} room{avail.available !== 1 ? 's' : ''} available</p>
                               )}
                               {soldOut && (
-                                <p className="text-sm text-red-500 mt-1">Not enough rooms available</p>
+                                <p className="text-sm text-red-500 mt-1">
+                                  {avail && avail.available > 0 ? 'Not enough rooms available' : 'Not available for these dates'}
+                                </p>
                               )}
                             </div>
                             <div className="text-right">
