@@ -16,6 +16,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       sql`
         SELECT b.id, b.user_id, u.full_name as guest_name, u.phone, u.email as guest_email,
                rc.name as category_name, rc.code as category_code,
+               rc.bed_type, rc.size_label, rc.max_extra_beds_per_room,
                b.check_in::text as check_in, b.check_out::text as check_out, b.rooms, b.adults, b.children, b.extra_beds,
                b.base_amount, b.discount_amount, b.final_amount,
                b.payment_status, b.payment_ref, b.special_requests, b.created_at::text as created_at,

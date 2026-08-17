@@ -25,6 +25,9 @@ interface BookingData {
   special_requests: string | null;
   privilege_card: string | null;
   created_at: string;
+  bed_type?: string | null;
+  size_label?: string | null;
+  max_extra_beds_per_room?: number | null;
   nights?: Array<{ date: string; rooms: number; base_price: string }>;
 }
 
@@ -75,6 +78,7 @@ const AdminBookings = () => {
 
   const fetchBookings = React.useCallback(async (search?: string, status?: string, from?: string, to?: string) => {
     try {
+      setError(''); // clear any stale/transient error on a fresh load
       const params = new URLSearchParams();
       if (search) params.set('search', search);
       if (status) params.set('status', status);
@@ -204,6 +208,7 @@ const AdminBookings = () => {
   };
 
   const handleStatusUpdate = async (bookingId: number, newStatus: string) => {
+    setError(''); // clear any stale error before this action
     // Optimistic update
     setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, payment_status: newStatus } : b));
     if (viewBooking?.id === bookingId) {
@@ -386,7 +391,12 @@ const AdminBookings = () => {
                 </tr>
               ) : (
                 bookings.map((booking) => (
-                  <tr key={booking.id} className="border-b border-slate-100 hover:bg-slate-50">
+                  <tr
+                    key={booking.id}
+                    onClick={() => handleEditBooking(booking.id)}
+                    className="border-b border-slate-100 hover:bg-blue-50/60 cursor-pointer transition-colors"
+                    title="Click to view full booking details"
+                  >
                     <td className="py-3 px-3">
                       <span className="font-mono text-sm font-medium text-slate-900">#{booking.id}</span>
                     </td>
@@ -408,7 +418,7 @@ const AdminBookings = () => {
                         {booking.payment_status}
                       </span>
                     </td>
-                    <td className="py-3 px-3">
+                    <td className="py-3 px-3" onClick={(e) => e.stopPropagation()}>
                       <div className="flex justify-end items-center gap-2">
                         <button
                           onClick={() => handleEditBooking(booking.id)}
@@ -557,6 +567,57 @@ const AdminBookings = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Bed & Occupancy (read-only) */}
+              <div className="bg-amber-50 rounded-lg p-4">
+                <h4 className="font-semibold text-slate-900 mb-3">Bed &amp; Occupancy</h4>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-500">Bed Type</label>
+                    <p className="text-slate-900 font-medium">{viewBooking.bed_type || '—'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-500">Room Size</label>
+                    <p className="text-slate-900">{viewBooking.size_label || '—'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-500">Extra Beds</label>
+                    <p className="text-slate-900">
+                      {editForm.extra_beds > 0 ? `${editForm.extra_beds} extra bed${editForm.extra_beds > 1 ? 's' : ''}` : 'None'}
+                      {viewBooking.max_extra_beds_per_room != null && (
+                        <span className="text-slate-400"> (max {viewBooking.max_extra_beds_per_room}/room)</span>
+                      )}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-500">Guests</label>
+                    <p className="text-slate-900">
+                      {editForm.adults} adult{editForm.adults > 1 ? 's' : ''}
+                      {editForm.children > 0 ? `, ${editForm.children} child${editForm.children > 1 ? 'ren' : ''}` : ''}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Nightly Breakdown (read-only) */}
+              {viewBooking.nights && viewBooking.nights.length > 0 && (
+                <div className="bg-slate-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-slate-900 mb-3">
+                    Nightly Breakdown ({viewBooking.nights.length} night{viewBooking.nights.length > 1 ? 's' : ''})
+                  </h4>
+                  <div className="space-y-1.5 text-sm">
+                    {viewBooking.nights.map((n, i) => (
+                      <div key={i} className="flex justify-between text-slate-700">
+                        <span>{formatDate(n.date)}</span>
+                        <span>
+                          {n.rooms} room{n.rooms > 1 ? 's' : ''}
+                          {n.base_price ? ` · ₹${Number(n.base_price).toLocaleString()}/night` : ''}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Editable Pricing */}
               <div className="bg-blue-50 rounded-lg p-4">
