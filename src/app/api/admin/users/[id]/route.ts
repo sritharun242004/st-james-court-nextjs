@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
-import { authenticateAdmin } from '@/lib/adminAuth';
+import { authenticateAdmin, adminErrorResponse } from '@/lib/adminAuth';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -37,8 +37,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     if (message.includes('unique') || message.includes('duplicate')) {
       return NextResponse.json({ error: 'A user with this phone or email already exists' }, { status: 409 });
     }
-    const status = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    return adminErrorResponse(error);
   }
 }
 
@@ -67,8 +66,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     return NextResponse.json({ data: { message: 'User deactivated' } });
   } catch (error) {
     console.error('User delete error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    return adminErrorResponse(error);
   }
 }

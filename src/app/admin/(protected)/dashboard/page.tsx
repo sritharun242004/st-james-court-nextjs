@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Users, BedDouble, Tag, TrendingUp, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
@@ -30,7 +31,8 @@ interface DashboardData {
 }
 
 const Dashboard = () => {
-  const { getToken } = useAuth();
+  const { getToken, logout } = useAuth();
+  const router = useRouter();
   const [data, setData] = React.useState<DashboardData | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState('');
@@ -39,9 +41,20 @@ const Dashboard = () => {
     const fetchDashboard = async () => {
       try {
         const token = getToken();
+        if (!token) {
+          await logout();
+          router.replace('/admin/login');
+          return;
+        }
         const res = await fetch('/api/admin/dashboard', {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (res.status === 401) {
+          // Session expired or invalid — clear it and send the admin to sign in again.
+          await logout();
+          router.replace('/admin/login');
+          return;
+        }
         const json = await res.json();
         if (!res.ok) throw new Error(json.error);
         setData(json.data);
@@ -52,7 +65,7 @@ const Dashboard = () => {
       }
     };
     fetchDashboard();
-  }, [getToken]);
+  }, [getToken, logout, router]);
 
   if (loading) {
     return (

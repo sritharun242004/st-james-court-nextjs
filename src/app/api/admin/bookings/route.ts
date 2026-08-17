@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
-import { authenticateAdmin } from '@/lib/adminAuth';
+import { authenticateAdmin, adminErrorResponse } from '@/lib/adminAuth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -87,8 +87,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data: rows });
   } catch (error) {
     console.error('Bookings list error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const statusCode = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status: statusCode });
+    return adminErrorResponse(error);
   }
 }

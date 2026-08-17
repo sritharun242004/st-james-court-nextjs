@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
-import { authenticateAdmin } from '@/lib/adminAuth';
+import { authenticateAdmin, adminErrorResponse } from '@/lib/adminAuth';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -42,9 +42,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json({ data: { ...rows[0], nights } });
   } catch (error) {
     console.error('Booking detail error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const statusCode = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status: statusCode });
+    return adminErrorResponse(error);
   }
 }
 
@@ -142,8 +140,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json({ data: rows[0] });
   } catch (error) {
     console.error('Booking update error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const statusCode = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status: statusCode });
+    return adminErrorResponse(error);
   }
 }

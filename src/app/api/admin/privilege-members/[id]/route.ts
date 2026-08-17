@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
-import { authenticateAdmin } from '@/lib/adminAuth';
+import { authenticateAdmin, adminErrorResponse } from '@/lib/adminAuth';
 
 export async function PUT(
   request: NextRequest,
@@ -36,9 +36,7 @@ export async function PUT(
     return NextResponse.json({ message: 'Privilege card updated' });
   } catch (error) {
     console.error('Update privilege member error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    return adminErrorResponse(error);
   }
 }
 
@@ -58,8 +56,6 @@ export async function DELETE(
     return NextResponse.json({ message: 'Privilege card deactivated' });
   } catch (error) {
     console.error('Deactivate privilege member error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    return adminErrorResponse(error);
   }
 }

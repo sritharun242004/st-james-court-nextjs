@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
-import { authenticateAdmin } from '@/lib/adminAuth';
+import { authenticateAdmin, adminErrorResponse } from '@/lib/adminAuth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -86,8 +86,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Dashboard error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    return adminErrorResponse(error);
   }
 }

@@ -1,6 +1,15 @@
-import { SignJWT, jwtVerify } from 'jose';
+import { SignJWT, jwtVerify, errors as joseErrors } from 'jose';
 
 const encoder = new TextEncoder();
+
+// Auth failures that should map to HTTP 401 (expired/invalid token, missing header).
+export class AuthError extends Error {
+  status = 401 as const;
+  constructor(message: string) {
+    super(message);
+    this.name = 'AuthError';
+  }
+}
 
 // --- Password hashing (PBKDF2 via Web Crypto — Edge-compatible) ---
 
@@ -50,17 +59,33 @@ function getSecret() {
   return encoder.encode(secret);
 }
 
+// Admin sessions are long-lived (1 year) so occasional admins are not forced to
+// re-login on every visit. If a token is ever leaked, rotate JWT_SECRET to
+// invalidate all existing tokens immediately.
+const TOKEN_TTL = '365d';
+
 export async function signToken(payload: { sub: number; username: string }): Promise<string> {
   return new SignJWT({ username: payload.username })
     .setProtectedHeader({ alg: 'HS256' })
     .setSubject(String(payload.sub))
     .setIssuedAt()
-    .setExpirationTime('24h')
+    .setExpirationTime(TOKEN_TTL)
     .sign(getSecret());
 }
 
 export async function verifyToken(token: string): Promise<{ sub: number; username: string }> {
-  const { payload } = await jwtVerify(token, getSecret());
+  let payload;
+  try {
+    ({ payload } = await jwtVerify(token, getSecret()));
+  } catch (err) {
+    if (err instanceof joseErrors.JWTExpired) {
+      throw new AuthError('Your session has expired. Please sign in again.');
+    }
+    if (err instanceof joseErrors.JOSEError) {
+      throw new AuthError('Invalid session. Please sign in again.');
+    }
+    throw err;
+  }
   return {
     sub: Number(payload.sub),
     username: payload.username as string,

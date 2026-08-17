@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
-import { authenticateAdmin } from '@/lib/adminAuth';
+import { authenticateAdmin, adminErrorResponse } from '@/lib/adminAuth';
 import { ensureRoomCategorySchema } from '@/lib/roomSchema';
 import { parseRoomBody } from '@/lib/roomContent';
 
@@ -29,9 +29,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data: rows });
   } catch (error) {
     console.error('Rooms list error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message.includes('authorization') ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    return adminErrorResponse(error);
   }
 }
 

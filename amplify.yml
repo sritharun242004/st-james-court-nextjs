@@ -6,7 +6,7 @@ frontend:
         - npm ci
     build:
       commands:
-        - env | grep -E '^(DATABASE_URL|JWT_SECRET|ADMIN_DEFAULT_PASSWORD|NEXT_PUBLIC_)' >> .env.production
+        - env | grep -E '^(DATABASE_URL|JWT_SECRET|ADMIN_DEFAULT_PASSWORD|RAZORPAY_KEY_ID|RAZORPAY_KEY_SECRET|NEXT_PUBLIC_)' >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next

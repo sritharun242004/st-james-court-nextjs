@@ -26,6 +26,22 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Decodes a JWT's `exp` claim (seconds since epoch) without verifying the signature.
+// Client-side only — lets us detect an already-expired session and force re-login,
+// so a stale token in localStorage never lands the user on a broken authed page.
+function isTokenExpired(token?: string): boolean {
+  if (!token) return true;
+  try {
+    const payload = token.split('.')[1];
+    if (!payload) return true;
+    const claims = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+    if (typeof claims.exp !== 'number') return false; // no exp -> treat as non-expiring
+    return claims.exp * 1000 <= Date.now();
+  } catch {
+    return true;
+  }
+}
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,7 +51,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-          setUser(JSON.parse(storedUser));
+          const parsed = JSON.parse(storedUser);
+          if (isTokenExpired(parsed.token)) {
+            localStorage.removeItem('user'); // stale/expired session -> force re-login
+          } else {
+            setUser(parsed);
+          }
         }
       } catch {
         localStorage.removeItem('user');
@@ -89,7 +110,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const getToken = (): string | null => {
-    return user?.token || null;
+    if (!user?.token) return null;
+    if (isTokenExpired(user.token)) {
+      // Session expired since load — drop it so route guards send the user to login.
+      setUser(null);
+      if (typeof window !== 'undefined') localStorage.removeItem('user');
+      return null;
+    }
+    return user.token;
   };
 
   const signUp = async (email: string, password: string, userData: Partial<User>) => {

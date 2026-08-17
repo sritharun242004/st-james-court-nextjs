@@ -16,7 +16,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, adminOnly = f
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.push('/login');
+        router.push(adminOnly ? '/admin/login' : '/login');
         return;
       }
 
