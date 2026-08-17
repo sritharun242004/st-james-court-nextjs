@@ -103,16 +103,6 @@ const ProfileContent = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'PAID': return 'bg-green-100 text-green-800';
-      case 'PENDING': return 'bg-yellow-100 text-yellow-800';
-      case 'FAILED': return 'bg-red-100 text-red-800';
-      case 'REFUNDED': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-slate-100 text-slate-800';
-    }
-  };
-
   return (
     <div className="min-h-screen bg-resort-cream py-6 px-3 sm:py-12 sm:px-4">
       <div className="max-w-4xl mx-auto">
@@ -321,9 +311,6 @@ const ProfileContent = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-semibold text-blue-900 text-lg">{booking.categoryName}</h3>
-                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(booking.paymentStatus)}`}>
-                          {booking.paymentStatus}
-                        </span>
                       </div>
                       <div className="text-sm text-slate-600 space-y-1">
                         <p>Booking #{booking.id} | {booking.rooms} room{booking.rooms > 1 ? 's' : ''} | {booking.adults} adult{booking.adults > 1 ? 's' : ''}{booking.children > 0 ? `, ${booking.children} child${booking.children > 1 ? 'ren' : ''}` : ''}</p>

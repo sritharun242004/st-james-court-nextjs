@@ -399,10 +399,6 @@ const Booking = () => {
                 <span>Total Amount:</span>
                 <span className="text-blue-600">₹{bookingResult.finalAmount.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600">Payment Status:</span>
-                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">{bookingResult.paymentStatus}</span>
-              </div>
             </div>
 
             <motion.a

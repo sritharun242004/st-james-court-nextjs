@@ -39,16 +39,6 @@ interface BookingItem {
   createdAt: string;
 }
 
-const getPaymentStyle = (status: string) => {
-  switch (status) {
-    case 'PAID':      return 'bg-green-100 text-green-800';
-    case 'PENDING':   return 'bg-yellow-100 text-yellow-800';
-    case 'CANCELLED': return 'bg-red-100 text-red-800';
-    case 'REFUNDED':  return 'bg-blue-100 text-blue-800';
-    default:          return 'bg-slate-100 text-slate-800';
-  }
-};
-
 type StayStatus = 'upcoming' | 'in-progress' | 'completed';
 
 const getStayStatus = (checkIn: string, checkOut: string, today: string): StayStatus => {
@@ -212,7 +202,6 @@ const MyBookingsContent = () => {
                         <div className="flex flex-wrap items-center gap-2 mb-3">
                           <h3 className="text-xl font-bold text-blue-900">{booking.categoryName}</h3>
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${stayClass}`}>{stayLabel}</span>
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${getPaymentStyle(booking.paymentStatus)}`}>{booking.paymentStatus}</span>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm text-slate-600">
