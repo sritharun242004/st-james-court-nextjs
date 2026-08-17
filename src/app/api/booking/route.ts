@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     // --- Phase 1: Parallel lookups (category + user + privilege card) ---
     const [categories, users, ...privilegeResult] = await Promise.all([
       sql`SELECT id, code, name, max_extra_beds_per_room FROM room_category WHERE code = ${body.categoryCode}`,
-      sql`SELECT id, full_name, phone, email FROM user_account WHERE phone = ${body.phone}`,
+      sql`SELECT id, full_name, phone, email FROM user_account WHERE phone = ${body.phone} OR email = ${body.email || null}`,
       ...(body.privilegeCardNumber
         ? [sql`SELECT id, active FROM privilege_member WHERE card_number = ${body.privilegeCardNumber}`]
         : []),
@@ -89,11 +89,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // --- Resolve user ---
+    // --- Resolve user (find-or-create) ---
+    // A returning guest may reuse the same email with a new phone (or vice
+    // versa); both columns are UNIQUE, so we must reuse the existing account
+    // instead of inserting a duplicate. Prefer the email match (the account
+    // identity used for confirmations), then the phone match.
     let userId: number;
-    if (users.length > 0) {
-      userId = users[0].id;
-      if (body.email && !users[0].email) {
+    const existing =
+      (body.email ? users.find((u) => u.email === body.email) : undefined) ||
+      users.find((u) => u.phone === body.phone);
+    if (existing) {
+      userId = existing.id;
+      // Backfill a missing email only when no other account already owns it.
+      if (body.email && !existing.email && !users.some((u) => u.id !== existing.id && u.email === body.email)) {
         await sql`UPDATE user_account SET email = ${body.email} WHERE id = ${userId}`;
       }
     } else {
@@ -314,7 +322,14 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Booking creation error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    const message = error instanceof Error ? error.message : '';
+    if (message.includes('unique') || message.includes('duplicate')) {
+      // A phone/email already belongs to another guest account.
+      return NextResponse.json(
+        { error: 'These contact details are already registered under a different guest. Please check the phone number and email, or contact the resort.' },
+        { status: 409 }
+      );
+    }
+    return NextResponse.json({ error: 'Could not complete your booking. Please try again.' }, { status: 500 });
   }
 }
