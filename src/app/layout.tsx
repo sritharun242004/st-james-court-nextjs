@@ -6,7 +6,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 export const metadata: Metadata = {
   title: 'St James Court Beach Resort | Luxury Beach Resort in Pondicherry',
   description: 'Experience luxury at St James Court Beach Resort. Premium accommodations, world-class amenities, and stunning beach views in Pondicherry. Book your perfect getaway today.',
-  keywords: 'luxury resort, beach resort, pondicherry, hotels, accommodation, beach vacation, spa, dining, events',
+  keywords: 'luxury resort, beach resort, pondicherry, hotels, accommodation, beach vacation, dining, events',
   authors: [{ name: 'St James Court Beach Resort' }],
   openGraph: {
     type: 'website',

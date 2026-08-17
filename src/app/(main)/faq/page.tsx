@@ -89,12 +89,6 @@ const FAQ = () => {
       answer: 'Absolutely! We specialise in all types of events — weddings, birthday parties, anniversary celebrations, corporate meetings, team outings, product launches, and more. Our dedicated event spaces (House of Lords Conference Hall and Royal Castle Board Room) can be configured for any occasion. Our event planning team will work with you to create a fully customised experience. Contact us for detailed packages and pricing.'
     },
     {
-      id: 10,
-      category: 'amenities',
-      question: 'Is there a spa at the resort?',
-      answer: 'Yes, our Ayurvedic spa offers a range of traditional and modern treatments including massages, facials, body treatments, and wellness therapies. The spa is open from 9:00 AM to 8:00 PM, and we recommend booking treatments in advance. Couples\' massage rooms are also available.'
-    },
-    {
       id: 11,
       category: 'checkin',
       question: 'What documents do I need for check-in?',
@@ -377,7 +371,7 @@ const FAQ = () => {
           >
             {[
               { title: 'Booking & Reservations', desc: 'Questions about making reservations, cancellations, and booking policies', count: '5 articles' },
-              { title: 'Resort Amenities', desc: 'Information about spa, pools, dining, and other resort facilities', count: '8 articles' },
+              { title: 'Resort Amenities', desc: 'Information about pools, dining, and other resort facilities', count: '8 articles' },
               { title: 'Activities & Tours', desc: 'Details about water sports, cultural tours, and local experiences', count: '6 articles' },
               { title: 'Resort Policies', desc: 'Information about check-in/out, smoking, pets, and other policies', count: '4 articles' },
             ].map((topic, index) => (

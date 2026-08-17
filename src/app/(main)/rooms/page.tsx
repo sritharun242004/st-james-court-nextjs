@@ -506,8 +506,8 @@ const Rooms = () => {
             <motion.h2 variants={fadeInUp} custom={0} className="text-xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-4">World-Class Amenities</motion.h2>
             <GoldSeparator />
             <motion.p variants={fadeInUp} custom={1} className="text-sm sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
-              Everything you need for the perfect beach vacation, from luxury spa treatments
-              to thrilling water sports and cultural experiences
+              Everything you need for the perfect beach vacation, from thrilling water sports
+              to relaxing pools and cultural experiences
             </motion.p>
           </motion.div>
 

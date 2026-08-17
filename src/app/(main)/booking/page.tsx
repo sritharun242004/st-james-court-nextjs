@@ -75,7 +75,7 @@ const Booking = () => {
   const defaultRoomTypes = [
     { id: 'DELUXE',       name: 'Deluxe Room',                   price: 4500  },
     { id: 'SUPER_DELUXE', name: 'Super Deluxe & Heritage Room',  price: 5500  },
-    { id: 'SUITE',        name: 'Executive Suite',               price: 6500  },
+    { id: 'SUITE',        name: 'Executive Suite',               price: 4500  },
     { id: 'FAMILY',       name: 'Family Room',                   price: 9000  },
     { id: 'CLUB',         name: 'Club Room',                     price: 1500  },
   ];
@@ -88,7 +88,6 @@ const Booking = () => {
   const [availabilityData, setAvailabilityData] = useState<Record<string, { available: number; avgPrice: number; avgMemberPrice: number | null; extraBedPrice: number; maxExtraBeds: number }>>({});
 
   const addOns = [
-    { id: 'spa', name: 'Spa Package', price: 3500, description: 'Couples massage and wellness treatments' },
     { id: 'dining', name: 'Dining Package', price: 2500, description: 'All meals included with wine pairing' },
     { id: 'activities', name: 'Activity Package', price: 4000, description: 'Water sports and cultural tours' },
     { id: 'airport', name: 'Airport Transfer', price: 1500, description: 'Luxury car pickup and drop-off' }
