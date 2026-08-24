@@ -4,6 +4,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://jamescourtbeachresort.com'),
   title: 'St James Court Beach Resort | Luxury Beach Resort in Pondicherry',
   description: 'Experience luxury at St James Court Beach Resort. Premium accommodations, world-class amenities, and stunning beach views in Pondicherry. Book your perfect getaway today.',
   keywords: 'luxury resort, beach resort, pondicherry, hotels, accommodation, beach vacation, dining, events',
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://stjamescourtresort.com',
+    url: 'https://jamescourtbeachresort.com',
     siteName: 'St James Court Beach Resort',
     title: 'St James Court Beach Resort | Luxury Beach Resort in Pondicherry',
     description: 'Experience luxury at St James Court Beach Resort. Premium accommodations, world-class amenities, and stunning beach views in Pondicherry.',
